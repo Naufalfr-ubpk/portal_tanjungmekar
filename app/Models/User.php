@@ -19,12 +19,12 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-    'name',
-    'email',
-    'password',
-    'role',
-    'google_id',
-    'avatar',
+        'name',
+        'email',
+        'password',
+        'avatar', 
+        'google_id', 
+        'role', // Wajib ditambahin biar gak error pas seeder jalan
     ];
 
     /**

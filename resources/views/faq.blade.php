@@ -3,7 +3,7 @@
         <div class="flex items-center gap-4">
             <a href="{{ url('/') }}" class="inline-flex items-center text-sm font-bold text-gray-500 hover:text-[#0E4D2B] transition-colors group">
                 <svg class="w-5 h-5 mr-1 transform group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-                Kembali ke Beranda
+                Kembali
             </a>
             <h2 class="font-semibold text-xl text-[#0E4D2B] leading-tight border-l-2 pl-4 border-gray-300">
                 {{ __('Pusat Bantuan & FAQ') }}
@@ -38,13 +38,13 @@
 
             <div x-show="searchQuery !== '' && filteredFaqs.length === 0" style="display: none;" class="bg-white p-8 rounded-xl shadow-sm border border-gray-200 text-center mt-6">
                 <h4 class="text-xl font-bold text-gray-800 mb-2">Pertanyaan Tidak Ditemukan</h4>
-                <p class="text-gray-500 mb-6">Kami tidak menemukan jawaban untuk pencarian Anda. Jangan khawatir, Anda dapat langsung menanyakannya kepada sistem.</p>
+                <p class="text-gray-500 mb-6">Kami tidak menemukan jawaban untuk pencarian Anda. Jangan khawatir, Anda dapat langsung mengajukan pertanyaan ini ke sistem.</p>
                 <a href="{{ route('faq.tambah') }}" class="inline-block bg-[#FBC02D] hover:bg-yellow-500 text-[#0E4D2B] font-bold py-3 px-8 rounded-full shadow transition-all">
                     Ajukan Pertanyaan Sekarang
                 </a>
             </div>
 
-            <div class="mt-12 text-center border-t border-gray-200 pt-8">
+            <div x-show="filteredFaqs.length > 0" class="mt-12 text-center border-t border-gray-200 pt-8">
                 <p class="text-gray-500 mb-4 font-medium">Tidak menemukan jawaban yang sesuai di daftar atas?</p>
                 <a href="{{ route('faq.tambah') }}" class="inline-flex items-center bg-white border-2 border-[#0E4D2B] hover:bg-[#0E4D2B] hover:text-white text-[#0E4D2B] font-bold py-3 px-6 rounded-lg transition-all group shadow-sm">
                     Buat Pengajuan Pertanyaan Baru

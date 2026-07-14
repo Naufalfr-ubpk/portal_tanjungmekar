@@ -10,7 +10,7 @@
 </head>
 <body class="font-sans antialiased bg-[#F4F8F4] text-gray-900">
 
-    <nav class="bg-white shadow-md border-b-4 border-[#0E4D2B] sticky top-0 z-50">
+    <nav x-data="{ openMobileMenu: false }" class="bg-white shadow-md border-b-4 border-[#0E4D2B] sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-20 sm:h-24">
                 
@@ -24,25 +24,19 @@
                     </div>
                 </a>
 
-                <div class="flex items-center gap-4 sm:gap-6">
-                    <div class="hidden lg:flex items-center gap-6 text-sm font-semibold text-[#0E4D2B]">
-                        <a href="{{ url('/') }}" class="hover:text-[#66BB6A] transition">Beranda</a>
-                        <a href="{{ Auth::check() ? route('pemetaan') : route('register') }}" class="hover:text-[#66BB6A] transition">Peta Wilayah</a>
-                        <a href="{{ Auth::check() ? route('faq') : route('register') }}" class="hover:text-[#66BB6A] transition">Pusat FAQ</a>
-                        <a href="{{ Auth::check() ? route('laporan-web') : route('register') }}" class="hover:text-[#66BB6A] transition">Layanan</a>
-                    </div>
+                <div class="hidden lg:flex items-center gap-6 text-sm font-semibold text-[#0E4D2B]">
+                    <a href="{{ url('/') }}" class="hover:text-[#66BB6A] transition">Beranda</a>
+                    <a href="{{ Auth::check() ? route('pemetaan') : route('register') }}" class="hover:text-[#66BB6A] transition">Peta Wilayah</a>
+                    <a href="{{ Auth::check() ? route('faq') : route('register') }}" class="hover:text-[#66BB6A] transition">Pusat FAQ</a>
+                    <a href="{{ Auth::check() ? route('laporan-web') : route('register') }}" class="hover:text-[#66BB6A] transition">Layanan</a>
                     
                     @auth
-                        <div x-data="{ openProfile: false }" class="relative ml-2 sm:ml-4">
-                            <button @click="openProfile = !openProfile" class="flex items-center gap-2 px-3 sm:px-4 py-2 bg-gray-50 border border-gray-200 rounded-full hover:bg-gray-100 transition">
-                                <div class="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-gray-300 flex items-center justify-center overflow-hidden border border-[#0E4D2B]">
-                                    @if(Auth::user()->avatar)
-                                        <img src="{{ Auth::user()->avatar }}" alt="Avatar" class="w-full h-full object-cover">
-                                    @else
-                                        <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&color=0E4D2B&background=A5D6A7&bold=true" alt="Avatar" class="w-full h-full object-cover">
-                                    @endif
+                        <div x-data="{ openProfile: false }" class="relative ml-4">
+                            <button @click="openProfile = !openProfile" class="flex items-center gap-2 px-4 py-2 bg-gray-50 border border-gray-200 rounded-full hover:bg-gray-100 transition">
+                                <div class="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center overflow-hidden border border-[#0E4D2B]">
+                                    <img src="{{ Auth::user()->avatar }}" alt="Avatar" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&color=0E4D2B&background=A5D6A7&bold=true';">
                                 </div>
-                                <span class="text-sm font-bold text-gray-800 hidden sm:block">{{ Auth::user()->name }}</span>
+                                <span class="text-sm font-bold text-gray-800">{{ Auth::user()->name }}</span>
                                 <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                             </button>
                             <div x-show="openProfile" @click.away="openProfile = false" style="display: none;" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 border border-gray-200 z-50">
@@ -50,17 +44,55 @@
                                 <a href="{{ route('profile.edit') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 font-semibold">Profil Saya</a>
                                 <form method="POST" action="{{ route('logout') }}">
                                     @csrf
-                                    <button type="submit" class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100 font-semibold">Keluar Akun</button>
+                                    <button type="submit" class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100 font-semibold">Keluar</button>
                                 </form>
                             </div>
                         </div>
                     @else
-                        <div class="flex items-center gap-2 sm:gap-3 ml-2">
-                            <a href="{{ route('login') }}" class="px-4 sm:px-6 py-2 sm:py-2.5 text-xs sm:text-sm font-bold text-[#0E4D2B] bg-transparent border-2 border-[#0E4D2B] rounded-full hover:bg-[#0E4D2B] hover:text-white transition-all">Login</a>
-                            <a href="{{ route('register') }}" class="px-4 sm:px-6 py-2 sm:py-2.5 text-xs sm:text-sm font-bold text-[#0E4D2B] bg-[#FBC02D] rounded-full shadow hover:bg-yellow-500 transition-all">Sign Up</a>
+                        <div class="flex items-center gap-3 ml-2">
+                            <a href="{{ route('login') }}" class="px-6 py-2.5 text-sm font-bold text-[#0E4D2B] bg-transparent border-2 border-[#0E4D2B] rounded-full hover:bg-[#0E4D2B] hover:text-white transition-all">Login</a>
+                            <a href="{{ route('register') }}" class="px-6 py-2.5 text-sm font-bold text-[#0E4D2B] bg-[#FBC02D] rounded-full shadow hover:bg-yellow-500 transition-all">Sign Up</a>
                         </div>
                     @endauth
                 </div>
+
+                <div class="lg:hidden flex items-center">
+                    <button @click="openMobileMenu = !openMobileMenu" class="text-[#0E4D2B] focus:outline-none">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path x-show="!openMobileMenu" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                            <path x-show="openMobileMenu" style="display: none;" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div x-show="openMobileMenu" style="display: none;" class="lg:hidden bg-white border-t border-gray-200">
+            <div class="px-4 pt-2 pb-4 space-y-1">
+                <a href="{{ url('/') }}" class="block px-3 py-2 rounded-md text-base font-bold text-[#0E4D2B] hover:bg-gray-50">Beranda</a>
+                <a href="{{ Auth::check() ? route('pemetaan') : route('register') }}" class="block px-3 py-2 rounded-md text-base font-bold text-gray-700 hover:bg-gray-50">Peta Wilayah</a>
+                <a href="{{ Auth::check() ? route('faq') : route('register') }}" class="block px-3 py-2 rounded-md text-base font-bold text-gray-700 hover:bg-gray-50">Pusat FAQ</a>
+                <a href="{{ Auth::check() ? route('laporan-web') : route('register') }}" class="block px-3 py-2 rounded-md text-base font-bold text-gray-700 hover:bg-gray-50">Layanan</a>
+                
+                @auth
+                    <div class="border-t border-gray-200 mt-4 pt-4">
+                        <div class="flex items-center gap-3 px-3 mb-3">
+                            <img src="{{ Auth::user()->avatar }}" alt="Avatar" class="w-10 h-10 rounded-full border border-[#0E4D2B]" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&color=0E4D2B&background=A5D6A7&bold=true';">
+                            <span class="font-bold text-gray-800">{{ Auth::user()->name }}</span>
+                        </div>
+                        <a href="{{ route('dashboard') }}" class="block px-3 py-2 rounded-md text-base font-bold text-gray-700 hover:bg-gray-50">Dashboard</a>
+                        <a href="{{ route('profile.edit') }}" class="block px-3 py-2 rounded-md text-base font-bold text-gray-700 hover:bg-gray-50">Profil Saya</a>
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit" class="w-full text-left px-3 py-2 rounded-md text-base font-bold text-red-600 hover:bg-gray-50">Keluar</button>
+                        </form>
+                    </div>
+                @else
+                    <div class="flex flex-col gap-2 mt-4 px-3">
+                        <a href="{{ route('login') }}" class="text-center py-2 text-sm font-bold text-[#0E4D2B] bg-transparent border-2 border-[#0E4D2B] rounded-full">Login</a>
+                        <a href="{{ route('register') }}" class="text-center py-2 text-sm font-bold text-[#0E4D2B] bg-[#FBC02D] rounded-full">Sign Up</a>
+                    </div>
+                @endauth
             </div>
         </div>
     </nav>
@@ -103,7 +135,7 @@
                     <div class="w-14 h-14 bg-[#A5D6A7] rounded-full flex items-center justify-center mx-auto mb-6">
                         <svg class="w-7 h-7 text-[#0E4D2B]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path></svg>
                     </div>
-                    <h4 class="text-xl font-bold text-[#0E4D2B] mb-2">Pemetaan Wilayah & Kelurahan</h4>
+                    <h4 class="text-xl font-bold text-[#0E4D2B] mb-2">Pemetaan Wilayah</h4>
                     <p class="text-gray-600 text-sm">Informasi koordinat akurat Kantor Kelurahan, detail kepengurusan dari RW 01 hingga RW 15.</p>
                 </a>
                 
@@ -126,9 +158,10 @@
         </div>
     </section>
 
+    <!-- REVISI TITLE FAQ SESUAI REQUEST -->
     <section class="py-16 bg-white">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h3 class="text-3xl font-extrabold text-[#0E4D2B] text-center mb-2">Tanya Jawab Singkat (FAQ)</h3>
+            <h3 class="text-3xl font-extrabold text-[#0E4D2B] text-center mb-2">Seputar Pertanyaan (FAQ)</h3>
             <p class="text-gray-500 text-center mb-8 text-sm">Punya pertanyaan seputar portal? Berikut beberapa poin info ringkas.</p>
             
             <div class="space-y-4 mb-10">
@@ -170,9 +203,9 @@
         <div class="max-w-7xl mx-auto px-4 text-center">
             <p class="text-sm font-bold text-[#2E7D32] tracking-widest uppercase mb-8">Didukung & Dikembangkan Oleh</p>
             <div class="flex flex-col md:flex-row justify-center items-center gap-12 md:gap-24">
-                <img src="{{ asset('images/logo-ubp.png') }}" alt="UBP" class="h-32 w-auto object-contain drop-shadow-md">
-                <img src="{{ asset('images/logo-tema.png') }}" alt="Tema KKN" class="h-32 w-auto object-contain drop-shadow-md">
-                <img src="{{ asset('images/logo-kkn.png') }}" alt="KKN Tanjungmekar" class="h-32 w-auto object-contain drop-shadow-md">
+                <img src="{{ asset('images/logo-ubp.png') }}" alt="UBP" class="h-32 w-auto object-contain drop-shadow-md hover:scale-105 transition-transform">
+                <img src="{{ asset('images/logo-tema.png') }}" alt="Tema KKN" class="h-32 w-auto object-contain drop-shadow-md hover:scale-105 transition-transform">
+                <img src="{{ asset('images/logo-kkn.png') }}" alt="KKN Tanjungmekar" class="h-32 w-auto object-contain drop-shadow-md hover:scale-105 transition-transform">
             </div>
         </div>
     </section>

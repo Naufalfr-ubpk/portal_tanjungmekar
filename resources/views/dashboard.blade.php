@@ -4,7 +4,7 @@
             <div class="flex items-center gap-4">
                 <a href="{{ url('/') }}" class="inline-flex items-center text-sm font-bold text-gray-500 hover:text-[#0E4D2B] transition-colors group">
                     <svg class="w-5 h-5 mr-1 transform group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-                    Kembali ke Beranda
+                    Kembali
                 </a>
                 <h2 class="font-semibold text-xl text-[#0E4D2B] leading-tight border-l-2 pl-4 border-gray-300">
                     {{ __('Dashboard') }}
@@ -48,15 +48,15 @@
                     <span class="w-full text-center bg-gray-100 text-gray-400 font-bold py-2 px-4 rounded-lg text-sm cursor-not-allowed block">Fitur Belum Rilis</span>
                 </div>
 
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col justify-between hover:shadow-md transition-shadow border-t-4 border-[#66BB6A]">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col justify-between border-b-4 border-dashed border-gray-300 opacity-80">
                     <div>
-                        <div class="w-12 h-12 bg-[#A5D6A7] rounded-xl flex items-center justify-center text-[#0E4D2B] mb-4">
+                        <div class="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center text-gray-400 mb-4">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"></path></svg>
                         </div>
-                        <h4 class="text-lg font-bold text-gray-800 mb-1">Layanan</h4>
-                        <p class="text-xs text-gray-500 mb-4 leading-relaxed">Pengaduan kendala portal, bug, atau laporan sistem kepada operator web.</p>
+                        <h4 class="text-lg font-bold text-gray-400 mb-1">Aduan & Lapor Warga</h4>
+                        <p class="text-xs text-gray-400 mb-4 leading-relaxed">Fasilitas pengaduan warga terkait masalah lingkungan ke Operator Kelurahan.</p>
                     </div>
-                    <a href="{{ route('laporan-web') }}" class="w-full text-center bg-[#0E4D2B] hover:bg-[#2E7D32] text-white font-bold py-2 px-4 rounded-lg text-sm transition-colors block">Buka Layanan</a>
+                    <span class="w-full text-center bg-gray-100 text-gray-400 font-bold py-2 px-4 rounded-lg text-sm cursor-not-allowed block">Fitur Belum Rilis</span>
                 </div>
 
             </div>

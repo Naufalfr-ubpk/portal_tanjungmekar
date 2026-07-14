@@ -12,27 +12,33 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// AREA PROTEKSI (Wajib Login)
+// AREA WAJIB LOGIN
 Route::middleware(['auth', 'verified'])->group(function () {
     
+    // Logika Pengarah (Redirect) Berdasarkan Role
     Route::get('/dashboard', function () {
-        return view('dashboard');
+        if (Auth::user()->role === 'admin') {
+            return redirect()->route('admin.dashboard');
+        } elseif (Auth::user()->role === 'operator') {
+            // Nanti kita buat rute operator, sementara arahin ke dashboard biasa
+            return view('dashboard');
+        }
+        return view('dashboard'); // Untuk Warga
     })->name('dashboard');
 
+    // RUTE KHUSUS ADMIN (CMS ala WordPress)
+    Route::prefix('admin')->group(function () {
+        Route::get('/dashboard', function () {
+            if (Auth::user()->role !== 'admin') abort(403, 'Akses Ditolak. Halaman ini khusus Admin.');
+            return view('admin.dashboard');
+        })->name('admin.dashboard');
+    });
+
+    // Rute Web Warga
     Route::get('/pemetaan', [MapController::class, 'index'])->name('pemetaan');
-    
-    Route::get('/faq', function () {
-        return view('faq');
-    })->name('faq');
-
-    // HALAMAN BARU SESUAI REQUEST
-    Route::get('/tambah-faq', function () {
-        return view('tambah-faq');
-    })->name('faq.tambah');
-
-    Route::get('/laporan-web', function () {
-        return view('laporan-web');
-    })->name('laporan-web');
+    Route::get('/faq', function () { return view('faq'); })->name('faq');
+    Route::get('/tambah-faq', function () { return view('tambah-faq'); })->name('faq.tambah');
+    Route::get('/laporan-web', function () { return view('laporan-web'); })->name('laporan-web');
 });
 
 Route::middleware('auth')->group(function () {

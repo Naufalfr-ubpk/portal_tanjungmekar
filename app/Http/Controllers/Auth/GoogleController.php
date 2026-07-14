@@ -45,7 +45,7 @@ class GoogleController extends Controller
                 Auth::login($newUser);
             }
 
-            return redirect()->intended('dashboard');
+            return redirect()->intended('/');
 
         } catch (Exception $e) {
             return redirect('/login')->withErrors(['email' => 'Gagal login menggunakan Google. Silakan coba lagi.']);
