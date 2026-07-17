@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\MapController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\PemetaanController;
 
 Route::get('/auth/google', [GoogleController::class, 'redirectToGoogle'])->name('google.login');
 Route::get('/auth/google/callback', [GoogleController::class, 'handleGoogleCallback'])->name('google.callback');
@@ -32,7 +33,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
             if (Auth::user()->role !== 'admin') abort(403, 'Akses Ditolak. Halaman ini khusus Admin.');
             return view('admin.dashboard');
         })->name('admin.dashboard');
+
+        // ROUTE MANAJEMEN PETA
+        // Manajemen Pemetaan Wilayah
+        Route::get('/pemetaan', [PemetaanController::class, 'index'])->name('admin.pemetaan.index');
+        Route::post('/pemetaan', [PemetaanController::class, 'store'])->name('admin.pemetaan.store');
+        Route::put('/pemetaan/{id}', [PemetaanController::class, 'update'])->name('admin.pemetaan.update');
+        Route::delete('/pemetaan/{id}', [PemetaanController::class, 'destroy'])->name('admin.pemetaan.destroy');
     });
+
 
     // Rute Web Warga
     Route::get('/pemetaan', [MapController::class, 'index'])->name('pemetaan');
@@ -45,6 +54,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    // RUTE BARU BUAT UPLOAD AVATAR
+    Route::post('/profile/avatar', [ProfileController::class, 'updateAvatar'])->name('profile.avatar.update');
+    // TAMBAHIN INI:
+    Route::delete('/profile/avatar', [ProfileController::class, 'deleteAvatar'])->name('profile.avatar.delete');
 });
 
 require __DIR__.'/auth.php';

@@ -8,7 +8,6 @@
                 </a>
             </div>
 
-            <!-- Navigation Links PC -->
             <div class="hidden lg:flex lg:items-center lg:gap-8">
                 <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="text-sm font-bold text-gray-700 hover:text-[#0E4D2B]">
                     {{ __('Dashboard') }}
@@ -19,11 +18,13 @@
                 <x-nav-link :href="route('faq')" :active="request()->routeIs('faq')" class="text-sm font-bold text-gray-700 hover:text-[#0E4D2B]">
                     {{ __('Pusat FAQ') }}
                 </x-nav-link>
-                <x-nav-link :href="route('laporan-web')" :active="request()->routeIs('laporan-web')" class="text-sm font-bold text-gray-700 hover:text-[#0E4D2B]">
-                    {{ __('Layanan') }}
-                </x-nav-link>
+                
+                @if(Auth::user()->role !== 'admin' && Auth::user()->role !== 'operator')
+                    <x-nav-link :href="route('laporan-web')" :active="request()->routeIs('laporan-web')" class="text-sm font-bold text-gray-700 hover:text-[#0E4D2B]">
+                        {{ __('Layanan') }}
+                    </x-nav-link>
+                @endif
 
-                <!-- Profile Dropdown PC -->
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
                         <button class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm leading-4 font-bold rounded-full text-gray-700 bg-gray-50 hover:text-[#0E4D2B] hover:border-[#0E4D2B] focus:outline-none transition">
@@ -46,7 +47,6 @@
                 </x-dropdown>
             </div>
 
-            <!-- Hamburger Button (Mobile) -->
             <div class="-mr-2 flex items-center lg:hidden">
                 <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-md text-[#0E4D2B] focus:outline-none transition">
                     <svg class="h-8 w-8" stroke="currentColor" fill="none" viewBox="0 0 24 24">
@@ -58,13 +58,15 @@
         </div>
     </div>
 
-    <!-- Responsive Navigation Menu (Mobile) -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden lg:hidden bg-white border-t border-gray-200">
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">{{ __('Dashboard') }}</x-responsive-nav-link>
             <x-responsive-nav-link :href="route('pemetaan')" :active="request()->routeIs('pemetaan')">{{ __('Peta Wilayah') }}</x-responsive-nav-link>
             <x-responsive-nav-link :href="route('faq')" :active="request()->routeIs('faq')">{{ __('Pusat FAQ') }}</x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('laporan-web')" :active="request()->routeIs('laporan-web')">{{ __('Layanan') }}</x-responsive-nav-link>
+            
+            @if(Auth::user()->role !== 'admin' && Auth::user()->role !== 'operator')
+                <x-responsive-nav-link :href="route('laporan-web')" :active="request()->routeIs('laporan-web')">{{ __('Layanan') }}</x-responsive-nav-link>
+            @endif
         </div>
         <div class="pt-4 pb-1 border-t border-gray-200">
             <div class="px-4 flex items-center gap-3">

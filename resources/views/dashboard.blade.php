@@ -31,7 +31,7 @@
                         <div class="w-12 h-12 bg-[#A5D6A7] rounded-xl flex items-center justify-center text-[#0E4D2B] mb-4">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path></svg>
                         </div>
-                        <h4 class="text-lg font-bold text-gray-800 mb-1">Pemetaan Spasial Wilayah</h4>
+                        <h4 class="text-lg font-bold text-gray-800 mb-1">Pemetaan Wilayah</h4>
                         <p class="text-xs text-gray-500 mb-4 leading-relaxed">Cari tahu informasi letak Kantor Kelurahan, kepengurusan RW, dan Bank Sampah.</p>
                     </div>
                     <a href="{{ route('pemetaan') }}" class="w-full text-center bg-[#0E4D2B] hover:bg-[#2E7D32] text-white font-bold py-2 px-4 rounded-lg text-sm transition-colors block">Buka Peta Wilayah</a>

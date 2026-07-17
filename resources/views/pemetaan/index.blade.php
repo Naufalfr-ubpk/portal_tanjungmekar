@@ -172,16 +172,15 @@
                     fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
                         .then(response => response.json())
                         .then(data => {
-                            let jalan = data.address.road ? data.address.road + ", " : "";
-                            let desa = data.address.village || data.address.suburb || data.address.neighbourhood || "";
-                            let kota = data.address.city || data.address.county || "";
-                            let fullAddress = `${jalan} ${desa}, ${kota}, Kode Pos: ${data.address.postcode}`;
+                            // REVISI: Tarik alamat komplit bawaan API OSM
+                            let fullAddress = data.display_name; 
                             
                             addrBox.innerHTML = `<span class='text-green-700 font-bold'>Detail Lokasi Anda:</span><br> ${fullAddress}`;
                             localStorage.setItem('kkn_lat', lat);
                             localStorage.setItem('kkn_lng', lng);
                             localStorage.setItem('kkn_addr', fullAddress);
                         })
+
                         .catch(() => {
                             addrBox.innerText = "Gagal memuat nama jalan detail, namun titik peta sudah akurat.";
                         });
@@ -197,5 +196,37 @@
                 addrBox.innerText = "Browser tidak mendukung GPS.";
             }
         }
+
+// BIKIN TOMBOL KEMBALI KE LOKASI (WARNA HIJAU) DI BAWAH TOMBOL ZOOM
+        var targetControl = L.Control.extend({
+            options: { position: 'topleft' },
+            onAdd: function (map) {
+                var btn = L.DomUtil.create('button', 'leaflet-bar leaflet-control');
+                // Icon Target / Crosshair
+                btn.innerHTML = `<svg style="width:20px;height:20px;margin:auto;color:white;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v2m0 14v2m9-9h-2M5 12H3"></path></svg>`;
+                btn.style.backgroundColor = '#0E4D2B';
+                btn.style.width = '34px';
+                btn.style.height = '34px';
+                btn.style.display = 'flex';
+                btn.style.cursor = 'pointer';
+                btn.style.border = '2px solid rgba(0,0,0,0.2)';
+                btn.title = "Kembali ke Titik Anda";
+
+                btn.onclick = function(e){
+                    e.preventDefault();
+                    let savedLat = localStorage.getItem('kkn_lat');
+                    let savedLng = localStorage.getItem('kkn_lng');
+                    if(savedLat && savedLng) {
+                        // Terbang balik ke lokasi terakhir tanpa loading ulang GPS
+                        map.flyTo([savedLat, savedLng], 17, { animate: true, duration: 1.5 });
+                    } else {
+                        alert('Klik tombol "Lokasi Saya" (hijau tua) terlebih dahulu untuk mendeteksi posisi Anda.');
+                    }
+                }
+                return btn;
+            }
+        });
+        map.addControl(new targetControl());
+
     </script>
 </x-app-layout>

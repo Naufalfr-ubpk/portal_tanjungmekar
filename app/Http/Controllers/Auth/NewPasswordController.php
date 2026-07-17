@@ -37,6 +37,14 @@ class NewPasswordController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
+        // === TAMBAHIN KODE INI BRO ===
+        $user = \App\Models\User::where('email', $request->email)->first();
+        if ($user && \Illuminate\Support\Facades\Hash::check($request->password, $user->password)) {
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'password' => 'Maaf, password ini telah digunakan sebelumnya. Mohon gunakan password yang baru.',
+            ]);
+        }
+
         // Here we will attempt to reset the user's password. If it is successful we
         // will update the password on an actual user model and persist it to the
         // database. Otherwise we will parse the error and return the response.

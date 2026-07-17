@@ -28,7 +28,10 @@
                     <a href="{{ url('/') }}" class="hover:text-[#66BB6A] transition">Beranda</a>
                     <a href="{{ Auth::check() ? route('pemetaan') : route('register') }}" class="hover:text-[#66BB6A] transition">Peta Wilayah</a>
                     <a href="{{ Auth::check() ? route('faq') : route('register') }}" class="hover:text-[#66BB6A] transition">Pusat FAQ</a>
-                    <a href="{{ Auth::check() ? route('laporan-web') : route('register') }}" class="hover:text-[#66BB6A] transition">Layanan</a>
+                    
+                    @if(!Auth::check() || (Auth::user()->role !== 'admin' && Auth::user()->role !== 'operator'))
+                        <a href="{{ Auth::check() ? route('laporan-web') : route('register') }}" class="hover:text-[#66BB6A] transition">Layanan</a>
+                    @endif
                     
                     @auth
                         <div x-data="{ openProfile: false }" class="relative ml-4">
@@ -72,7 +75,10 @@
                 <a href="{{ url('/') }}" class="block px-3 py-2 rounded-md text-base font-bold text-[#0E4D2B] hover:bg-gray-50">Beranda</a>
                 <a href="{{ Auth::check() ? route('pemetaan') : route('register') }}" class="block px-3 py-2 rounded-md text-base font-bold text-gray-700 hover:bg-gray-50">Peta Wilayah</a>
                 <a href="{{ Auth::check() ? route('faq') : route('register') }}" class="block px-3 py-2 rounded-md text-base font-bold text-gray-700 hover:bg-gray-50">Pusat FAQ</a>
-                <a href="{{ Auth::check() ? route('laporan-web') : route('register') }}" class="block px-3 py-2 rounded-md text-base font-bold text-gray-700 hover:bg-gray-50">Layanan</a>
+                
+                @if(!Auth::check() || (Auth::user()->role !== 'admin' && Auth::user()->role !== 'operator'))
+                    <a href="{{ Auth::check() ? route('laporan-web') : route('register') }}" class="block px-3 py-2 rounded-md text-base font-bold text-gray-700 hover:bg-gray-50">Layanan</a>
+                @endif
                 
                 @auth
                     <div class="border-t border-gray-200 mt-4 pt-4">
@@ -136,7 +142,7 @@
                         <svg class="w-7 h-7 text-[#0E4D2B]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path></svg>
                     </div>
                     <h4 class="text-xl font-bold text-[#0E4D2B] mb-2">Pemetaan Wilayah</h4>
-                    <p class="text-gray-600 text-sm">Informasi koordinat akurat Kantor Kelurahan, detail kepengurusan dari RW 01 hingga RW 15.</p>
+                    <p class="text-gray-600 text-sm">Cari tahu informasi letak Kantor Kelurahan, kepengurusan RW, dan Bank Sampah.</p>
                 </a>
                 
                 <a href="{{ Auth::check() ? route('dashboard') : route('register') }}" class="bg-white p-8 rounded-2xl shadow-lg border-t-4 border-[#FBC02D] hover:-translate-y-2 hover:shadow-xl transition-all duration-300 block">
@@ -158,7 +164,6 @@
         </div>
     </section>
 
-    <!-- REVISI TITLE FAQ SESUAI REQUEST -->
     <section class="py-16 bg-white">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <h3 class="text-3xl font-extrabold text-[#0E4D2B] text-center mb-2">Seputar Pertanyaan (FAQ)</h3>

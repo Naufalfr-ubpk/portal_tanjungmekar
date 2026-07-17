@@ -10,12 +10,15 @@ return new class extends Migration
     {
         Schema::create('locations', function (Blueprint $table) {
             $table->id();
-            $table->string('name'); // Contoh: "RW 01", "Bank Sampah RW 13"
-            $table->enum('type', ['kelurahan', 'rw', 'bank_sampah']); // Kategori lokasi
-            $table->decimal('latitude', 10, 8); // Koordinat Garis Lintang
-            $table->decimal('longitude', 11, 8); // Koordinat Garis Bujur
-            $table->text('description')->nullable(); // Detail tambahan (contoh: Nama Pak RW, dll)
-            $table->string('address')->nullable(); // Alamat lengkap kalau ada
+            $table->string('type'); // rw, banksampah, kelurahan
+            $table->string('title');
+            $table->string('manager_label');
+            $table->string('manager_name');
+            $table->string('contact_label');
+            $table->string('contact_number')->nullable();
+            $table->string('latitude');
+            $table->string('longitude');
+            $table->text('address');
             $table->timestamps();
         });
     }
