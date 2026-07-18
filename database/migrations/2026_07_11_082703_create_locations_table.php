@@ -10,14 +10,15 @@ return new class extends Migration
     {
         Schema::create('locations', function (Blueprint $table) {
             $table->id();
-            $table->string('type'); // rw, banksampah, kelurahan
+            $table->string('type'); // kelurahan, rw, banksampah
             $table->string('title');
             $table->string('manager_label');
             $table->string('manager_name');
             $table->string('contact_label');
             $table->string('contact_number')->nullable();
-            $table->string('latitude');
-            $table->string('longitude');
+            $table->string('koordinat'); // Gabungan latitude & longitude
+            $table->text('gmaps_link')->nullable(); // Link Hyperlink Gmaps
+            $table->string('gmaps_button_text')->default('Buka di Google Maps'); // Teks tombol custom
             $table->text('address');
             $table->timestamps();
         });

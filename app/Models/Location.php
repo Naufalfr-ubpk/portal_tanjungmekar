@@ -11,6 +11,7 @@ class Location extends Model
 
     protected $fillable = [
         'type', 'title', 'manager_label', 'manager_name', 
-        'contact_label', 'contact_number', 'latitude', 'longitude', 'address'
+        'contact_label', 'contact_number', 'koordinat', 
+        'gmaps_link', 'gmaps_button_text', 'address'
     ];
 }

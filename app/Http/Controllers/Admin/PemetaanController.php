@@ -8,58 +8,62 @@ use App\Models\Location;
 
 class PemetaanController extends Controller
 {
-    // Nampilin halaman dan data peta
     public function index()
     {
-        $locations = Location::latest()->get();
+        // Ngurutin berdasarkan tipe: Kelurahan dulu, baru RW, baru Bank Sampah
+        $locations = Location::orderByRaw("FIELD(type, 'kelurahan', 'rw', 'banksampah')")->get();
         return view('admin.pemetaan.index', compact('locations'));
     }
 
-    // Nyimpen data titik peta baru
     public function store(Request $request)
     {
-        $request->validate([
+        $data = $request->validate([
             'type' => 'required',
             'title' => 'required',
             'manager_label' => 'required',
             'manager_name' => 'required',
             'contact_label' => 'required',
-            'latitude' => 'required',
-            'longitude' => 'required',
+            'koordinat' => 'required',
             'address' => 'required',
+            'gmaps_link' => 'nullable',
+            'gmaps_button_text' => 'nullable',
+            'contact_number' => 'nullable'
         ]);
 
-        Location::create($request->all());
+        if (empty($data['gmaps_button_text'])) {
+            $data['gmaps_button_text'] = 'Buka di Google Maps';
+        }
 
-        return redirect()->route('admin.pemetaan.index')->with('success', 'Titik Peta berhasil ditambahkan!');
+        Location::create($data);
+        return redirect()->route('admin.pemetaan.index')->with('success', 'Lokasi Peta berhasil ditambahkan!');
     }
 
-    // Mengubah data titik peta
     public function update(Request $request, $id)
     {
-        $request->validate([
+        $data = $request->validate([
             'type' => 'required',
             'title' => 'required',
             'manager_label' => 'required',
             'manager_name' => 'required',
             'contact_label' => 'required',
-            'latitude' => 'required',
-            'longitude' => 'required',
+            'koordinat' => 'required',
             'address' => 'required',
+            'gmaps_link' => 'nullable',
+            'gmaps_button_text' => 'nullable',
+            'contact_number' => 'nullable'
         ]);
 
-        $location = Location::findOrFail($id);
-        $location->update($request->all());
+        if (empty($data['gmaps_button_text'])) {
+            $data['gmaps_button_text'] = 'Buka di Google Maps';
+        }
 
-        return redirect()->route('admin.pemetaan.index')->with('success', 'Data Titik Peta berhasil diperbarui!');
+        Location::findOrFail($id)->update($data);
+        return redirect()->route('admin.pemetaan.index')->with('success', 'Data Lokasi berhasil diperbarui!');
     }
 
-    // Menghapus data titik peta
     public function destroy($id)
     {
-        $location = Location::findOrFail($id);
-        $location->delete();
-
-        return redirect()->route('admin.pemetaan.index')->with('success', 'Titik Peta berhasil dihapus!');
+        Location::findOrFail($id)->delete();
+        return redirect()->route('admin.pemetaan.index')->with('success', 'Lokasi peta berhasil dihapus!');
     }
 }
