@@ -16,21 +16,26 @@
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">
-            @include('layouts.navigation')
+            
+            <!-- BUNGKUSAN STICKY: Navbar dan Header dikunci di atas pakai sticky top-0 dan z-40 -->
+            <div class="sticky top-0 z-40 w-full">
+                @include('layouts.navigation')
 
-            <!-- Page Heading -->
-            @isset($header)
-                <header class="bg-white shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        {{ $header }}
-                    </div>
-                </header>
-            @endisset
+                <!-- Page Heading -->
+                @if (isset($header))
+                    <header class="bg-white shadow">
+                        <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
+                            {{ $header }}
+                        </div>
+                    </header>
+                @endif
+            </div>
 
-            <!-- Page Content -->
-            <main>
+            <!-- Page Content (Konten ini yang bakal tenggelam ke bawah navbar saat di-scroll) -->
+            <main class="relative z-0">
                 {{ $slot }}
             </main>
+            
         </div>
     </body>
 </html>

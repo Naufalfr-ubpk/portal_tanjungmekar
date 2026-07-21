@@ -11,13 +11,28 @@
         </div>
     </x-slot>
 
-    <div class="py-8 bg-[#F4F8F4] min-h-screen">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <!-- JURUS SAKTI: Membunuh scroll body bawaan browser khusus di laptop -->
+    <style>
+        @media (min-width: 1024px) {
+            body, html {
+                overflow: hidden !important;
+            }
+        }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #A5D6A7; border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background-color: #2E7D32; }
+    </style>
+
+    <!-- Kunci tinggi ngikutin layar utuh dikurang area navbar atas -->
+    <div class="bg-[#F4F8F4] lg:h-[calc(100vh-140px)] w-full">
+        <!-- Pindah padding dari py-6 jadi pt-6 pb-4 biar bawahnya gak nabrak -->
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 h-full pt-6 pb-10">
             
-            <div class="flex flex-col lg:flex-row gap-8 items-start relative">
+            <div class="flex flex-col-reverse lg:flex-row gap-6 items-start h-full">
                 
-                <!-- KOLOM KIRI: DAFTAR LOKASI -->
-                <div class="w-full lg:w-1/3 flex flex-col gap-6">
+                <!-- KOLOM KIRI (CARD & LIST) - Cuma ini yang boleh di-scroll -->
+                <div class="w-full lg:w-1/3 flex flex-col gap-6 lg:h-full lg:overflow-y-auto pr-2 pb-6 custom-scrollbar">
                     
                     <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-200 text-center">
                         <button onclick="lokasiSaya()" class="w-full flex items-center justify-center gap-2 bg-[#0E4D2B] hover:bg-[#2E7D32] text-white font-bold py-3 px-4 rounded-xl shadow transition-colors">
@@ -29,7 +44,6 @@
                         </div>
                     </div>
 
-                    <!-- 1. KELOMPOK KELURAHAN -->
                     @if($locations->where('type', 'kelurahan')->count() > 0)
                     <div>
                         <h4 class="text-sm font-extrabold text-[#0E4D2B] uppercase tracking-widest mb-3 border-b-2 border-gray-300 pb-1">Area Kelurahan</h4>
@@ -55,7 +69,6 @@
                     </div>
                     @endif
 
-                    <!-- 2. KELOMPOK RUKUN WARGA (Sesuai Urutan Request) -->
                     @if($locations->where('type', 'rw')->count() > 0)
                     <div>
                         <h4 class="text-sm font-extrabold text-[#66BB6A] uppercase tracking-widest mb-3 border-b-2 border-gray-300 pb-1">Rukun Warga (RW)</h4>
@@ -81,7 +94,6 @@
                     </div>
                     @endif
 
-                    <!-- 3. KELOMPOK BANK SAMPAH (Paling Bawah) -->
                     @if($locations->where('type', 'banksampah')->count() > 0)
                     <div>
                         <h4 class="text-sm font-extrabold text-yellow-600 uppercase tracking-widest mb-3 border-b-2 border-gray-300 pb-1">Bank Sampah</h4>
@@ -109,10 +121,10 @@
 
                 </div>
 
-                <!-- KOLOM KANAN: PETA LEAFLET -->
-                <div class="w-full lg:w-2/3 sticky top-[60px] z-10">
-                    <div class="bg-white p-2 rounded-2xl shadow-sm border-2 border-gray-200">
-                        <div id="map" class="w-full h-[450px] rounded-xl relative z-0"></div>
+                <!-- KOLOM KANAN (MAP) - Menyesuaikan tinggi kontainer -->
+                    <div class="w-full lg:w-2/3 h-[400px] lg:h-full">
+                    <div class="bg-white p-2 rounded-2xl shadow-sm border-2 border-gray-200 h-full">
+                        <div id="map" class="w-full h-full rounded-xl relative z-0"></div>
                     </div>
                 </div>
 
@@ -144,10 +156,8 @@
             iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34]
         });
 
-        // AMBIL DATA DARI DATABASE (Dari Route)
         var locationsData = @json($locations);
 
-        // Nampilin jarum peta otomatis berdasarkan data database
         locationsData.forEach(loc => {
             if(loc.koordinat) {
                 var coords = loc.koordinat.split(',');
@@ -223,7 +233,6 @@
             }
         }
 
-        // BIKIN TOMBOL KEMBALI KE LOKASI (WARNA HIJAU) DI BAWAH TOMBOL ZOOM
         var targetControl = L.Control.extend({
             options: { position: 'topleft' },
             onAdd: function (map) {
