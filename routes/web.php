@@ -6,12 +6,21 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\PemetaanController;
 use App\Http\Controllers\FaqController;
 use App\Models\Location; 
+use App\Models\Faq;
 
 Route::get('/auth/google', [GoogleController::class, 'redirectToGoogle'])->name('google.login');
 Route::get('/auth/google/callback', [GoogleController::class, 'handleGoogleCallback'])->name('google.callback');
 
 Route::get('/', function () {
-    return view('welcome');
+    // AMBIL HANYA FAQ BAWAAN WEB, MAKSIMAL 3, URUT ABJAD
+    $faqs = Faq::where('is_bawaan', true)
+               ->orWhere('is_bawaan', 1)
+               ->orWhere('is_bawaan', '1')
+               ->orderBy('pertanyaan', 'asc')
+               ->take(3)
+               ->get();
+
+    return view('welcome', compact('faqs'));
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {

@@ -1,9 +1,13 @@
 <x-app-layout>
-    <!-- Modal ditaruh di luar slot header, pakai fixed z-[99999] murni tanpa teleport -->
+    <!-- Modal diberi ID untuk dimanipulasi Vanilla JS agar kebal z-index trap -->
     @if(session('success'))
-    <div x-data="{ show: true }" x-show="show" style="display: none;" class="fixed inset-0 z-[99999] flex items-center justify-center bg-black bg-opacity-70 p-4">
-        <div @click.away="show = false" class="bg-white rounded-3xl shadow-2xl p-8 max-w-md w-full text-center relative">
-            <button @click="show = false" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition">
+    <div id="success-modal" class="fixed inset-0 z-[999999] flex items-center justify-center p-4">
+        <!-- Background Overlay Hitam Terpisah -->
+        <div class="fixed inset-0 bg-black bg-opacity-70" onclick="document.getElementById('success-modal').remove()"></div>
+        
+        <!-- Konten Modal -->
+        <div class="bg-white rounded-3xl shadow-2xl p-8 max-w-md w-full text-center relative z-50">
+            <button onclick="document.getElementById('success-modal').remove()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
             </button>
             <div class="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner mt-4">
@@ -13,10 +17,20 @@
             <p class="text-gray-600 mb-8">{{ session('success') }}</p>
             <div class="flex flex-col gap-3">
                 <a href="{{ route('faq') }}" class="w-full py-3 bg-[#0E4D2B] text-white font-bold rounded-xl hover:bg-[#0A3D22] transition shadow-md">Kembali ke Pusat FAQ</a>
-                <button @click="show = false" type="button" class="w-full py-3 bg-gray-100 text-gray-700 font-bold rounded-xl hover:bg-gray-200 transition">Tutup & Ajukan Lagi</button>
+                <button onclick="document.getElementById('success-modal').remove()" type="button" class="w-full py-3 bg-gray-100 text-gray-700 font-bold rounded-xl hover:bg-gray-200 transition">Tutup & Ajukan Lagi</button>
             </div>
         </div>
     </div>
+    
+    <!-- Script murni memindahkan node DOM modal ke luar x-app-layout menembus navbar -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('success-modal');
+            if (modal) {
+                document.body.appendChild(modal);
+            }
+        });
+    </script>
     @endif
 
     <x-slot name="header">

@@ -83,13 +83,24 @@
             <div class="flex items-center gap-4">
                 <span class="text-xs font-bold bg-[#FBC02D] text-[#0E4D2B] px-3 py-1 rounded-full uppercase tracking-wider border border-yellow-400">HAK AKSES: {{ strtoupper(Auth::user()->role) }}</span>
                 <div class="h-8 w-px bg-gray-300"></div>
+                
+                <!-- Alpine Dropdown Profil -->
                 <div x-data="{ openAdminProfile: false }" class="relative">
-                    <button @click="openAdminProfile = !openAdminProfile" class="flex items-center gap-2 px-4 py-2 bg-gray-50 border border-gray-200 rounded-full hover:bg-gray-100 transition focus:outline-none">
+                    <button @click="openAdminProfile = !openAdminProfile" @click.away="openAdminProfile = false" class="flex items-center gap-2 px-4 py-2 bg-gray-50 border border-gray-200 rounded-full hover:bg-gray-100 transition focus:outline-none">
                         <div class="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center overflow-hidden border border-[#0E4D2B]">
                             <img src="{{ Auth::user()->avatar ?? 'https://ui-avatars.com/api/?name='.urlencode(Auth::user()->name).'&color=0E4D2B&background=A5D6A7&bold=true' }}" alt="Avatar" class="w-full h-full object-cover">
                         </div>
                         <span class="text-sm font-bold text-gray-800">{{ Auth::user()->name }}</span>
+                        <svg class="w-4 h-4 text-gray-500 transition-transform duration-200" :class="openAdminProfile ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                     </button>
+
+                    <div x-show="openAdminProfile" x-transition.opacity style="display: none;" class="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg py-2 border border-gray-100 z-50">
+                        <a href="{{ route('profile.edit') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-[#0E4D2B] font-medium transition">Profil Saya</a>
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 font-medium transition">Keluar Akun</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </header>
@@ -197,6 +208,8 @@
                                 <div>
                                     <label class="block text-xs font-bold text-gray-700 mb-1">Kategori</label>
                                     <select name="type" x-model="formData.type" @change="autoSetLabels()" class="w-full rounded-md border-gray-300 shadow-sm text-sm focus:ring-[#0E4D2B]" required>
+                                        <!-- Ditambah 'disabled' biar teks placeholder gak bisa dipilih 2 kali -->
+                                        <option value="" disabled>-- Pilih Kategori --</option>
                                         <option value="kelurahan">Kantor Kelurahan</option>
                                         <option value="rw">Rukun Warga (RW)</option>
                                         <option value="banksampah">Bank Sampah</option>
@@ -211,15 +224,15 @@
                             <div class="grid grid-cols-2 gap-4 mb-4 p-3 bg-gray-50 rounded-lg border border-gray-200">
                                 <div>
                                     <label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">Label Pengelola</label>
-                                    <input type="text" name="manager_label" x-model="formData.manager_label" class="w-full rounded-md border-gray-300 shadow-sm text-sm" required>
+                                    <input type="text" name="manager_label" x-model="formData.manager_label" class="w-full rounded-md border-gray-300 shadow-sm text-sm" placeholder="Cth: Ketua RW" required>
                                 </div>
                                 <div>
                                     <label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">Nama Lengkap</label>
-                                    <input type="text" name="manager_name" x-model="formData.manager_name" class="w-full rounded-md border-gray-300 shadow-sm text-sm" required>
+                                    <input type="text" name="manager_name" x-model="formData.manager_name" class="w-full rounded-md border-gray-300 shadow-sm text-sm" placeholder="Cth: Bapak Ahmad / Ibu Siti" required>
                                 </div>
                                 <div>
                                     <label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">Label Kontak</label>
-                                    <input type="text" name="contact_label" x-model="formData.contact_label" class="w-full rounded-md border-gray-300 shadow-sm text-sm" required>
+                                    <input type="text" name="contact_label" x-model="formData.contact_label" class="w-full rounded-md border-gray-300 shadow-sm text-sm" placeholder="Cth: Kontak / Resepsionis" required>
                                 </div>
                                 <div>
                                     <label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">No. Handphone</label>
@@ -229,23 +242,23 @@
 
                             <div class="mb-4">
                                 <label class="block text-xs font-bold text-gray-700 mb-1">Koordinat <span class="text-[10px] font-normal text-gray-500">(Latitude, Longitude)</span></label>
-                                <input type="text" id="koordinatInput" name="koordinat" x-model="formData.koordinat" @input="updateMarkerFromInput" class="w-full rounded-md border-gray-300 shadow-sm text-sm bg-blue-50 focus:bg-white font-mono" required>
+                                <input type="text" id="koordinatInput" name="koordinat" x-model="formData.koordinat" @input="updateMarkerFromInput" class="w-full rounded-md border-gray-300 shadow-sm text-sm bg-blue-50 focus:bg-white font-mono" placeholder="Cth: -6.294132, 107.295258" required>
                             </div>
 
                             <div class="grid grid-cols-2 gap-4 mb-4">
                                 <div>
                                     <label class="block text-xs font-bold text-gray-700 mb-1">Link Google Maps (Opsional)</label>
-                                    <input type="text" name="gmaps_link" x-model="formData.gmaps_link" class="w-full rounded-md border-gray-300 shadow-sm text-sm">
+                                    <input type="text" name="gmaps_link" x-model="formData.gmaps_link" class="w-full rounded-md border-gray-300 shadow-sm text-sm" placeholder="Cth: https://maps.app.goo.gl/...">
                                 </div>
                                 <div>
                                     <label class="block text-xs font-bold text-gray-700 mb-1">Teks Tombol Link</label>
-                                    <input type="text" name="gmaps_button_text" x-model="formData.gmaps_button_text" class="w-full rounded-md border-gray-300 shadow-sm text-sm">
+                                    <input type="text" name="gmaps_button_text" x-model="formData.gmaps_button_text" class="w-full rounded-md border-gray-300 shadow-sm text-sm" placeholder="Cth: Buka di Google Maps">
                                 </div>
                             </div>
 
                             <div class="mb-6">
                                 <label class="block text-xs font-bold text-gray-700 mb-1">Alamat Lengkap <span class="text-[10px] font-normal text-gray-500">(Bisa diedit manual)</span></label>
-                                <textarea name="address" id="alamatInput" x-model="formData.address" rows="2" class="w-full rounded-md border-gray-300 shadow-sm text-sm focus:ring-[#0E4D2B]" required></textarea>
+                                <textarea name="address" id="alamatInput" x-model="formData.address" rows="2" class="w-full rounded-md border-gray-300 shadow-sm text-sm focus:ring-[#0E4D2B]" placeholder="Cth: Dusun Krajan, RT 01 / RW 02..." required></textarea>
                             </div>
 
                             <div class="flex justify-end gap-3 pt-4 border-t">
@@ -297,10 +310,11 @@
             marker: null,
             defaultLat: -6.273213,
             defaultLng: 107.273665,
+            
             formData: {
-                type: 'rw', title: '', manager_label: 'Ketua RW', manager_name: '', 
-                contact_label: 'Kontak', contact_number: '', koordinat: '', 
-                gmaps_link: '', gmaps_button_text: 'Buka di Google Maps', address: ''
+                type: '', title: '', manager_label: '', manager_name: '', 
+                contact_label: '', contact_number: '', koordinat: '', 
+                gmaps_link: '', gmaps_button_text: '', address: ''
             },
             
             deleteModalOpen: false,
@@ -315,7 +329,7 @@
                 this.deleteModalOpen = false;
                 this.deleteUrl = '';
             },
-            
+
             autoSetLabels() {
                 if(this.formData.type === 'kelurahan') { 
                     this.formData.manager_label = 'Lurah'; 
@@ -323,7 +337,7 @@
                 } else if(this.formData.type === 'banksampah') { 
                     this.formData.manager_label = 'Pengelola'; 
                     this.formData.contact_label = 'Kontak'; 
-                } else { 
+                } else if(this.formData.type === 'rw') { 
                     this.formData.manager_label = 'Ketua RW'; 
                     this.formData.contact_label = 'Kontak'; 
                 }
@@ -341,9 +355,9 @@
                     this.formAction = '{{ route('admin.pemetaan.store') }}';
                     this.formMethod = 'POST';
                     this.formData = {
-                        type: 'rw', title: '', manager_label: 'Ketua RW', manager_name: '', 
-                        contact_label: 'Kontak', contact_number: '', koordinat: '', 
-                        gmaps_link: '', gmaps_button_text: 'Buka di Google Maps', address: ''
+                        type: '', title: '', manager_label: '', manager_name: '', 
+                        contact_label: '', contact_number: '', koordinat: '', 
+                        gmaps_link: '', gmaps_button_text: '', address: ''
                     };
                 }
                 

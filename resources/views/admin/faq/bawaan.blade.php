@@ -126,7 +126,7 @@
                 </table>
             </div>
 
-            <!-- MODAL FORM TAMBAH / EDIT FAQ WEB (Pakai Overlay sesuai instruksi) -->
+            <!-- MODAL FORM TAMBAH / EDIT FAQ WEB -->
             <div x-show="isModalOpen" style="display: none;" class="fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-70 p-4">
                 <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden max-h-[90vh] overflow-y-auto">
                     <div class="bg-[#0E4D2B] p-5 text-white flex justify-between items-center">
@@ -154,8 +154,9 @@
                             <div class="col-span-2"><p class="text-xs font-bold text-gray-500 uppercase">Halaman Tujuan (Opsional)</p></div>
                             <div>
                                 <label class="block text-[10px] font-bold text-gray-600 mb-1">Halaman Tujuan</label>
+                                <!-- Ditambah 'disabled' biar teks placeholder gak bisa dipilih 2 kali -->
                                 <select name="action_link" x-model="formData.action_link" class="w-full rounded-md border-gray-300 shadow-sm text-sm focus:ring-[#0E4D2B]">
-                                    <option value="">-- Pilih Halaman --</option>
+                                    <option value="" disabled>-- Pilih Halaman --</option>
                                     <option value="/dashboard">Dashboard</option>
                                     <option value="/pemetaan">Peta Wilayah</option>
                                     <option value="/faq">Pusat Bantuan FAQ</option>

@@ -61,12 +61,26 @@
             <div class="flex items-center gap-4">
                 <span class="text-xs font-bold bg-[#FBC02D] text-[#0E4D2B] px-3 py-1 rounded-full uppercase tracking-wider border border-yellow-400">HAK AKSES: {{ strtoupper(Auth::user()->role) }}</span>
                 <div class="h-8 w-px bg-gray-300"></div>
-                <button class="flex items-center gap-2 px-4 py-2 bg-gray-50 border border-gray-200 rounded-full hover:bg-gray-100 transition focus:outline-none">
-                    <div class="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center overflow-hidden border border-[#0E4D2B]">
-                        <img src="{{ Auth::user()->avatar ?? 'https://ui-avatars.com/api/?name='.urlencode(Auth::user()->name).'&color=0E4D2B&background=A5D6A7&bold=true' }}" alt="Avatar" class="w-full h-full object-cover">
+                
+                <!-- Alpine Dropdown Profil -->
+                <div x-data="{ openAdminProfile: false }" class="relative">
+                    <button @click="openAdminProfile = !openAdminProfile" @click.away="openAdminProfile = false" class="flex items-center gap-2 px-4 py-2 bg-gray-50 border border-gray-200 rounded-full hover:bg-gray-100 transition focus:outline-none">
+                        <div class="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center overflow-hidden border border-[#0E4D2B]">
+                            <img src="{{ Auth::user()->avatar ?? 'https://ui-avatars.com/api/?name='.urlencode(Auth::user()->name).'&color=0E4D2B&background=A5D6A7&bold=true' }}" alt="Avatar" class="w-full h-full object-cover">
+                        </div>
+                        <span class="text-sm font-bold text-gray-800">{{ Auth::user()->name }}</span>
+                        <svg class="w-4 h-4 text-gray-500 transition-transform duration-200" :class="openAdminProfile ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+
+                    <div x-show="openAdminProfile" x-transition.opacity style="display: none;" class="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg py-2 border border-gray-100 z-50">
+                        <a href="{{ route('profile.edit') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-[#0E4D2B] font-medium transition">Profil Saya</a>
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 font-medium transition">Keluar Akun</button>
+                        </form>
                     </div>
-                    <span class="text-sm font-bold text-gray-800">{{ Auth::user()->name }}</span>
-                </button>
+                </div>
+
             </div>
         </header>
 
@@ -136,7 +150,7 @@
                 </table>
             </div>
 
-            <!-- MODAL FORM ULAS / JAWAB FAQ (Tidak ada click.away di div pembungkusnya) -->
+            <!-- MODAL FORM ULAS / JAWAB FAQ -->
             <div x-show="isModalOpen" style="display: none;" class="fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-70 p-4">
                 <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden max-h-[90vh] overflow-y-auto">
                     <div class="bg-[#0E4D2B] p-5 text-white flex justify-between items-center">
@@ -165,7 +179,8 @@
                             <div>
                                 <label class="block text-[10px] font-bold text-gray-600 mb-1">Halaman Tujuan</label>
                                 <select name="action_link" x-model="formData.action_link" class="w-full rounded-md border-gray-300 shadow-sm text-sm focus:ring-[#0E4D2B]">
-                                    <option value="">-- Pilih Halaman --</option>
+                                    <!-- Atribut disabled ditambahkan di bawah ini -->
+                                    <option value="" disabled>-- Pilih Halaman --</option>
                                     <option value="/dashboard">Dashboard</option>
                                     <option value="/pemetaan">Peta Wilayah</option>
                                     <option value="/faq">Pusat Bantuan FAQ</option>
@@ -196,7 +211,7 @@
                 </div>
             </div>
 
-            <!-- MODAL KONFIRMASI HAPUS (Tetap pakai click.away) -->
+            <!-- MODAL KONFIRMASI HAPUS -->
             <div x-show="deleteModalOpen" style="display: none;" class="fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-70 p-4">
                 <div @click.away="closeDeleteModal()" class="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full text-center">
                     <div class="w-16 h-16 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-4">

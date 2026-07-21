@@ -14,11 +14,14 @@ class FaqAdminController extends Controller
 
     public function index()
     {
-        // HANYA narik yang BUKAN bawaan web (is_bawaan = false ATAU null)
+        // Proteksi super ketat. Hanya menampilkan pengajuan yang BUKAN bawaan web 
+        // dan menghindari FAQ yang diinput manual oleh nama penanya "Sistem Web"
         $faqs = Faq::where(function($query) {
-            $query->where('is_bawaan', false)
-                  ->orWhereNull('is_bawaan');
-        })->latest()->get();
+            $query->whereNull('is_bawaan')
+                  ->orWhere('is_bawaan', 0)
+                  ->orWhere('is_bawaan', false)
+                  ->orWhere('is_bawaan', '0');
+        })->where('nama_penanya', '!=', 'Sistem Web')->latest()->get();
         
         return view('admin.faq.index', compact('faqs'));
     }
@@ -56,7 +59,7 @@ class FaqAdminController extends Controller
     // === BAGIAN FAQ BAWAAN WEB ===
     public function bawaanIndex()
     {
-        $faqs = Faq::where('is_bawaan', true)->latest()->get();
+        $faqs = Faq::where('is_bawaan', true)->orWhere('is_bawaan', 1)->latest()->get();
         return view('admin.faq.bawaan', compact('faqs'));
     }
 

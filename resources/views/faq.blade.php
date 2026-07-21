@@ -25,9 +25,9 @@
                 </div>
             </div>
 
-            <!-- LIST FAQ DINAMIS DENGAN FITUR FILTER ALPINE -->
+            <!-- LIST FAQ DINAMIS DENGAN FITUR FILTER ALPINE (Urut Abjad) -->
             <div class="space-y-4">
-                @forelse($faqs as $faq)
+                @forelse($faqs->sortBy('pertanyaan') as $faq)
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 faq-item" 
                      data-question="{{ strtolower($faq->pertanyaan) }}" 
                      x-show="searchQuery === '' || '{{ strtolower($faq->pertanyaan) }}'.includes(searchQuery.toLowerCase())">
@@ -43,7 +43,7 @@
                     @endif
                 </div>
                 @empty
-                <!-- Ini nggak bakal kepanggil kalau faqs kosong dari backend, tapi jaga-jaga aja -->
+                <!-- Kosong -->
                 @endforelse
 
                 <!-- KOTAK KUNING: MUNCUL KALAU KETIKAN GAK ADA DI DAFTAR -->
@@ -51,10 +51,10 @@
                     <div class="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
                         <svg class="w-8 h-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                     </div>
-                    <h4 class="text-xl font-bold text-gray-800 mb-2">Jawaban Tidak Ditemukan</h4>
-                    <p class="text-gray-600 mb-6">Kami tidak dapat menemukan jawaban untuk pertanyaan "<span class="font-bold" x-text="searchQuery"></span>". Silakan ajukan pertanyaan baru kepada kami.</p>
-                    <a href="{{ route('faq.tambah') }}" class="inline-flex items-center gap-2 px-6 py-3 bg-yellow-500 text-white font-bold rounded-xl shadow-md hover:bg-yellow-600 transition">
-                        Ajukan Pertanyaan Baru
+                    <h4 class="text-xl font-bold text-gray-800 mb-2">Pertanyaan Tidak Ditemukan</h4>
+                    <p class="text-gray-600 mb-6">Kami tidak dapat menemukan pertanyaan untuk kalimat "<span class="font-bold" x-text="searchQuery"></span>". Silakan ajukan pertanyaan baru kepada kami.</p>
+                    <a href="{{ route('faq.tambah') }}" class="inline-flex items-center gap-2 px-6 py-3 bg-[#FBC02D] text-[#0E4D2B] font-bold rounded-xl shadow-md hover:bg-yellow-500 transition">
+                        Buat Pengajuan Pertanyaan Baru
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                     </a>
                 </div>
@@ -62,7 +62,7 @@
 
             <!-- BAGIAN BAWAH DEFAULT -->
             <div x-show="searchQuery === ''" class="mt-12 text-center">
-                <p class="text-gray-500 mb-4">Tidak menemukan jawaban yang sesuai di daftar atas?</p>
+                <p class="text-gray-500 mb-4">Tidak menemukan pertanyaan yang Anda cari?</p>
                 <a href="{{ route('faq.tambah') }}" class="inline-flex items-center gap-2 px-8 py-3 bg-white border-2 border-[#0E4D2B] text-[#0E4D2B] font-bold rounded-xl hover:bg-green-50 transition">
                     Buat Pengajuan Pertanyaan Baru
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>

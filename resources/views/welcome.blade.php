@@ -54,7 +54,7 @@
                     @else
                         <div class="flex items-center gap-3 ml-2">
                             <a href="{{ route('login') }}" class="px-6 py-2.5 text-sm font-bold text-[#0E4D2B] bg-transparent border-2 border-[#0E4D2B] rounded-full hover:bg-[#0E4D2B] hover:text-white transition-all">Login</a>
-                            <a href="{{ route('register') }}" class="px-6 py-2.5 text-sm font-bold text-[#0E4D2B] bg-[#FBC02D] rounded-full shadow hover:bg-yellow-500 transition-all">Sign Up</a>
+                            <a href="{{ route('register') }}" class="text-center py-2.5 px-6 text-sm font-bold text-[#0E4D2B] bg-[#FBC02D] rounded-full shadow hover:bg-yellow-500 transition-all">Sign Up</a>
                         </div>
                     @endauth
                 </div>
@@ -170,18 +170,17 @@
             <p class="text-gray-500 text-center mb-8 text-sm">Punya pertanyaan seputar portal? Berikut beberapa poin info ringkas.</p>
             
             <div class="space-y-4 mb-10">
+                <!-- Loop dinamis ngambil dari FAQ Bawaan Web, sudah urut abjad dari controller -->
+                @forelse($faqs as $faq)
                 <div class="border-2 border-[#A5D6A7] rounded-lg p-5 bg-[#F4F8F4]">
-                    <h5 class="font-bold text-[#0E4D2B]">Bagaimana cara kerja Bank Sampah Digital?</h5>
-                    <p class="text-sm text-gray-600 mt-2">Warga dapat membawa sampah non-organik dan organik ke lokasi operasional. Setiap setoran dicatat langsung sebagai saldo tabungan digital oleh operator.</p>
+                    <h5 class="font-bold text-[#0E4D2B]">{{ $faq->pertanyaan }}</h5>
+                    <p class="text-sm text-gray-600 mt-2">{{ $faq->jawaban }}</p>
                 </div>
-                <div class="border-2 border-[#A5D6A7] rounded-lg p-5 bg-[#F4F8F4]">
-                    <h5 class="font-bold text-[#0E4D2B]">Apakah warga perlu mendaftar untuk melihat Peta?</h5>
-                    <p class="text-sm text-gray-600 mt-2">Iya, sistem portal ini mengharuskan warga untuk membuat akun (Sign Up) agar dapat mengakses fitur Pemetaan Wilayah, menabung di Bank Sampah, dan Lapor Warga secara aman.</p>
+                @empty
+                <div class="border-2 border-[#A5D6A7] rounded-lg p-5 bg-[#F4F8F4] text-center">
+                    <p class="text-sm text-gray-500 italic">Belum ada informasi FAQ.</p>
                 </div>
-                <div class="border-2 border-[#A5D6A7] rounded-lg p-5 bg-[#F4F8F4]">
-                    <h5 class="font-bold text-[#0E4D2B]">Bagaimana cara melihat lokasi Bank Sampah terdekat?</h5>
-                    <p class="text-sm text-gray-600 mt-2">Gunakan menu "Peta Wilayah" di atas. Peta akan menampilkan titik-titik Bank Sampah dan batas RW. Anda juga dapat menekan tombol "Temukan Lokasi Saya".</p>
-                </div>
+                @endforelse
             </div>
 
             <div class="text-center bg-[#F4F8F4] p-6 rounded-2xl border border-gray-200">
