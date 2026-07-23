@@ -7,10 +7,18 @@
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700,800&display=swap" rel="stylesheet" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"></script>
+    <style>
+        /* Custom Scrollbar Global Biar Elegan dan Gak Ngebug */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #F4F8F4; }
+        ::-webkit-scrollbar-thumb { background-color: #A5D6A7; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background-color: #2E7D32; }
+    </style>
 </head>
 <body class="font-sans antialiased bg-[#F4F8F4] text-gray-900">
 
-    <nav x-data="{ openMobileMenu: false }" class="bg-white shadow-md border-b-4 border-[#0E4D2B] sticky top-0 z-50">
+    <!-- Tambah relative di nav biar absolute dropdown patokannya ke sini -->
+    <nav x-data="{ openMobileMenu: false }" class="bg-white shadow-md border-b-4 border-[#0E4D2B] sticky top-0 z-50 relative">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-20 sm:h-24">
                 
@@ -47,7 +55,7 @@
                                 <a href="{{ route('profile.edit') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 font-semibold">Profil Saya</a>
                                 <form method="POST" action="{{ route('logout') }}">
                                     @csrf
-                                    <button type="submit" class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100 font-semibold">Keluar</button>
+                                    <button type="submit" class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100 font-semibold">Sign Out</button>
                                 </form>
                             </div>
                         </div>
@@ -70,8 +78,24 @@
             </div>
         </div>
 
-        <div x-show="openMobileMenu" style="display: none;" class="lg:hidden bg-white border-t border-gray-200">
-            <div class="px-4 pt-2 pb-4 space-y-1">
+        <!-- Penambahan absolute, w-full, left-0, dan shadow-2xl biar menunya ngambang di atas konten -->
+        <div x-show="openMobileMenu" x-transition style="display: none;" class="absolute w-full left-0 top-[100%] lg:hidden bg-white border-b-4 border-[#0E4D2B] shadow-2xl z-50">
+            <div class="px-4 pt-4 pb-6 space-y-1">
+                @auth
+                    <div class="mb-5 pb-5 border-b border-gray-200">
+                        <div class="flex items-center gap-3 px-3 mb-4">
+                            <img src="{{ Auth::user()->avatar }}" alt="Avatar" class="w-12 h-12 rounded-full border-2 border-[#0E4D2B]" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&color=0E4D2B&background=A5D6A7&bold=true';">
+                            <span class="font-bold text-gray-800 text-lg">{{ Auth::user()->name }}</span>
+                        </div>
+                        <a href="{{ route('dashboard') }}" class="block px-3 py-2.5 rounded-md text-base font-bold text-gray-700 hover:bg-gray-50">Dashboard</a>
+                        <a href="{{ route('profile.edit') }}" class="block px-3 py-2.5 rounded-md text-base font-bold text-gray-700 hover:bg-gray-50">Profil Saya</a>
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit" class="w-full text-left px-3 py-2.5 rounded-md text-base font-bold text-red-600 hover:bg-gray-50">Sign Out</button>
+                        </form>
+                    </div>
+                @endauth
+
                 <a href="{{ url('/') }}" class="block px-3 py-2 rounded-md text-base font-bold text-[#0E4D2B] hover:bg-gray-50">Beranda</a>
                 <a href="{{ Auth::check() ? route('pemetaan') : route('register') }}" class="block px-3 py-2 rounded-md text-base font-bold text-gray-700 hover:bg-gray-50">Peta Wilayah</a>
                 <a href="{{ Auth::check() ? route('faq') : route('register') }}" class="block px-3 py-2 rounded-md text-base font-bold text-gray-700 hover:bg-gray-50">Pusat FAQ</a>
@@ -79,70 +103,67 @@
                 @if(!Auth::check() || (Auth::user()->role !== 'admin' && Auth::user()->role !== 'operator'))
                     <a href="{{ Auth::check() ? route('laporan-web') : route('register') }}" class="block px-3 py-2 rounded-md text-base font-bold text-gray-700 hover:bg-gray-50">Layanan</a>
                 @endif
-                
-                @auth
-                    <div class="border-t border-gray-200 mt-4 pt-4">
-                        <div class="flex items-center gap-3 px-3 mb-3">
-                            <img src="{{ Auth::user()->avatar }}" alt="Avatar" class="w-10 h-10 rounded-full border border-[#0E4D2B]" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&color=0E4D2B&background=A5D6A7&bold=true';">
-                            <span class="font-bold text-gray-800">{{ Auth::user()->name }}</span>
-                        </div>
-                        <a href="{{ route('dashboard') }}" class="block px-3 py-2 rounded-md text-base font-bold text-gray-700 hover:bg-gray-50">Dashboard</a>
-                        <a href="{{ route('profile.edit') }}" class="block px-3 py-2 rounded-md text-base font-bold text-gray-700 hover:bg-gray-50">Profil Saya</a>
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-                            <button type="submit" class="w-full text-left px-3 py-2 rounded-md text-base font-bold text-red-600 hover:bg-gray-50">Keluar</button>
-                        </form>
+
+                @guest
+                    <div class="flex flex-col gap-3 mt-5 pt-5 border-t border-gray-200 px-3">
+                        <a href="{{ route('login') }}" class="text-center py-2.5 text-sm font-bold text-[#0E4D2B] bg-transparent border-2 border-[#0E4D2B] rounded-full hover:bg-[#0E4D2B] hover:text-white active:bg-[#0E4D2B] active:text-white transition-all">Login</a>
+                        <a href="{{ route('register') }}" class="text-center py-2.5 text-sm font-bold text-[#0E4D2B] bg-[#FBC02D] rounded-full shadow hover:bg-yellow-500 transition-all">Sign Up</a>
                     </div>
-                @else
-                    <div class="flex flex-col gap-2 mt-4 px-3">
-                        <a href="{{ route('login') }}" class="text-center py-2 text-sm font-bold text-[#0E4D2B] bg-transparent border-2 border-[#0E4D2B] rounded-full">Login</a>
-                        <a href="{{ route('register') }}" class="text-center py-2 text-sm font-bold text-[#0E4D2B] bg-[#FBC02D] rounded-full">Sign Up</a>
-                    </div>
-                @endauth
+                @endguest
             </div>
         </div>
     </nav>
 
-    <main class="relative overflow-hidden bg-[#0E4D2B]">
-        <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
+    <!-- SETTING HERO SECTION: Background Kolase + Overlay Transparan -->
+    <main class="relative overflow-hidden bg-[#0E4D2B] bg-no-repeat" style="background-image: url('{{ asset('images/hero-kolase.png') }}'); background-size: auto 85%; background-position: center top 20px;">
+        
+        <!-- Kaca Film Hijau Transparan -->
+        <!-- bg-opacity-85 untuk warna 85% hijau dan 15% nembus ke gambar kolase -->
+        <div class="absolute inset-0 bg-[#0E4D2B] bg-opacity-85"></div>
+        
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div class="pt-10 pb-12 md:pt-14 md:pb-16 lg:flex lg:items-center lg:gap-12">
-                <div class="text-center lg:text-left lg:w-1/2">
-                    <h2 class="text-4xl font-extrabold text-white sm:text-5xl md:text-6xl leading-tight mb-6">
+            <div class="pt-8 pb-4 md:pt-14 md:pb-6 flex flex-col lg:flex-row lg:items-center lg:gap-12">
+                
+                <div class="order-first lg:order-last w-full lg:w-1/2 relative mb-8 lg:mb-0">
+                    <div class="aspect-w-16 aspect-h-9 sm:aspect-h-10 rounded-2xl overflow-hidden shadow-2xl border-4 border-[#2E7D32]">
+                        <img src="{{ asset('images/hero-pemandangan.png') }}" alt="Lingkungan Bersih Tanjungmekar" class="object-cover w-full h-full">
+                    </div>
+                </div>
+
+                <div class="order-last lg:order-first text-center lg:text-left lg:w-1/2">
+                    <h2 class="text-4xl font-extrabold text-white sm:text-5xl md:text-6xl leading-tight mb-4 sm:mb-6">
                         Sistem Informasi <br>
                         <span class="text-[#FBC02D]">Geografis & Bank Sampah</span>
                     </h2>
-                    <p class="mt-4 text-lg text-[#F4F8F4] md:text-xl font-medium max-w-2xl mx-auto lg:mx-0">
+                    <p class="mt-4 text-sm sm:text-lg text-[#F4F8F4] md:text-xl font-medium max-w-2xl mx-auto lg:mx-0 px-2 sm:px-0 leading-relaxed">
                         Pemberdayaan Masyarakat dalam Pengelolaan Sampah Berbasis Lingkungan Berkelanjutan di Kelurahan Tanjungmekar.
                     </p>
-                    <div class="mt-8 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                    <div class="mt-8 mb-4 sm:mb-0 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start px-4 sm:px-0">
                         <a href="{{ Auth::check() ? route('pemetaan') : route('register') }}" class="px-8 py-3.5 text-base font-bold text-[#0E4D2B] bg-[#FBC02D] rounded-full shadow-lg hover:bg-yellow-500 hover:-translate-y-1 transition-all duration-300">Jelajahi Peta</a>
                     </div>
                 </div>
-                <div class="mt-12 lg:mt-0 lg:w-1/2 relative">
-                    <div class="aspect-w-16 aspect-h-9 rounded-2xl overflow-hidden shadow-2xl border-4 border-[#2E7D32]">
-                        <img src="https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?q=80&w=2070&auto=format&fit=crop" alt="Lingkungan Bersih" class="object-cover w-full h-full">
-                    </div>
-                </div>
+
             </div>
         </div>
-        <svg class="w-full text-[#F4F8F4]" viewBox="0 0 1440 120" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+        
+        <!-- Gelombang Bawah (Tambahin relative z-10 biar posisinya di depan layar hijau transparan) -->
+        <svg class="w-full text-[#F4F8F4] relative z-10" viewBox="0 0 1440 120" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
             <path d="M0,64L80,69.3C160,75,320,85,480,80C640,75,800,53,960,48C1120,43,1280,53,1360,58.7L1440,64L1440,120L1360,120C1280,120,1120,120,960,120C800,120,640,120,480,120C320,120,160,120,80,120L0,120Z"></path>
         </svg>
     </main>
 
-    <section id="fitur" class="py-16 bg-[#F4F8F4]">
+    <section id="fitur" class="py-12 sm:py-16 bg-[#F4F8F4]">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h3 class="text-3xl font-extrabold text-[#0E4D2B] mb-4">Layanan Digital Tanjungmekar</h3>
-            <p class="text-gray-600 max-w-2xl mx-auto mb-12">Fasilitas terpadu untuk mempermudah akses informasi dan pelaporan warga.</p>
+            <p class="text-gray-600 max-w-2xl mx-auto mb-10 sm:mb-12 leading-relaxed px-2">Fasilitas terpadu untuk mempermudah akses informasi dan pelaporan warga.</p>
             
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 px-2 sm:px-0">
                 <a href="{{ Auth::check() ? route('pemetaan') : route('register') }}" class="bg-white p-8 rounded-2xl shadow-lg border-t-4 border-[#2E7D32] hover:-translate-y-2 hover:shadow-xl transition-all duration-300 block">
                     <div class="w-14 h-14 bg-[#A5D6A7] rounded-full flex items-center justify-center mx-auto mb-6">
                         <svg class="w-7 h-7 text-[#0E4D2B]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path></svg>
                     </div>
                     <h4 class="text-xl font-bold text-[#0E4D2B] mb-2">Pemetaan Wilayah</h4>
-                    <p class="text-gray-600 text-sm">Cari tahu informasi letak Kantor Kelurahan, kepengurusan RW, dan Bank Sampah.</p>
+                    <p class="text-gray-600 text-sm leading-relaxed">Cari tahu informasi letak Kantor Kelurahan, kepengurusan RW, dan Bank Sampah.</p>
                 </a>
                 
                 <a href="{{ Auth::check() ? route('dashboard') : route('register') }}" class="bg-white p-8 rounded-2xl shadow-lg border-t-4 border-[#FBC02D] hover:-translate-y-2 hover:shadow-xl transition-all duration-300 block">
@@ -150,7 +171,7 @@
                         <svg class="w-7 h-7 text-[#0E4D2B]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
                     </div>
                     <h4 class="text-xl font-bold text-[#0E4D2B] mb-2">Bank Sampah Digital</h4>
-                    <p class="text-gray-600 text-sm">Lokasi operasional Bank Sampah beserta sistem manajemen laporan setoran tabungan warga.</p>
+                    <p class="text-gray-600 text-sm leading-relaxed">Lokasi operasional Bank Sampah beserta sistem manajemen laporan setoran tabungan warga.</p>
                 </a>
 
                 <a href="{{ Auth::check() ? route('dashboard') : route('register') }}" class="bg-white p-8 rounded-2xl shadow-lg border-t-4 border-[#66BB6A] hover:-translate-y-2 hover:shadow-xl transition-all duration-300 block">
@@ -158,23 +179,22 @@
                         <svg class="w-7 h-7 text-[#0E4D2B]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"></path></svg>
                     </div>
                     <h4 class="text-xl font-bold text-[#0E4D2B] mb-2">Aduan & Lapor Warga</h4>
-                    <p class="text-gray-600 text-sm">Fasilitas pengaduan warga terkait masalah lingkungan yang terhubung langsung ke Kelurahan.</p>
+                    <p class="text-gray-600 text-sm leading-relaxed">Fasilitas pengaduan warga terkait masalah lingkungan yang terhubung langsung ke Kelurahan.</p>
                 </a>
             </div>
         </div>
     </section>
 
-    <section class="py-16 bg-white">
+    <section class="py-12 sm:py-16 bg-white">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <h3 class="text-3xl font-extrabold text-[#0E4D2B] text-center mb-2">Seputar Pertanyaan (FAQ)</h3>
             <p class="text-gray-500 text-center mb-8 text-sm">Punya pertanyaan seputar portal? Berikut beberapa poin info ringkas.</p>
             
-            <div class="space-y-4 mb-10">
-                <!-- Loop dinamis ngambil dari FAQ Bawaan Web, sudah urut abjad dari controller -->
+            <div class="space-y-4 mb-10 px-2 sm:px-0">
                 @forelse($faqs as $faq)
                 <div class="border-2 border-[#A5D6A7] rounded-lg p-5 bg-[#F4F8F4]">
-                    <h5 class="font-bold text-[#0E4D2B]">{{ $faq->pertanyaan }}</h5>
-                    <p class="text-sm text-gray-600 mt-2">{{ $faq->jawaban }}</p>
+                    <h5 class="font-bold text-[#0E4D2B] leading-snug">{{ $faq->pertanyaan }}</h5>
+                    <p class="text-sm text-gray-600 mt-2 leading-relaxed">{{ $faq->jawaban }}</p>
                 </div>
                 @empty
                 <div class="border-2 border-[#A5D6A7] rounded-lg p-5 bg-[#F4F8F4] text-center">
@@ -183,8 +203,8 @@
                 @endforelse
             </div>
 
-            <div class="text-center bg-[#F4F8F4] p-6 rounded-2xl border border-gray-200">
-                <p class="text-sm font-semibold text-gray-600 mb-3">Pertanyaan lebih lanjut atau keluhan Anda belum terjawab di atas?</p>
+            <div class="text-center bg-[#F4F8F4] p-6 rounded-2xl border border-gray-200 mx-2 sm:mx-0">
+                <p class="text-sm font-semibold text-gray-600 mb-3 px-2 leading-relaxed">Pertanyaan lebih lanjut atau keluhan Anda belum terjawab di atas?</p>
                 <a href="{{ Auth::check() ? route('faq') : route('register') }}" class="inline-flex items-center justify-center px-6 py-2.5 bg-[#0E4D2B] hover:bg-[#2E7D32] text-white text-sm font-bold rounded-full shadow transition-all group">
                     Jelajahi Semua Pertanyaan
                     <svg class="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
@@ -194,30 +214,30 @@
     </section>
 
     @guest
-    <section class="bg-[#2E7D32] py-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center flex flex-col items-center">
-            <h3 class="text-2xl font-bold text-white mb-4">Siap Berkontribusi untuk Lingkungan?</h3>
-            <p class="text-[#F4F8F4] mb-8 max-w-xl">Bergabunglah bersama kami menjaga kebersihan Tanjungmekar. Daftarkan diri Anda sekarang untuk mulai memanfaatkan layanan Bank Sampah.</p>
-            <a href="{{ route('register') }}" class="px-8 py-3.5 text-lg font-bold text-[#0E4D2B] bg-[#FBC02D] rounded-full shadow-lg hover:bg-yellow-500 hover:-translate-y-1 transition-all">Sign Up Sekarang</a>
+    <section class="bg-[#2E7D32] py-12 sm:py-16">
+        <div class="max-w-7xl mx-auto px-6 sm:px-6 lg:px-8 text-center flex flex-col items-center">
+            <h3 class="text-2xl sm:text-3xl font-bold text-white mb-4">Siap Berkontribusi untuk Lingkungan?</h3>
+            <p class="text-[#F4F8F4] mb-8 max-w-xl mx-auto text-sm sm:text-base leading-relaxed">Bergabunglah bersama kami menjaga kebersihan Tanjungmekar. Daftarkan diri Anda sekarang untuk mulai memanfaatkan layanan Bank Sampah.</p>
+            <a href="{{ route('register') }}" class="px-8 py-3.5 text-base sm:text-lg font-bold text-[#0E4D2B] bg-[#FBC02D] rounded-full shadow-lg hover:bg-yellow-500 hover:-translate-y-1 transition-all w-full sm:w-auto">Sign Up Sekarang</a>
         </div>
     </section>
     @endguest
 
-    <section class="bg-[#F4F8F4] py-16 border-t-2 border-gray-200">
+    <section class="bg-[#F4F8F4] py-12 sm:py-16 border-t-2 border-gray-200">
         <div class="max-w-7xl mx-auto px-4 text-center">
-            <p class="text-sm font-bold text-[#2E7D32] tracking-widest uppercase mb-8">Didukung & Dikembangkan Oleh</p>
-            <div class="flex flex-col md:flex-row justify-center items-center gap-12 md:gap-24">
-                <img src="{{ asset('images/logo-ubp.png') }}" alt="UBP" class="h-32 w-auto object-contain drop-shadow-md hover:scale-105 transition-transform">
-                <img src="{{ asset('images/logo-tema.png') }}" alt="Tema KKN" class="h-32 w-auto object-contain drop-shadow-md hover:scale-105 transition-transform">
-                <img src="{{ asset('images/logo-kkn.png') }}" alt="KKN Tanjungmekar" class="h-32 w-auto object-contain drop-shadow-md hover:scale-105 transition-transform">
+            <p class="text-xs sm:text-sm font-bold text-[#2E7D32] tracking-widest uppercase mb-8">Didukung & Dikembangkan Oleh</p>
+            <div class="flex flex-row justify-center items-center gap-4 sm:gap-12 md:gap-24 px-2">
+                <img src="{{ asset('images/logo-ubp.png') }}" alt="UBP" class="h-12 sm:h-20 md:h-32 w-auto object-contain drop-shadow-md hover:scale-105 transition-transform">
+                <img src="{{ asset('images/logo-tema.png') }}" alt="Tema KKN" class="h-12 sm:h-20 md:h-32 w-auto object-contain drop-shadow-md hover:scale-105 transition-transform">
+                <img src="{{ asset('images/logo-kkn.png') }}" alt="KKN Tanjungmekar" class="h-12 sm:h-20 md:h-32 w-auto object-contain drop-shadow-md hover:scale-105 transition-transform">
             </div>
         </div>
     </section>
 
     <footer class="bg-[#0E4D2B] py-8 border-t-8 border-[#2E7D32]">
-        <div class="max-w-7xl mx-auto px-4 text-center">
-            <p class="text-[#F4F8F4] text-sm">
-                © 2026 Portal Tanjungmekar. Dikembangkan oleh Mahasiswa KKN Tanjungmekar, <span class="font-bold text-[#FBC02D]">Naufal Fauzi Rahman</span> (Sistem Informasi) - Universitas Buana Perjuangan Karawang.
+        <div class="max-w-7xl mx-auto px-6 text-center flex flex-col items-center">
+            <p class="text-[#F4F8F4] text-xs sm:text-sm leading-relaxed max-w-[340px] sm:max-w-none mx-auto">
+                © 2026 Portal Tanjungmekar. Dikembangkan oleh Mahasiswa KKN Tanjungmekar, <span class="font-bold text-[#FBC02D]">Naufal Fauzi Rahman</span> (Sistem Informasi) - Universitas Buana <br class="block sm:hidden"> Perjuangan Karawang.
             </p>
         </div>
     </footer>

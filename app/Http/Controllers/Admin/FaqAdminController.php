@@ -36,6 +36,10 @@ class FaqAdminController extends Controller
         ]);
 
         $faq = Faq::findOrFail($id);
+        
+        // Simpan status lama sebelum diupdate
+        $oldStatus = strtolower($faq->status);
+
         $faq->update([
             'jawaban' => $request->jawaban,
             'status' => $request->status,
@@ -43,7 +47,9 @@ class FaqAdminController extends Controller
             'action_link' => $request->action_link,
         ]);
 
-        if ($request->status !== 'pending' && $faq->email_penanya) {
+        // Kirim email HANYA JIKA status SEBELUMNYA 'pending' DAN status BARU BUKAN 'pending'
+        // Jadi kalau diedit lagi dari dipublikasi ke ditolak (atau sebaliknya), email gak bakal dikirim lagi.
+        if ($oldStatus === 'pending' && strtolower($request->status) !== 'pending' && $faq->email_penanya) {
             Mail::to($faq->email_penanya)->send(new FaqUserStatusMail($faq));
         }
 
@@ -52,8 +58,24 @@ class FaqAdminController extends Controller
 
     public function destroy($id)
     {
-        Faq::findOrFail($id)->delete();
-        return back()->with('success', 'Pertanyaan berhasil dihapus.');
+        $faq = Faq::findOrFail($id);
+        $oldStatus = strtolower($faq->status);
+
+        // LOGIKA SHORTCUT: Jika status belum ditolak, ubah jadi ditolak
+        if ($oldStatus !== 'ditolak') {
+            $faq->update(['status' => 'ditolak']);
+            
+            // Kirim email penolakan HANYA JIKA status awalnya dari 'pending'
+            if ($oldStatus === 'pending' && $faq->email_penanya) {
+                Mail::to($faq->email_penanya)->send(new FaqUserStatusMail($faq));
+            }
+            
+            return back()->with('success', 'FAQ ditolak! Dipindahkan ke tab Ditolak.');
+        }
+
+        // LOGIKA PERMANEN: Jika status sudah ditolak (dihapus dari tab Ditolak), hapus beneran
+        $faq->delete();
+        return back()->with('success', 'Pertanyaan berhasil dihapus secara permanen.');
     }
 
     // === BAGIAN FAQ BAWAAN WEB ===

@@ -12,8 +12,27 @@ class FaqController extends Controller
 {
     public function index()
     {
-        // Narik semua FAQ yang dipublikasi (baik dari warga maupun bawaan web)
-        $faqs = Faq::where('status', 'dipublikasi')->latest()->get();
+        // FILTER KETAT: Menyinkronkan murni dengan apa yang ada di Panel Admin
+        // Mengabaikan "data hantu" sisa tes sebelumnya.
+        $faqs = Faq::whereIn('status', ['dipublikasi', 'Dipublikasi'])
+            ->where(function($query) {
+                // 1. Ambil FAQ Bawaan Web yang valid (Sama persis kayak filter Admin Kelola Web)
+                $query->where('is_bawaan', 1)
+                      ->orWhere('is_bawaan', true)
+                      ->orWhere('is_bawaan', '1')
+                // 2. ATAU Ambil FAQ Warga yang valid (Sama persis kayak filter Admin Daftar Warga)
+                      ->orWhere(function($subQuery) {
+                          $subQuery->where(function($q) {
+                              $q->whereNull('is_bawaan')
+                                ->orWhere('is_bawaan', 0)
+                                ->orWhere('is_bawaan', false)
+                                ->orWhere('is_bawaan', '0');
+                          })->where('nama_penanya', '!=', 'Sistem Web');
+                      });
+            })
+            ->orderBy('pertanyaan', 'asc') // Urut abjad A-Z otomatis dari database
+            ->get();
+
         return view('faq', compact('faqs'));
     }
 

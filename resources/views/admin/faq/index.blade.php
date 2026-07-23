@@ -179,8 +179,9 @@
                             <div>
                                 <label class="block text-[10px] font-bold text-gray-600 mb-1">Halaman Tujuan</label>
                                 <select name="action_link" x-model="formData.action_link" class="w-full rounded-md border-gray-300 shadow-sm text-sm focus:ring-[#0E4D2B]">
-                                    <!-- Atribut disabled ditambahkan di bawah ini -->
-                                    <option value="" disabled>-- Pilih Halaman --</option>
+                                    <!-- Opsi Tidak Ada ditambahkan di sini, Pilih Halaman di-hide -->
+                                    <option value="" disabled hidden>-- Pilih Halaman --</option>
+                                    <option value="">Tidak Ada</option>
                                     <option value="/dashboard">Dashboard</option>
                                     <option value="/pemetaan">Peta Wilayah</option>
                                     <option value="/faq">Pusat Bantuan FAQ</option>

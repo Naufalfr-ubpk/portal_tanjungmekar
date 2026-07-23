@@ -71,7 +71,7 @@
 
         <div class="p-8">
             <div class="mb-6">
-                <!-- Tombol kembali di dalam konten, sesuai instruksi lu -->
+                <!-- Tombol kembali di dalam konten -->
                 <a href="{{ route('admin.faq.index') }}" class="inline-flex items-center text-sm font-bold text-gray-500 hover:text-[#0E4D2B] transition-colors mb-4">
                     <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
                     Kembali
@@ -154,9 +154,10 @@
                             <div class="col-span-2"><p class="text-xs font-bold text-gray-500 uppercase">Halaman Tujuan (Opsional)</p></div>
                             <div>
                                 <label class="block text-[10px] font-bold text-gray-600 mb-1">Halaman Tujuan</label>
-                                <!-- Ditambah 'disabled' biar teks placeholder gak bisa dipilih 2 kali -->
                                 <select name="action_link" x-model="formData.action_link" class="w-full rounded-md border-gray-300 shadow-sm text-sm focus:ring-[#0E4D2B]">
-                                    <option value="" disabled>-- Pilih Halaman --</option>
+                                    <!-- Opsi Tidak Ada ditambahkan di sini, Pilih Halaman di-hide -->
+                                    <option value="" disabled hidden>-- Pilih Halaman --</option>
+                                    <option value="">Tidak Ada</option>
                                     <option value="/dashboard">Dashboard</option>
                                     <option value="/pemetaan">Peta Wilayah</option>
                                     <option value="/faq">Pusat Bantuan FAQ</option>

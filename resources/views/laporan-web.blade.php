@@ -29,7 +29,7 @@
                         <div class="mb-6">
                             <label class="block text-sm font-bold text-gray-700 mb-2">Jenis Kendala</label>
                             <select class="w-full rounded-lg border-gray-300 shadow-sm focus:border-[#0E4D2B] focus:ring focus:ring-[#0E4D2B] focus:ring-opacity-50 py-3" required>
-                                <option value="">-- Pilih Jenis Kendala --</option>
+                                <option value="" disabled selected hidden>-- Pilih Jenis Kendala --</option>
                                 <option value="peta">Peta Tidak Muncul / Error</option>
                                 <option value="login">Masalah Login / Akun</option>
                                 <option value="ui">Tampilan Berantakan</option>
