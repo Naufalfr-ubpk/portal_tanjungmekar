@@ -31,9 +31,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return view('dashboard');
     })->name('dashboard');
 
-    Route::prefix('admin')->group(function () {
+    // 🔥 PERBAIKAN: Bungkus SELURUH rute admin pakai middleware pengecek role di pintu depan
+    Route::prefix('admin')->middleware(function ($request, $next) {
+        if (Auth::user()->role !== 'admin') {
+            abort(403, 'Akses Ditolak. Halaman ini khusus Admin.');
+        }
+        return $next($request);
+    })->group(function () {
+        
         Route::get('/dashboard', function () {
-            if (Auth::user()->role !== 'admin') abort(403, 'Akses Ditolak. Halaman ini khusus Admin.');
+            // Pengecekan manual di sini dihapus karena udah aman dijagain middleware di atas
             return view('admin.dashboard');
         })->name('admin.dashboard');
 
@@ -54,13 +61,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::delete('/manajemen-faq/web/{id}', [\App\Http\Controllers\Admin\FaqAdminController::class, 'bawaanDestroy'])->name('admin.faq.bawaan.destroy');
     });
 
-    // Rute Khusus Operator
-    Route::prefix('operator')->group(function () {
+    // 🔥 PERBAIKAN: Rute Khusus Operator juga dibungkus middleware biar aman kalau nanti nambah rute
+    Route::prefix('operator')->middleware(function ($request, $next) {
+        if (Auth::user()->role !== 'operator' && Auth::user()->role !== 'admin') {
+            abort(403, 'Akses Ditolak. Halaman ini khusus Operator.');
+        }
+        return $next($request);
+    })->group(function () {
         Route::get('/dashboard', function () {
-            // LOGIC DIPERBAIKI: Tolak JIKA BUKAN operator DAN BUKAN admin
-            if (Auth::user()->role !== 'operator' && Auth::user()->role !== 'admin') {
-                abort(403, 'Akses Ditolak. Halaman ini khusus Operator.');
-            }
             return view('operator.dashboard');
         })->name('operator.dashboard');
     });
