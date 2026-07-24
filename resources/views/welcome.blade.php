@@ -43,13 +43,14 @@
                     
                     @auth
                         @php
-                            $userAvatar = Auth::user()->avatar;
-                            $avatarSrc = $userAvatar ? (str_starts_with($userAvatar, 'http') ? $userAvatar : asset($userAvatar)) : 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) . '&color=0E4D2B&background=A5D6A7&bold=true';
+                            $rawAvatar = Auth::user()->avatar;
+                            $avatarUrl = $rawAvatar ? (str_starts_with($rawAvatar, 'http') ? $rawAvatar : asset($rawAvatar)) : 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) . '&color=0E4D2B&background=A5D6A7&bold=true';
+                            $fallbackAvatar = 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) . '&color=0E4D2B&background=A5D6A7&bold=true';
                         @endphp
                         <div x-data="{ openProfile: false }" class="relative ml-4">
                             <button @click="openProfile = !openProfile" class="flex items-center gap-2 px-4 py-2 bg-gray-50 border border-gray-200 rounded-full hover:bg-gray-100 transition">
-                                <div class="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center overflow-hidden border border-[#0E4D2B]">
-                                    <img src="{{ $avatarSrc }}" alt="Avatar" class="w-full h-full object-cover">
+                                <div class="w-8 h-8 rounded-full bg-[#A5D6A7] flex items-center justify-center overflow-hidden border border-[#0E4D2B]">
+                                    <img src="{{ $avatarUrl }}" alt="Avatar" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='{{ $fallbackAvatar }}';">
                                 </div>
                                 <span class="text-sm font-bold text-gray-800">{{ Auth::user()->name }}</span>
                                 <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
@@ -87,12 +88,15 @@
             <div class="px-4 pt-4 pb-6 space-y-1">
                 @auth
                     @php
-                        $userAvatar = Auth::user()->avatar;
-                        $avatarSrc = $userAvatar ? (str_starts_with($userAvatar, 'http') ? $userAvatar : asset($userAvatar)) : 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) . '&color=0E4D2B&background=A5D6A7&bold=true';
+                        $rawAvatar = Auth::user()->avatar;
+                        $avatarUrl = $rawAvatar ? (str_starts_with($rawAvatar, 'http') ? $rawAvatar : asset($rawAvatar)) : 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) . '&color=0E4D2B&background=A5D6A7&bold=true';
+                        $fallbackAvatar = 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) . '&color=0E4D2B&background=A5D6A7&bold=true';
                     @endphp
                     <div class="mb-5 pb-5 border-b border-gray-200">
                         <div class="flex items-center gap-3 px-3 mb-4">
-                            <img src="{{ $avatarSrc }}" alt="Avatar" class="w-12 h-12 rounded-full border-2 border-[#0E4D2B]">
+                            <div class="w-12 h-12 rounded-full bg-[#A5D6A7] overflow-hidden border-2 border-[#0E4D2B]">
+                                <img src="{{ $avatarUrl }}" alt="Avatar" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='{{ $fallbackAvatar }}';">
+                            </div>
                             <span class="font-bold text-gray-800 text-lg">{{ Auth::user()->name }}</span>
                         </div>
                         <a href="{{ route('dashboard') }}" class="block px-3 py-2.5 rounded-md text-base font-bold text-gray-700 hover:bg-gray-50">Dashboard</a>
@@ -115,7 +119,7 @@
                 @guest
                     <div class="flex flex-col gap-3 mt-5 pt-5 border-t border-gray-200 px-3">
                         <a href="{{ route('login') }}" class="text-center py-2.5 text-sm font-bold text-[#0E4D2B] bg-transparent border-2 border-[#0E4D2B] rounded-full hover:bg-[#0E4D2B] hover:text-white active:bg-[#0E4D2B] active:text-white transition-all">Login</a>
-                        <a href="{{ route('register') }}" class="text-center py-2.5 text-sm font-bold text-[#0E4D2B] bg-[#FBC02D] rounded-full shadow hover:bg-yellow-500 transition-all">Sign Up</a>
+                        <a href="{{ route('register') }}" class="text-center py-2.5 px-6 text-sm font-bold text-[#0E4D2B] bg-[#FBC02D] rounded-full shadow hover:bg-yellow-500 transition-all">Sign Up</a>
                     </div>
                 @endguest
             </div>
