@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\GoogleController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\PemetaanController;
 use App\Http\Controllers\FaqController;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Location; 
 use App\Models\Faq;
 
@@ -26,6 +27,7 @@ Route::get('/', function () {
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', function () {
         if (Auth::user()->role === 'admin') return redirect()->route('admin.dashboard');
+        if (Auth::user()->role === 'operator') return redirect()->route('operator.dashboard');
         return view('dashboard');
     })->name('dashboard');
 
@@ -50,6 +52,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/manajemen-faq/web', [\App\Http\Controllers\Admin\FaqAdminController::class, 'bawaanStore'])->name('admin.faq.bawaan.store');
         Route::put('/manajemen-faq/web/{id}', [\App\Http\Controllers\Admin\FaqAdminController::class, 'bawaanUpdate'])->name('admin.faq.bawaan.update');
         Route::delete('/manajemen-faq/web/{id}', [\App\Http\Controllers\Admin\FaqAdminController::class, 'bawaanDestroy'])->name('admin.faq.bawaan.destroy');
+    });
+
+    // Rute Khusus Operator
+    Route::prefix('operator')->group(function () {
+        Route::get('/dashboard', function () {
+            // LOGIC DIPERBAIKI: Tolak JIKA BUKAN operator DAN BUKAN admin
+            if (Auth::user()->role !== 'operator' && Auth::user()->role !== 'admin') {
+                abort(403, 'Akses Ditolak. Halaman ini khusus Operator.');
+            }
+            return view('operator.dashboard');
+        })->name('operator.dashboard');
     });
 
     Route::get('/pemetaan', function () { 

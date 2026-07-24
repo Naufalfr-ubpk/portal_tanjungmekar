@@ -126,7 +126,7 @@
                 
                 <div class="order-first lg:order-last w-full lg:w-1/2 relative mb-8 lg:mb-0">
                     <div class="aspect-w-16 aspect-h-9 sm:aspect-h-10 rounded-2xl overflow-hidden shadow-2xl border-4 border-[#2E7D32]">
-                        <img src="{{ asset('images/hero-pemandangan.png') }}" alt="Lingkungan Bersih Tanjungmekar" class="object-cover w-full h-full">
+                        <img src="{{ asset('images/kelurahan.png') }}" alt="Lingkungan Bersih Tanjungmekar" class="object-cover w-full h-full">
                     </div>
                 </div>
 
