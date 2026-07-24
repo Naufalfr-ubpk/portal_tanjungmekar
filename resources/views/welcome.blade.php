@@ -22,13 +22,13 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-20 sm:h-24">
                 
-                <a href="{{ url('/') }}" class="flex items-center gap-4 group cursor-pointer">
-                    <img src="{{ asset('images/logo-ubp.png') }}" alt="Logo UBP" class="h-10 sm:h-14 w-auto object-contain">
-                    <div class="h-10 sm:h-12 w-px bg-gray-300"></div>
-                    <img src="{{ asset('images/logo-kkn.png') }}" alt="Logo KKN" class="h-10 sm:h-14 w-auto object-contain">
-                    <div class="hidden lg:block ml-3">
-                        <h1 class="text-xl sm:text-2xl font-bold text-[#0E4D2B] leading-tight">Portal Tanjungmekar</h1>
-                        <p class="text-xs sm:text-sm text-[#66BB6A] font-semibold tracking-wide">KKN UBP Karawang 2026</p>
+                <a href="{{ url('/') }}" class="flex items-center gap-2 sm:gap-4 group cursor-pointer">
+                    <img src="{{ asset('images/pemkab-logo.png') }}" alt="Logo Pemkab" class="h-8 sm:h-14 w-auto object-contain">
+                    <img src="{{ asset('images/logo-ubp.png') }}" alt="Logo UBP" class="h-8 sm:h-14 w-auto object-contain">
+                    <img src="{{ asset('images/logo-kkn.png') }}" alt="Logo KKN" class="h-8 sm:h-14 w-auto object-contain">
+                    <div class="ml-1 sm:ml-3">
+                        <h1 class="text-base sm:text-2xl font-bold text-[#0E4D2B] leading-tight">Portal Tanjungmekar</h1>
+                        <p class="text-[10px] sm:text-sm text-[#66BB6A] font-semibold tracking-wide">KKN UBP Karawang 2026</p>
                     </div>
                 </a>
 
@@ -42,10 +42,14 @@
                     @endif
                     
                     @auth
+                        @php
+                            $userAvatar = Auth::user()->avatar;
+                            $avatarSrc = $userAvatar ? (str_starts_with($userAvatar, 'http') ? $userAvatar : asset($userAvatar)) : 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) . '&color=0E4D2B&background=A5D6A7&bold=true';
+                        @endphp
                         <div x-data="{ openProfile: false }" class="relative ml-4">
                             <button @click="openProfile = !openProfile" class="flex items-center gap-2 px-4 py-2 bg-gray-50 border border-gray-200 rounded-full hover:bg-gray-100 transition">
                                 <div class="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center overflow-hidden border border-[#0E4D2B]">
-                                    <img src="{{ Auth::user()->avatar }}" alt="Avatar" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&color=0E4D2B&background=A5D6A7&bold=true';">
+                                    <img src="{{ $avatarSrc }}" alt="Avatar" class="w-full h-full object-cover">
                                 </div>
                                 <span class="text-sm font-bold text-gray-800">{{ Auth::user()->name }}</span>
                                 <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
@@ -82,9 +86,13 @@
         <div x-show="openMobileMenu" x-transition style="display: none;" class="absolute w-full left-0 top-[100%] lg:hidden bg-white border-b-4 border-[#0E4D2B] shadow-2xl z-50">
             <div class="px-4 pt-4 pb-6 space-y-1">
                 @auth
+                    @php
+                        $userAvatar = Auth::user()->avatar;
+                        $avatarSrc = $userAvatar ? (str_starts_with($userAvatar, 'http') ? $userAvatar : asset($userAvatar)) : 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) . '&color=0E4D2B&background=A5D6A7&bold=true';
+                    @endphp
                     <div class="mb-5 pb-5 border-b border-gray-200">
                         <div class="flex items-center gap-3 px-3 mb-4">
-                            <img src="{{ Auth::user()->avatar }}" alt="Avatar" class="w-12 h-12 rounded-full border-2 border-[#0E4D2B]" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&color=0E4D2B&background=A5D6A7&bold=true';">
+                            <img src="{{ $avatarSrc }}" alt="Avatar" class="w-12 h-12 rounded-full border-2 border-[#0E4D2B]">
                             <span class="font-bold text-gray-800 text-lg">{{ Auth::user()->name }}</span>
                         </div>
                         <a href="{{ route('dashboard') }}" class="block px-3 py-2.5 rounded-md text-base font-bold text-gray-700 hover:bg-gray-50">Dashboard</a>
@@ -227,6 +235,7 @@
         <div class="max-w-7xl mx-auto px-4 text-center">
             <p class="text-xs sm:text-sm font-bold text-[#2E7D32] tracking-widest uppercase mb-8">Didukung & Dikembangkan Oleh</p>
             <div class="flex flex-row justify-center items-center gap-4 sm:gap-12 md:gap-24 px-2">
+                <img src="{{ asset('images/pemkab-logo.png') }}" alt="Pemkab" class="h-12 sm:h-20 md:h-32 w-auto object-contain drop-shadow-md hover:scale-105 transition-transform">
                 <img src="{{ asset('images/logo-ubp.png') }}" alt="UBP" class="h-12 sm:h-20 md:h-32 w-auto object-contain drop-shadow-md hover:scale-105 transition-transform">
                 <img src="{{ asset('images/logo-tema.png') }}" alt="Tema KKN" class="h-12 sm:h-20 md:h-32 w-auto object-contain drop-shadow-md hover:scale-105 transition-transform">
                 <img src="{{ asset('images/logo-kkn.png') }}" alt="KKN Tanjungmekar" class="h-12 sm:h-20 md:h-32 w-auto object-contain drop-shadow-md hover:scale-105 transition-transform">
@@ -237,7 +246,7 @@
     <footer class="bg-[#0E4D2B] py-8 border-t-8 border-[#2E7D32]">
         <div class="max-w-7xl mx-auto px-6 text-center flex flex-col items-center">
             <p class="text-[#F4F8F4] text-xs sm:text-sm leading-relaxed max-w-[340px] sm:max-w-none mx-auto">
-                © 2026 Portal Tanjungmekar. Dikembangkan oleh Mahasiswa KKN Tanjungmekar, <span class="font-bold text-[#FBC02D]">Naufal Fauzi Rahman</span> (Sistem Informasi) - Universitas Buana <br class="block sm:hidden"> Perjuangan Karawang.
+                © 2026 Portal Tanjungmekar. Dikembangkan oleh Mahasiswa KKN Tanjungmekar, <span class="font-bold text-[#FBC02D]">Naufal Fauzi Rahman</span> (Sistem Informasi) - Universitas Buana Perjuangan Karawang.
             </p>
         </div>
     </footer>

@@ -30,13 +30,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return view('dashboard');
     })->name('dashboard');
 
-    // Manggil Gate 'admin' (User biasa bakal langsung ditendang 403)
+    // 1. MURNI KHUSUS ADMIN (Hanya Dashboard Admin)
     Route::prefix('admin')->middleware('can:admin')->group(function () {
-        
         Route::get('/dashboard', function () {
             return view('admin.dashboard');
         })->name('admin.dashboard');
+    });
 
+    // 2. BISA DIAKSES ADMIN & OPERATOR (Manajemen Peta & FAQ)
+    Route::prefix('admin')->middleware('can:operator')->group(function () {
         Route::get('/pemetaan', [PemetaanController::class, 'index'])->name('admin.pemetaan.index');
         Route::post('/pemetaan', [PemetaanController::class, 'store'])->name('admin.pemetaan.store');
         Route::put('/pemetaan/{id}', [PemetaanController::class, 'update'])->name('admin.pemetaan.update');
@@ -52,7 +54,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::delete('/manajemen-faq/web/{id}', [\App\Http\Controllers\Admin\FaqAdminController::class, 'bawaanDestroy'])->name('admin.faq.bawaan.destroy');
     });
 
-    // Manggil Gate 'operator'
+    // 3. KHUSUS OPERATOR
     Route::prefix('operator')->middleware('can:operator')->group(function () {
         Route::get('/dashboard', function () {
             return view('operator.dashboard');

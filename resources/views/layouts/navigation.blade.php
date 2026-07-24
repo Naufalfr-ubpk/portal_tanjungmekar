@@ -1,10 +1,19 @@
+@php
+    $userAvatar = Auth::user()->avatar;
+    $avatarSrc = $userAvatar ? (str_starts_with($userAvatar, 'http') ? $userAvatar : asset($userAvatar)) : 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) . '&color=0E4D2B&background=A5D6A7&bold=true';
+@endphp
 <nav x-data="{ open: false }" class="bg-white border-b-4 border-[#0E4D2B] shadow-sm relative z-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-20">
             <div class="flex items-center">
                 <a href="{{ url('/') }}" class="flex items-center gap-2">
-                    <img src="{{ asset('images/logo-kkn.png') }}" class="block h-12 w-auto" alt="Logo KKN" />
-                    <span class="font-bold text-[#0E4D2B] text-lg hidden sm:block">Portal Tanjungmekar</span>
+                    <img src="{{ asset('images/pemkab-logo.png') }}" class="block h-8 sm:h-12 w-auto" alt="Logo Pemkab" />
+                    <img src="{{ asset('images/logo-ubp.png') }}" class="block h-8 sm:h-12 w-auto" alt="Logo UBP" />
+                    <img src="{{ asset('images/logo-kkn.png') }}" class="block h-8 sm:h-12 w-auto" alt="Logo KKN" />
+                    <div class="ml-1 sm:ml-2">
+                        <div class="font-bold text-[#0E4D2B] text-sm sm:text-lg leading-tight">Portal Tanjungmekar</div>
+                        <div class="text-[10px] sm:text-sm text-[#66BB6A] font-semibold tracking-wide">KKN UBP Karawang 2026</div>
+                    </div>
                 </a>
             </div>
 
@@ -29,7 +38,7 @@
                     <x-slot name="trigger">
                         <button class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm leading-4 font-bold rounded-full text-gray-700 bg-gray-50 hover:text-[#0E4D2B] hover:border-[#0E4D2B] focus:outline-none transition">
                             <div class="w-7 h-7 rounded-full bg-gray-300 mr-2 flex items-center justify-center overflow-hidden border border-[#0E4D2B]">
-                                <img src="{{ Auth::user()->avatar }}" alt="Avatar" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&color=0E4D2B&background=A5D6A7&bold=true';">
+                                <img src="{{ $avatarSrc }}" alt="Avatar" class="w-full h-full object-cover">
                             </div>
                             <div>{{ Auth::user()->name }}</div>
                             <div class="ms-1">
@@ -41,7 +50,6 @@
                         <x-dropdown-link :href="route('profile.edit')" class="font-semibold text-gray-700">{{ __('Profil Saya') }}</x-dropdown-link>
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
-                            <!-- Teks diganti jadi Sign Out -->
                             <x-dropdown-link :href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();" class="font-semibold text-red-600">{{ __('Sign Out') }}</x-dropdown-link>
                         </form>
                     </x-slot>
@@ -66,7 +74,7 @@
             <div class="mb-5 pb-5 border-b border-gray-200">
                 <div class="flex items-center gap-3 px-3 mb-4">
                     <div class="w-12 h-12 rounded-full bg-gray-300 overflow-hidden border-2 border-[#0E4D2B]">
-                        <img src="{{ Auth::user()->avatar }}" alt="Avatar" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&color=0E4D2B&background=A5D6A7&bold=true';">
+                        <img src="{{ $avatarSrc }}" alt="Avatar" class="w-full h-full object-cover">
                     </div>
                     <div>
                         <div class="font-bold text-lg text-gray-800">{{ Auth::user()->name }}</div>
@@ -76,14 +84,13 @@
                 <x-responsive-nav-link :href="route('profile.edit')" class="font-semibold text-gray-700">{{ __('Profil Saya') }}</x-responsive-nav-link>
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
-                    <!-- Teks diganti jadi Sign Out -->
                     <x-responsive-nav-link :href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();" class="text-red-600 font-bold">{{ __('Sign Out') }}</x-responsive-nav-link>
                 </form>
             </div>
 
             <!-- Menu Navigasi di bawah profil -->
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">{{ __('Dashboard') }}</x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('pemetaan')" :active="request()->routeIs('pemetaan')">{{ __('Peta Wilayah') }}</x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('pemetaan')" :activerequest()->routeIs('pemetaan')">{{ __('Peta Wilayah') }}</x-responsive-nav-link>
             <x-responsive-nav-link :href="route('faq')" :active="request()->routeIs('faq')">{{ __('Pusat FAQ') }}</x-responsive-nav-link>
             
             @if(Auth::user()->role !== 'admin' && Auth::user()->role !== 'operator')
