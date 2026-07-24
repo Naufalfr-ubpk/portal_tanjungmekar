@@ -13,7 +13,6 @@ Route::get('/auth/google', [GoogleController::class, 'redirectToGoogle'])->name(
 Route::get('/auth/google/callback', [GoogleController::class, 'handleGoogleCallback'])->name('google.callback');
 
 Route::get('/', function () {
-    // AMBIL HANYA FAQ BAWAAN WEB, MAKSIMAL 3, URUT ABJAD
     $faqs = Faq::where('is_bawaan', true)
                ->orWhere('is_bawaan', 1)
                ->orWhere('is_bawaan', '1')
@@ -31,16 +30,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return view('dashboard');
     })->name('dashboard');
 
-    // 🔥 PERBAIKAN: Bungkus SELURUH rute admin pakai middleware pengecek role di pintu depan
-    Route::prefix('admin')->middleware(function ($request, $next) {
-        if (Auth::user()->role !== 'admin') {
-            abort(403, 'Akses Ditolak. Halaman ini khusus Admin.');
-        }
-        return $next($request);
-    })->group(function () {
+    // Manggil Gate 'admin' (User biasa bakal langsung ditendang 403)
+    Route::prefix('admin')->middleware('can:admin')->group(function () {
         
         Route::get('/dashboard', function () {
-            // Pengecekan manual di sini dihapus karena udah aman dijagain middleware di atas
             return view('admin.dashboard');
         })->name('admin.dashboard');
 
@@ -49,25 +42,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::put('/pemetaan/{id}', [PemetaanController::class, 'update'])->name('admin.pemetaan.update');
         Route::delete('/pemetaan/{id}', [PemetaanController::class, 'destroy'])->name('admin.pemetaan.destroy');
 
-        // Rute FAQ Warga
         Route::get('/manajemen-faq', [\App\Http\Controllers\Admin\FaqAdminController::class, 'index'])->name('admin.faq.index');
         Route::put('/manajemen-faq/{id}', [\App\Http\Controllers\Admin\FaqAdminController::class, 'update'])->name('admin.faq.update');
         Route::delete('/manajemen-faq/{id}', [\App\Http\Controllers\Admin\FaqAdminController::class, 'destroy'])->name('admin.faq.destroy');
 
-        // Rute Terpisah Khusus FAQ Bawaan Web
         Route::get('/manajemen-faq/web', [\App\Http\Controllers\Admin\FaqAdminController::class, 'bawaanIndex'])->name('admin.faq.bawaan');
         Route::post('/manajemen-faq/web', [\App\Http\Controllers\Admin\FaqAdminController::class, 'bawaanStore'])->name('admin.faq.bawaan.store');
         Route::put('/manajemen-faq/web/{id}', [\App\Http\Controllers\Admin\FaqAdminController::class, 'bawaanUpdate'])->name('admin.faq.bawaan.update');
         Route::delete('/manajemen-faq/web/{id}', [\App\Http\Controllers\Admin\FaqAdminController::class, 'bawaanDestroy'])->name('admin.faq.bawaan.destroy');
     });
 
-    // 🔥 PERBAIKAN: Rute Khusus Operator juga dibungkus middleware biar aman kalau nanti nambah rute
-    Route::prefix('operator')->middleware(function ($request, $next) {
-        if (Auth::user()->role !== 'operator' && Auth::user()->role !== 'admin') {
-            abort(403, 'Akses Ditolak. Halaman ini khusus Operator.');
-        }
-        return $next($request);
-    })->group(function () {
+    // Manggil Gate 'operator'
+    Route::prefix('operator')->middleware('can:operator')->group(function () {
         Route::get('/dashboard', function () {
             return view('operator.dashboard');
         })->name('operator.dashboard');
