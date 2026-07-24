@@ -1,5 +1,8 @@
 @php
     $modeParam = Auth::user()->role === 'admin' ? ['mode' => 'operator'] : [];
+    $rawAvatar = Auth::user()->avatar;
+    $avatarUrl = $rawAvatar ? (str_starts_with($rawAvatar, 'http') ? $rawAvatar : asset($rawAvatar)) : 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) . '&color=0E4D2B&background=FBC02D&bold=true';
+    $fallbackAvatar = 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) . '&color=0E4D2B&background=FBC02D&bold=true';
 @endphp
 <!DOCTYPE html>
 <html lang="id">
@@ -85,8 +88,8 @@
                 
                 <div x-data="{ openOperatorProfile: false }" class="relative">
                     <button @click="openOperatorProfile = !openOperatorProfile" class="flex items-center gap-2 px-2 md:px-4 py-2 bg-gray-50 border border-gray-200 rounded-full hover:bg-gray-100 transition focus:outline-none">
-                        <div class="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center overflow-hidden border border-[#0E4D2B]">
-                            <img src="{{ Auth::user()->avatar ?? 'https://ui-avatars.com/api/?name='.urlencode(Auth::user()->name).'&color=0E4D2B&background=FBC02D&bold=true' }}" alt="Avatar" class="w-full h-full object-cover">
+                        <div class="w-8 h-8 rounded-full bg-[#FBC02D] flex items-center justify-center overflow-hidden border border-[#0E4D2B]">
+                            <img src="{{ $avatarUrl }}" alt="Avatar" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='{{ $fallbackAvatar }}';">
                         </div>
                         <span class="hidden sm:inline-block text-sm font-bold text-gray-800">{{ Auth::user()->name }}</span>
                         <svg class="w-4 h-4 text-gray-600 font-bold" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
