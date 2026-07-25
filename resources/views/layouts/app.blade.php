@@ -20,9 +20,6 @@
             .cropper-container {
                 max-height: 60vh !important; 
             }
-            .cropper-view-box, .cropper-face {
-                border-radius: 50%;
-            }
             /* Pastikan modal/overlay tidak tertutup navbar */
             [x-show="showCropperModal"], .modal, .cropper-modal {
                 z-index: 9999 !important;
