@@ -18,8 +18,6 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
             
             <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg flex items-center gap-6 relative">
-                
-
                 <div class="flex flex-col items-center gap-3">
                     <div class="relative w-24 h-24 bg-gray-200 rounded-full flex items-center justify-center overflow-hidden border-4 border-[#0E4D2B] group">
                         <img id="current-avatar" src="{{ Auth::user()->avatar }}" alt="Avatar" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&color=0E4D2B&background=A5D6A7&bold=true';">
@@ -83,8 +81,9 @@
             
         </div>
 
+        <!-- @click.away DIHAPUS: Modal hanya bisa ditutup lewat tombol X atau Batal -->
         <div x-show="openModal" style="display: none;" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 p-4 overflow-hidden">
-            <div @click.away="closeModal()" class="bg-white rounded-2xl shadow-2xl max-w-xl w-full p-6 relative flex flex-col max-h-[90vh]">
+            <div class="bg-white rounded-2xl shadow-2xl max-w-xl w-full p-6 relative flex flex-col max-h-[90vh]">
                 <div class="flex justify-between items-center mb-4">
                     <h3 class="text-xl font-bold text-[#0E4D2B]">Sesuaikan Foto Profil</h3>
                     <button @click="closeModal()" class="text-gray-400 hover:text-red-500 transition">
@@ -125,7 +124,6 @@
                     let file = event.target.files[0];
                     if (!file) return;
 
-                    // Pastikan file adalah gambar
                     if (!file.type.match('image.*')) {
                         alert("Harap pilih file gambar (JPG/PNG).");
                         return;
@@ -135,34 +133,31 @@
                     reader.onload = (e) => {
                         this.openModal = true;
                         
-                        // Set gambar ke workspace
                         let image = document.getElementById('image-workspace');
                         image.src = e.target.result;
 
-                        // Hancurkan cropper lama kalau ada, lalu bikin baru
                         if (this.cropper) {
                             this.cropper.destroy();
                         }
 
-                        // Jeda bentar nunggu modal render
                         setTimeout(() => {
                             this.cropper = new Cropper(image, {
-                                aspectRatio: NaN, // Bebas ditarik ke atas, bawah, kiri, kanan (fleksibel)
-                                viewMode: 0,      // Diubah ke 0 agar kotak crop bisa bebas melebihi gambar
-                                dragMode: 'move', // Memungkinkan gambar digeser-geser (pan)
+                                aspectRatio: NaN, // Kotak bisa ditarik fleksibel
+                                viewMode: 1,      // Gambar tidak bisa di-zoom out lebih kecil dari crop box
+                                dragMode: 'move', // Menggeser gambar dari dalam crop box
                                 autoCropArea: 0.9,
                                 restore: false,
                                 guides: true,
                                 center: true,
                                 highlight: false,
-                                cropBoxMovable: true,   // Kotak crop bisa digeser
-                                cropBoxResizable: true, // Kotak crop bisa ditarik
-                                toggleDragModeOnDblclick: true,
+                                cropBoxMovable: true,
+                                cropBoxResizable: true,
+                                toggleDragModeOnDblclick: false, // Dimatikan agar tidak ke-switch ke mode crop secara tak sengaja
                             });
                         }, 100);
                     };
                     reader.readAsDataURL(file);
-                    event.target.value = ''; // Reset input
+                    event.target.value = ''; 
                 },
 
                 rotateImage() {
@@ -183,7 +178,6 @@
                     if (!this.cropper) return;
                     this.isUploading = true;
 
-                    // Ambil hasil crop. Parameter width/height dihapus agar tidak gepeng/distorsi jika kotaknya persegi panjang, diganti maxWidth.
                     let canvas = this.cropper.getCroppedCanvas({
                         maxWidth: 800,
                         maxHeight: 800,
@@ -191,7 +185,6 @@
                     
                     let base64data = canvas.toDataURL('image/png');
 
-                    // Kirim ke Controller via AJAX
                     fetch("{{ route('profile.avatar.update') }}", {
                         method: 'POST',
                         headers: {
@@ -203,7 +196,6 @@
                     .then(response => response.json())
                     .then(data => {
                         if(data.success) {
-                            // Langsung refresh halaman biar sinkron sama database & tombol Hapus muncul!
                             window.location.reload();
                         } else {
                             alert('Gagal mengupload gambar.');
