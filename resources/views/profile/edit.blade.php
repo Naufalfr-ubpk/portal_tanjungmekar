@@ -147,17 +147,17 @@
                         // Jeda bentar nunggu modal render
                         setTimeout(() => {
                             this.cropper = new Cropper(image, {
-                                aspectRatio: 1, // Pasti kotak (1:1) buat foto profil
-                                viewMode: 1,
-                                dragMode: 'move',
+                                aspectRatio: NaN, // Bebas ditarik ke atas, bawah, kiri, kanan (fleksibel)
+                                viewMode: 1,      // Batasi zoom & geser biar ga nembus area checkerboard kosong
+                                dragMode: 'move', // Memungkinkan gambar digeser-geser (pan)
                                 autoCropArea: 0.9,
                                 restore: false,
                                 guides: true,
                                 center: true,
                                 highlight: false,
-                                cropBoxMovable: true,
-                                cropBoxResizable: true,
-                                toggleDragModeOnDblclick: false,
+                                cropBoxMovable: true,   // Kotak crop bisa digeser
+                                cropBoxResizable: true, // Kotak crop bisa ditarik
+                                toggleDragModeOnDblclick: true,
                             });
                         }, 100);
                     };
@@ -183,10 +183,10 @@
                     if (!this.cropper) return;
                     this.isUploading = true;
 
-                    // Ambil hasil crop dalam bentuk Base64 (resolusi 500x500 biar enteng)
+                    // Ambil hasil crop. Parameter width/height dihapus agar tidak gepeng/distorsi jika kotaknya persegi panjang, diganti maxWidth.
                     let canvas = this.cropper.getCroppedCanvas({
-                        width: 500,
-                        height: 500,
+                        maxWidth: 800,
+                        maxHeight: 800,
                     });
                     
                     let base64data = canvas.toDataURL('image/png');
