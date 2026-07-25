@@ -81,7 +81,7 @@
             
         </div>
 
-        <!-- @click.away DIHAPUS: Modal hanya bisa ditutup lewat tombol X atau Batal -->
+        <!-- @click.away sengaja DIHAPUS agar modal tidak gampang ke-cancel saat misklik -->
         <div x-show="openModal" style="display: none;" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 p-4 overflow-hidden">
             <div class="bg-white rounded-2xl shadow-2xl max-w-xl w-full p-6 relative flex flex-col max-h-[90vh]">
                 <div class="flex justify-between items-center mb-4">
@@ -142,9 +142,9 @@
 
                         setTimeout(() => {
                             this.cropper = new Cropper(image, {
-                                aspectRatio: NaN, // Kotak bisa ditarik fleksibel
-                                viewMode: 1,      // Gambar tidak bisa di-zoom out lebih kecil dari crop box
-                                dragMode: 'move', // Menggeser gambar dari dalam crop box
+                                aspectRatio: NaN, 
+                                viewMode: 0,      // Kotak crop bebas keluar dari batas gambar
+                                dragMode: 'move', // Bisa digeser bebas (pan)
                                 autoCropArea: 0.9,
                                 restore: false,
                                 guides: true,
@@ -152,7 +152,22 @@
                                 highlight: false,
                                 cropBoxMovable: true,
                                 cropBoxResizable: true,
-                                toggleDragModeOnDblclick: false, // Dimatikan agar tidak ke-switch ke mode crop secara tak sengaja
+                                toggleDragModeOnDblclick: false,
+                                zoom: (event) => {
+                                    // LOGIKA CUSTOM ZOOM CONSTRAINT BERDASARKAN HEIGHT
+                                    if (this.cropper) {
+                                        let cropBoxData = this.cropper.getCropBoxData();
+                                        let canvasData = this.cropper.getCanvasData();
+                                        
+                                        // Prediksi tinggi gambar setelah dizoom
+                                        let newHeight = canvasData.naturalHeight * event.detail.ratio;
+                                        
+                                        // Jika sedang zoom out (ratio mengecil) DAN tinggi gambar bakal lebih kecil dari tinggi kotak biru
+                                        if (event.detail.ratio < event.detail.oldRatio && newHeight < cropBoxData.height) {
+                                            event.preventDefault(); // Batalkan zoom out!
+                                        }
+                                    }
+                                }
                             });
                         }, 100);
                     };
