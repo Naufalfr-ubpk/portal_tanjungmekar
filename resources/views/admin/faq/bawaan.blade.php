@@ -66,15 +66,16 @@
         </div>
     </aside>
 
-    <main class="flex-1 md:ml-64 bg-gray-50 min-h-screen w-full transition-all duration-300">
+    <main class="flex-1 w-full min-w-0 md:ml-64 bg-gray-50 min-h-screen transition-all duration-300 overflow-x-hidden">
         <!-- HEADER KONTEN -->
-        <header class="bg-white h-20 shadow-sm border-b border-gray-200 flex items-center justify-between px-4 md:px-8 z-10 sticky top-0">
+        <header class="bg-white h-20 shadow-sm border-b border-gray-200 flex items-center justify-between px-4 md:px-8 z-10 sticky top-0 w-full">
             <div class="flex items-center gap-3 md:gap-6">
+                <!-- HAMBURGER BUTTON -->
                 <button @click="sidebarOpen = true" class="md:hidden p-2 text-gray-600 hover:bg-gray-100 rounded-lg focus:outline-none transition mr-2">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
                 </button>
 
-                <h2 class="text-lg md:text-xl font-bold text-gray-800 border-r-2 pr-4 md:pr-6 border-gray-300">Manajemen FAQ</h2>
+                <h2 class="text-lg md:text-xl font-bold text-gray-800 border-r-2 pr-4 md:pr-6 border-gray-300">Kelola FAQ Web</h2>
                 <nav class="hidden md:flex gap-5 text-sm font-bold text-gray-500">
                     <a href="{{ url('/') }}" class="hover:text-[#0E4D2B] transition">Beranda</a>
                     <a href="{{ route('pemetaan') }}" class="hover:text-[#0E4D2B] transition">Peta Wilayah</a>
@@ -90,10 +91,16 @@
                 @endif
                 <div class="hidden sm:block h-8 w-px bg-gray-300"></div>
                 
+                @php
+                    $rawAvatar = Auth::user()->avatar;
+                    $bgAvatar = $isOp ? 'FBC02D' : 'A5D6A7';
+                    $avatarUrl = $rawAvatar ? (str_starts_with($rawAvatar, 'http') ? $rawAvatar : asset($rawAvatar)) : 'https://ui-avatars.com/api/?name='.urlencode(Auth::user()->name).'&color=0E4D2B&background='.$bgAvatar.'&bold=true';
+                    $fallbackAvatar = 'https://ui-avatars.com/api/?name='.urlencode(Auth::user()->name).'&color=0E4D2B&background='.$bgAvatar.'&bold=true';
+                @endphp
                 <div x-data="{ openAdminProfile: false }" class="relative">
                     <button @click="openAdminProfile = !openAdminProfile" @click.away="openAdminProfile = false" class="flex items-center gap-2 px-2 md:px-4 py-2 bg-gray-50 border border-gray-200 rounded-full hover:bg-gray-100 transition focus:outline-none">
-                        <div class="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center overflow-hidden border border-[#0E4D2B]">
-                            <img src="{{ Auth::user()->avatar ?? 'https://ui-avatars.com/api/?name='.urlencode(Auth::user()->name).'&color=0E4D2B&background='.($isOp ? 'FBC02D' : 'A5D6A7').'&bold=true' }}" alt="Avatar" class="w-full h-full object-cover">
+                        <div class="w-8 h-8 rounded-full bg-[#{{ $bgAvatar }}] flex items-center justify-center overflow-hidden border border-[#0E4D2B]">
+                            <img src="{{ $avatarUrl }}" alt="Avatar" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='{{ $fallbackAvatar }}';">
                         </div>
                         <span class="hidden sm:inline-block text-sm font-bold text-gray-800">{{ Auth::user()->name }}</span>
                         <svg class="w-4 h-4 text-gray-500 transition-transform duration-200" :class="openAdminProfile ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
@@ -107,6 +114,7 @@
                         </form>
                     </div>
                 </div>
+
             </div>
         </header>
 
@@ -169,11 +177,10 @@
                 </div>
             </div>
 
-            <!-- MODAL FORM TAMBAH / EDIT FAQ WEB (DENGAN STICKY HEADER) -->
+            <!-- MODAL FORM TAMBAH / EDIT FAQ WEB -->
             <div x-show="isModalOpen" style="display: none;" class="fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-70 p-4 md:p-6">
                 <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden flex flex-col max-h-[90vh]">
                     
-                    <!-- STICKY HEADER -->
                     <div class="bg-[#0E4D2B] p-4 md:p-5 text-white flex justify-between items-center flex-shrink-0 z-20 shadow-md">
                         <h3 class="text-lg md:text-xl font-bold" x-text="modalTitle"></h3>
                         <button type="button" @click="closeModal()" class="text-white hover:text-red-300 transition">
@@ -181,7 +188,6 @@
                         </button>
                     </div>
                     
-                    <!-- SCROLLABLE BODY -->
                     <div class="p-5 md:p-6 overflow-y-auto custom-scrollbar flex-1 bg-white">
                         <form :action="formAction" method="POST">
                             @csrf 
@@ -248,7 +254,7 @@
     <script>
     function faqWebManager() {
         return {
-            sidebarOpen: false, // Menambahkan state sidebarOpen untuk toggle mobile
+            sidebarOpen: false, 
             isModalOpen: false, deleteModalOpen: false, deleteUrl: '', modalTitle: '', formAction: '', formMethod: '',
             formData: { id: '', pertanyaan: '', jawaban: '', action_button_text: '', action_link: '' },
             openModal(mode, data = null) {

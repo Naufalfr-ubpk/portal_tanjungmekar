@@ -64,8 +64,9 @@
         </div>
     </aside>
 
-    <main class="flex-1 md:ml-64 bg-gray-50 min-h-screen w-full transition-all duration-300">
-        <header class="bg-white h-20 shadow-sm border-b border-gray-200 flex items-center justify-between px-4 md:px-8 z-10 sticky top-0">
+    <main class="flex-1 w-full min-w-0 md:ml-64 bg-gray-50 min-h-screen transition-all duration-300 overflow-x-hidden">
+        <!-- HEADER KONTEN -->
+        <header class="bg-white h-20 shadow-sm border-b border-gray-200 flex items-center justify-between px-4 md:px-8 z-10 sticky top-0 w-full">
             <div class="flex items-center gap-3 md:gap-6">
                 <!-- HAMBURGER BUTTON -->
                 <button @click="sidebarOpen = true" class="md:hidden p-2 text-gray-600 hover:bg-gray-100 rounded-lg focus:outline-none transition mr-2">
@@ -80,7 +81,7 @@
                 </nav>
             </div>
             
-            <div class="flex items-center gap-3 md:gap-4">
+            <div class="flex items-center gap-2 md:gap-4">
                 @if($isOp)
                 <span class="hidden sm:inline-block text-[10px] md:text-xs font-bold bg-[#0E4D2B] text-white px-2 md:px-3 py-1 rounded-full uppercase tracking-wider border border-[#0A3D22]">HAK AKSES: OPERATOR</span>
                 @else
@@ -88,10 +89,16 @@
                 @endif
                 <div class="hidden sm:block h-8 w-px bg-gray-300"></div>
                 
+                @php
+                    $rawAvatar = Auth::user()->avatar;
+                    $bgAvatar = $isOp ? 'FBC02D' : 'A5D6A7';
+                    $avatarUrl = $rawAvatar ? (str_starts_with($rawAvatar, 'http') ? $rawAvatar : asset($rawAvatar)) : 'https://ui-avatars.com/api/?name='.urlencode(Auth::user()->name).'&color=0E4D2B&background='.$bgAvatar.'&bold=true';
+                    $fallbackAvatar = 'https://ui-avatars.com/api/?name='.urlencode(Auth::user()->name).'&color=0E4D2B&background='.$bgAvatar.'&bold=true';
+                @endphp
                 <div x-data="{ openAdminProfile: false }" class="relative">
                     <button @click="openAdminProfile = !openAdminProfile" @click.away="openAdminProfile = false" class="flex items-center gap-2 px-2 md:px-4 py-2 bg-gray-50 border border-gray-200 rounded-full hover:bg-gray-100 transition focus:outline-none">
-                        <div class="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center overflow-hidden border border-[#0E4D2B]">
-                            <img src="{{ Auth::user()->avatar ?? 'https://ui-avatars.com/api/?name='.urlencode(Auth::user()->name).'&color=0E4D2B&background='.($isOp ? 'FBC02D' : 'A5D6A7').'&bold=true' }}" alt="Avatar" class="w-full h-full object-cover">
+                        <div class="w-8 h-8 rounded-full bg-[#{{ $bgAvatar }}] flex items-center justify-center overflow-hidden border border-[#0E4D2B]">
+                            <img src="{{ $avatarUrl }}" alt="Avatar" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='{{ $fallbackAvatar }}';">
                         </div>
                         <span class="hidden sm:inline-block text-sm font-bold text-gray-800">{{ Auth::user()->name }}</span>
                         <svg class="w-4 h-4 text-gray-500 transition-transform duration-200" :class="openAdminProfile ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
@@ -110,13 +117,11 @@
         </header>
 
         <div class="p-4 md:p-6">
-            <!-- HEADER KONTEN (Dipisah flex-col di HP biar tombol gak nabrak teks) -->
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
                 <div>
                     <h2 class="text-xl md:text-2xl font-bold text-[#0E4D2B]">Daftar Pengajuan Pertanyaan Warga</h2>
                     <p class="text-gray-500 text-sm">Jawab dan publikasikan keluhan atau pertanyaan warga.</p>
                 </div>
-                <!-- Tombol full width di HP -->
                 @if(Auth::user()->role === 'admin' && !$isOp)
                 <a href="{{ route('admin.faq.bawaan') }}" class="w-full md:w-auto text-center bg-[#0E4D2B] text-white px-5 py-2.5 rounded-lg font-semibold hover:bg-green-800 transition shadow-md">Kelola FAQ Web</a>
                 @endif
@@ -129,7 +134,7 @@
                 </div>
             @endif
 
-            <!-- MENU TABS (Scroll menyamping di HP) -->
+            <!-- MENU TABS -->
             <div class="flex overflow-x-auto hide-scroll gap-2 md:gap-3 mb-4 pb-2">
                 <button @click="activeTab = 'semua'" :class="activeTab === 'semua' ? 'bg-[#0E4D2B] text-white' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'" class="whitespace-nowrap px-4 md:px-5 py-2 rounded-full font-bold shadow-sm border transition text-xs md:text-sm">Semua</button>
                 <button @click="activeTab = 'pending'" :class="activeTab === 'pending' ? 'bg-yellow-500 text-white border-yellow-500' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'" class="whitespace-nowrap px-4 md:px-5 py-2 rounded-full font-bold shadow-sm border transition text-xs md:text-sm">Menunggu Jawaban</button>
@@ -137,7 +142,7 @@
                 <button @click="activeTab = 'ditolak'" :class="activeTab === 'ditolak' ? 'bg-red-600 text-white border-red-600' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'" class="whitespace-nowrap px-4 md:px-5 py-2 rounded-full font-bold shadow-sm border transition text-xs md:text-sm">Ditolak</button>
             </div>
 
-            <!-- TABEL (Scroll menyamping di HP, whitespace nowrap biar tabel gak ngaco) -->
+            <!-- TABEL -->
             <div class="bg-white rounded-xl shadow border border-gray-200 overflow-hidden w-full">
                 <div class="overflow-x-auto w-full custom-scrollbar">
                     <table class="min-w-full divide-y divide-gray-200">

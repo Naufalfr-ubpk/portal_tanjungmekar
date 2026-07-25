@@ -109,10 +109,16 @@
                 @endif
                 <div class="hidden sm:block h-8 w-px bg-gray-300"></div>
                 
+                @php
+                    $rawAvatar = Auth::user()->avatar;
+                    $bgAvatar = $isOp ? 'FBC02D' : 'A5D6A7';
+                    $avatarUrl = $rawAvatar ? (str_starts_with($rawAvatar, 'http') ? $rawAvatar : asset($rawAvatar)) : 'https://ui-avatars.com/api/?name='.urlencode(Auth::user()->name).'&color=0E4D2B&background='.$bgAvatar.'&bold=true';
+                    $fallbackAvatar = 'https://ui-avatars.com/api/?name='.urlencode(Auth::user()->name).'&color=0E4D2B&background='.$bgAvatar.'&bold=true';
+                @endphp
                 <div x-data="{ openAdminProfile: false }" class="relative">
                     <button @click="openAdminProfile = !openAdminProfile" @click.away="openAdminProfile = false" class="flex items-center gap-2 px-2 md:px-4 py-2 bg-gray-50 border border-gray-200 rounded-full hover:bg-gray-100 transition focus:outline-none">
-                        <div class="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center overflow-hidden border border-[#0E4D2B]">
-                            <img src="{{ Auth::user()->avatar ?? 'https://ui-avatars.com/api/?name='.urlencode(Auth::user()->name).'&color=0E4D2B&background='.($isOp ? 'FBC02D' : 'A5D6A7').'&bold=true' }}" alt="Avatar" class="w-full h-full object-cover">
+                        <div class="w-8 h-8 rounded-full bg-[#{{ $bgAvatar }}] flex items-center justify-center overflow-hidden border border-[#0E4D2B]">
+                            <img src="{{ $avatarUrl }}" alt="Avatar" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='{{ $fallbackAvatar }}';">
                         </div>
                         <span class="hidden sm:inline-block text-sm font-bold text-gray-800">{{ Auth::user()->name }}</span>
                         <svg class="w-4 h-4 text-gray-500 transition-transform duration-200" :class="openAdminProfile ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
@@ -198,7 +204,7 @@
                 </div>
             </div>
 
-            <!-- MODAL FORM UTAMA (Tambah/Edit) DENGAN KUNCIAN TINGGI DESKTOP (md:h-[85vh]) -->
+            <!-- MODAL FORM UTAMA -->
             <div x-show="isModalOpen" style="display: none;" class="fixed inset-0 z-[100] bg-black bg-opacity-70 flex items-center justify-center p-4 md:p-6 overflow-hidden">
                 
                 <div class="bg-white rounded-2xl shadow-2xl w-full max-w-5xl flex flex-col md:flex-row overflow-hidden relative h-[90vh] md:h-[85vh] mx-auto">
