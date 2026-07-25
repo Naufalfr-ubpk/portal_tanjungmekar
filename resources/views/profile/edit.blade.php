@@ -148,7 +148,7 @@
                         setTimeout(() => {
                             this.cropper = new Cropper(image, {
                                 aspectRatio: NaN, // Bebas ditarik ke atas, bawah, kiri, kanan (fleksibel)
-                                viewMode: 1,      // Batasi zoom & geser biar ga nembus area checkerboard kosong
+                                viewMode: 0,      // Diubah ke 0 agar kotak crop bisa bebas melebihi gambar
                                 dragMode: 'move', // Memungkinkan gambar digeser-geser (pan)
                                 autoCropArea: 0.9,
                                 restore: false,
