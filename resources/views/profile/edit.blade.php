@@ -140,10 +140,10 @@
                         }
 
                         setTimeout(() => {
-                            this.cropper = new Cropper(image, {
+                            let cropperInstance = new Cropper(image, {
                                 aspectRatio: NaN, 
-                                viewMode: 0,      // Kotak crop bebas ditarik ngelewatin foto, tidak dibatasi
-                                dragMode: 'move', // Foto bebas digeser-geser (pan)
+                                viewMode: 0,
+                                dragMode: 'move',
                                 autoCropArea: 0.9,
                                 restore: false,
                                 guides: true,
@@ -152,19 +152,51 @@
                                 cropBoxMovable: true,
                                 cropBoxResizable: true,
                                 toggleDragModeOnDblclick: false,
-                                zoom: (event) => {
-                                    if (this.cropper) {
-                                        let cropBoxData = this.cropper.getCropBoxData();
-                                        let canvasData = this.cropper.getCanvasData();
-                                        let newHeight = canvasData.naturalHeight * event.detail.ratio;
+                                zoom: function(event) {
+                                    let cb = cropperInstance.getCropBoxData();
+                                    let cv = cropperInstance.getCanvasData();
+                                    let newHeight = cv.naturalHeight * event.detail.ratio;
 
-                                        // MURNI CUMA BATASIN TINGGI AJA. Kalau lagi zoom out (ratio turun) dan tingginya bakal kurang dari tinggi kotak biru, stop!
-                                        if (event.detail.ratio < event.detail.oldRatio && newHeight < cropBoxData.height) {
-                                            event.preventDefault();
-                                        }
+                                    // STOP ZOOM OUT: Jika tinggi gambar mau lebih kecil dari tinggi kotak crop
+                                    if (event.detail.ratio < event.detail.oldRatio && newHeight < cb.height) {
+                                        event.preventDefault();
+                                    }
+                                },
+                                crop: function(event) {
+                                    let cb = cropperInstance.getCropBoxData();
+                                    let cv = cropperInstance.getCanvasData();
+                                    
+                                    // 1. Cegah cropbox ditarik lebih tinggi dari ukuran gambar
+                                    if (cb.height > cv.height) {
+                                        if (cropperInstance.isRestricting) return;
+                                        cropperInstance.isRestricting = true;
+                                        cropperInstance.setCropBoxData({ height: cv.height });
+                                        cropperInstance.isRestricting = false;
+                                        return;
+                                    }
+
+                                    // 2. Cegah gambar digeser tembus batas atas dan bawah
+                                    let newTop = cv.top;
+                                    let isModified = false;
+
+                                    if (newTop > cb.top) {
+                                        newTop = cb.top; // Kunci atas
+                                        isModified = true;
+                                    }
+                                    if (newTop + cv.height < cb.top + cb.height) {
+                                        newTop = cb.top + cb.height - cv.height; // Kunci bawah
+                                        isModified = true;
+                                    }
+
+                                    if (isModified) {
+                                        if (cropperInstance.isRestricting) return;
+                                        cropperInstance.isRestricting = true;
+                                        cropperInstance.setCanvasData({ top: newTop });
+                                        cropperInstance.isRestricting = false;
                                     }
                                 }
                             });
+                            this.cropper = cropperInstance;
                         }, 100);
                     };
                     reader.readAsDataURL(file);
