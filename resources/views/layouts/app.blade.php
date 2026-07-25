@@ -13,12 +13,27 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        
+        <!-- CSS SAKTI ANTI BENTROK & ANTI OVERSIZE -->
+        <style>
+            /* Membatasi tinggi cropper supaya tidak perlu zoom out */
+            .cropper-container {
+                max-height: 60vh !important; 
+            }
+            .cropper-view-box, .cropper-face {
+                border-radius: 50%;
+            }
+            /* Pastikan modal/overlay tidak tertutup navbar */
+            [x-show="showCropperModal"], .modal, .cropper-modal {
+                z-index: 9999 !important;
+            }
+        </style>
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">
             
-            <!-- BUNGKUSAN STICKY: Navbar dan Header dikunci di atas pakai sticky top-0 dan z-40 -->
-            <div class="sticky top-0 z-40 w-full">
+            <!-- Navbar Z-Index diturunkan ke 30 supaya kalah sama Cropper -->
+            <div class="sticky top-0 z-30 w-full">
                 @include('layouts.navigation')
 
                 <!-- Page Heading -->
@@ -31,8 +46,8 @@
                 @endif
             </div>
 
-            <!-- Page Content (Konten ini yang bakal tenggelam ke bawah navbar saat di-scroll) -->
-            <main class="relative z-0">
+            <!-- HILANGIN relative dan z-0 disini, biar modal nembus ke depan -->
+            <main>
                 {{ $slot }}
             </main>
             

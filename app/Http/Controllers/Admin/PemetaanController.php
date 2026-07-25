@@ -10,8 +10,10 @@ class PemetaanController extends Controller
 {
     public function index()
     {
-        // Ngurutin berdasarkan tipe: Kelurahan dulu, baru RW, baru Bank Sampah
-        $locations = Location::orderByRaw("FIELD(type, 'kelurahan', 'rw', 'banksampah')")->get();
+        // Ngurutin berdasarkan tipe dulu, baru diurutin berdasarkan abjad/angka title-nya
+        $locations = Location::orderByRaw("FIELD(type, 'kelurahan', 'rw', 'banksampah')")
+                             ->orderBy('title', 'asc')
+                             ->get();
         return view('admin.pemetaan.index', compact('locations'));
     }
 

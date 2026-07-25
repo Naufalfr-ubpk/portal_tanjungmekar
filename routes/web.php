@@ -62,7 +62,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
 
     Route::get('/pemetaan', function () { 
-        $locations = Location::orderByRaw("FIELD(type, 'kelurahan', 'rw', 'banksampah')")->get();
+        // Ditambahkan orderBy title agar urut abjad/angka secara logis di halaman user
+        $locations = Location::orderByRaw("FIELD(type, 'kelurahan', 'rw', 'banksampah')")
+                             ->orderBy('title', 'asc')
+                             ->get();
         return view('pemetaan.index', compact('locations')); 
     })->name('pemetaan');
     
