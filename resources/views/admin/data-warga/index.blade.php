@@ -159,7 +159,7 @@
             <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
                 <div class="p-6 border-b border-gray-200">
                     <h3 class="text-xl font-extrabold text-[#0E4D2B]">Daftar Warga Terverifikasi</h3>
-                    <p class="text-sm text-gray-500 mt-1">Pantau aktivitas login dan kelola akun warga di sini.</p>
+                    <p class="text-sm text-gray-500 mt-1">Pantau dan kelola data akun warga di sini.</p>
                 </div>
 
                 <!-- TABS -->
@@ -177,8 +177,7 @@
                                 <th class="px-6 py-4 font-bold">Nama Warga</th>
                                 <th class="px-6 py-4 font-bold">Email</th>
                                 <th class="px-6 py-4 font-bold">Tipe Akun</th>
-                                <th class="px-6 py-4 font-bold">Terakhir Aktif</th>
-                                <th class="px-6 py-4 font-bold text-center">Aksi</th>
+                                <th class="px-6 py-4 font-bold text-center">Tindakan</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-200">
@@ -198,40 +197,15 @@
                                             <span class="inline-block bg-[#A5D6A7] text-[#0E4D2B] px-2.5 py-1 rounded-md text-[10px] font-bold tracking-wide">AKUN USER</span>
                                         @endif
                                     </td>
-                                    <td class="px-6 py-4">
-                                        @if($w->last_seen_at)
-                                            @php 
-                                                $diffInMinutes = $w->last_seen_at->diffInMinutes(now());
-                                                $daysInactive = $w->last_seen_at->diffInDays(now());
-                                            @endphp
-                                            
-                                            @if($diffInMinutes < 2)
-                                                <span class="inline-flex items-center gap-1.5 text-green-600 font-bold text-sm">
-                                                    <span class="relative flex h-2.5 w-2.5">
-                                                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                                                      <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
-                                                    </span>
-                                                    Sedang Online
-                                                </span>
-                                            @elseif($daysInactive >= 30)
-                                                <span class="text-red-600 font-bold text-sm">{{ $w->last_seen_at->diffForHumans() }}</span>
-                                            @else
-                                                <span class="text-gray-600 font-bold text-sm">{{ $w->last_seen_at->diffForHumans() }}</span>
-                                            @endif
-                                        @else
-                                            <span class="text-gray-400 text-sm italic">Belum pernah online</span>
-                                        @endif
-                                    </td>
                                     <td class="px-6 py-4 text-center">
-                                        @if($w->google_id)
-                                            <span class="text-xs text-gray-400 font-semibold cursor-not-allowed" title="Akun Google tidak dapat dihapus">Hanya Lihat</span>
-                                        @else
+                                        @if($isAdminTheme)
+                                            <!-- Tombol Hapus untuk Admin (Bisa hapus semua user) -->
                                             <div x-data="{ showDeleteModal: false }">
                                                 <button @click="showDeleteModal = true" class="text-red-500 hover:text-red-700 bg-red-50 hover:bg-red-100 p-2 rounded-lg transition" title="Hapus Akun">
                                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                                 </button>
 
-                                                <!-- Delete Modal - Tanpa @click.away -->
+                                                <!-- Delete Modal -->
                                                 <div x-show="showDeleteModal" style="display: none;" class="fixed inset-0 z-50 flex items-center justify-center">
                                                     <div class="fixed inset-0 bg-black bg-opacity-50"></div>
                                                     <div class="bg-white rounded-2xl shadow-xl w-full max-w-md p-6 relative z-10 mx-4">
@@ -241,7 +215,7 @@
                                                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                                                             </button>
                                                         </div>
-                                                        <p class="text-gray-600 mb-6 text-left text-sm">Apakah Anda yakin ingin menghapus akun warga <strong>{{ $w->name }}</strong>? Aksi ini tidak dapat dibatalkan.</p>
+                                                        <p class="text-gray-600 mb-6 text-left text-sm">Apakah Anda yakin ingin menghapus akses akun <strong>{{ $w->name }}</strong>? User harus melakukan registrasi/otorisasi ulang untuk masuk.</p>
                                                         <div class="flex justify-end gap-3">
                                                             <button @click="showDeleteModal = false" class="px-4 py-2 text-sm font-bold text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-lg transition">Batal</button>
                                                             <form action="{{ route('admin.data-warga.destroy', $w->id) }}" method="POST">
@@ -253,12 +227,15 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                        @else
+                                            <!-- Tampilan untuk Operator -->
+                                            <span class="text-xs text-gray-400 font-semibold">Hanya Lihat</span>
                                         @endif
                                     </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="5" class="px-6 py-12 text-center text-gray-500">
+                                    <td colspan="4" class="px-6 py-12 text-center text-gray-500">
                                         <svg class="w-12 h-12 mx-auto text-gray-300 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
                                         <p class="font-semibold text-lg">Belum ada data warga</p>
                                     </td>

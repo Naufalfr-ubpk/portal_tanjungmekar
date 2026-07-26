@@ -30,12 +30,12 @@ class DataWargaController extends Controller
     {
         $user = User::findOrFail($id);
         
-        // Proteksi Lapis Ganda: Cuma bisa hapus role user & bukan akun google
-        if ($user->role === 'user' && is_null($user->google_id)) {
+        // Hapus akun selama role-nya adalah 'user' (bebas mau manual atau google)
+        if ($user->role === 'user') {
             $user->delete();
-            return redirect()->back()->with('success', 'Data warga berhasil dihapus.');
+            return redirect()->back()->with('success', 'Data akun warga berhasil dihapus. Mereka harus login ulang/otorisasi ulang untuk masuk.');
         }
 
-        return redirect()->back()->with('error', 'Akun Google tidak dapat dihapus secara manual.');
+        return redirect()->back()->with('error', 'Gagal menghapus data.');
     }
 }
