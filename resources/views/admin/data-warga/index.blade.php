@@ -177,7 +177,9 @@
                                 <th class="px-6 py-4 font-bold">Nama Warga</th>
                                 <th class="px-6 py-4 font-bold">Email</th>
                                 <th class="px-6 py-4 font-bold">Tipe Akun</th>
-                                <th class="px-6 py-4 font-bold text-center">Tindakan</th>
+
+                                <th class="px-6 py-4 font-bold text-center uppercase">{{ $isAdminTheme ? 'Tindakan' : 'Aksi' }}</th>
+
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-200">
