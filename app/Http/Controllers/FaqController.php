@@ -56,14 +56,20 @@ class FaqController extends Controller
         $adminEmail = 'gr1mmp4ck@gmail.com'; 
         $operatorEmail = 'pakaji08432@gmail.com'; 
 
-        // 1. Kirim ke Operator (Pesan: Halo Operator), dan BCC (Salinan) ke Admin
-        Mail::to($operatorEmail)
-            ->bcc($adminEmail)
-            ->send(new FaqNotificationMail($faq, 'Operator', false));
-            
-        // 2. Kirim pesan utama khusus ke Admin (Pesan: Halo Admin)
-        Mail::to($adminEmail)->send(new FaqNotificationMail($faq, 'Admin', false));
+        // Blok Try-Catch hanya membungkus proses pengiriman email
+        try {
+            if ($operatorEmail != '') {
+                Mail::to($operatorEmail)->send(new FaqNotificationMail($faq, 'Operator', false));
+                Mail::to($adminEmail)->send(new FaqNotificationMail($faq, 'Admin', true));
+            } else {
+                Mail::to($adminEmail)->send(new FaqNotificationMail($faq, 'Admin', false));
+            }
+        } catch (\Exception $e) {
+            // Jika Railway memblokir email, error ditangkap di sini sehingga web tidak crash 500.
+            // Di lokal (XAMPP), email akan tetap terkirim normal karena tidak diblokir.
+        }
 
+        // Baris ini akan SELALU tereksekusi untuk memunculkan pop-up overlay
         return back()->with('success', 'Pertanyaan Anda berhasil diajukan dan sedang menunggu ulasan.');
     }
 }
