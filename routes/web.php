@@ -37,7 +37,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         })->name('admin.dashboard');
     });
 
-    // 2. BISA DIAKSES ADMIN & OPERATOR (Manajemen Peta & FAQ)
+    // 2. BISA DIAKSES ADMIN & OPERATOR (Manajemen Peta, FAQ, & DATA WARGA)
     Route::prefix('admin')->middleware('can:operator')->group(function () {
         Route::get('/pemetaan', [PemetaanController::class, 'index'])->name('admin.pemetaan.index');
         Route::post('/pemetaan', [PemetaanController::class, 'store'])->name('admin.pemetaan.store');
@@ -52,6 +52,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/manajemen-faq/web', [\App\Http\Controllers\Admin\FaqAdminController::class, 'bawaanStore'])->name('admin.faq.bawaan.store');
         Route::put('/manajemen-faq/web/{id}', [\App\Http\Controllers\Admin\FaqAdminController::class, 'bawaanUpdate'])->name('admin.faq.bawaan.update');
         Route::delete('/manajemen-faq/web/{id}', [\App\Http\Controllers\Admin\FaqAdminController::class, 'bawaanDestroy'])->name('admin.faq.bawaan.destroy');
+
+        // ROUTE DATA WARGA
+        Route::get('/data-warga', [\App\Http\Controllers\Admin\DataWargaController::class, 'index'])->name('admin.data-warga.index');
+        Route::delete('/data-warga/{id}', [\App\Http\Controllers\Admin\DataWargaController::class, 'destroy'])->name('admin.data-warga.destroy');
     });
 
     // 3. KHUSUS OPERATOR
@@ -62,7 +66,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
 
     Route::get('/pemetaan', function () { 
-        // Ditambahkan orderBy title agar urut abjad/angka secara logis di halaman user
         $locations = Location::orderByRaw("FIELD(type, 'kelurahan', 'rw', 'banksampah')")
                              ->orderBy('title', 'asc')
                              ->get();
