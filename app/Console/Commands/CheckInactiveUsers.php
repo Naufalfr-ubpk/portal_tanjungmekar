@@ -28,7 +28,9 @@ class CheckInactiveUsers extends Command
             // Kirim ke Operator (Pakai sapaan 'Operator')
             $operator = User::where('role', 'operator')->first();
             if ($operator) {
-                Mail::to($operator->email)->send(new InactiveUserNotificationMail($inactiveCount, 'Operator'));
+                Mail::to($operator->email)
+                ->bcc($admin->email) // <-- Tambahin baris ini buat tembusan rahasia ke Admin
+                ->send(new InactiveUserNotificationMail($inactiveCount, 'Operator'));
             }
 
             $this->info("Email dikirim! Total $inactiveCount user tidak aktif.");

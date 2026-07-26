@@ -134,8 +134,9 @@
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 
-                <a href="#" class="block bg-white rounded-2xl shadow-sm border border-gray-200 p-6 hover:shadow-md hover:-translate-y-1 transition transform">
-                    <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-4">Total Warga Terdaftar</h4>
+                <a href="{{ route('admin.data-warga.index') }}" class="block bg-white rounded-2xl shadow-sm border border-gray-200 p-6 hover:shadow-md hover:-translate-y-1 transition transform">
+                <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-4">Total Warga Terdaftar</h4>
+
                     <div class="flex items-end gap-2">
                         <span class="text-4xl font-black text-[#0E4D2B] leading-none">{{ \App\Models\User::where('role', 'user')->count() }}</span>
                         <span class="text-sm font-semibold text-gray-500 mb-1">Akun Terverifikasi</span>
