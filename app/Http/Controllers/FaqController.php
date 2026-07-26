@@ -53,23 +53,25 @@ class FaqController extends Controller
             'is_bawaan' => false,
         ]);
 
-        $adminEmail = 'gr1mmp4ck@gmail.com'; 
-        $operatorEmail = 'pakaji08432@gmail.com'; 
+        // DETEKTOR LINGKUNGAN: Hanya kirim email jika TIDAK di production (Railway)
+        if (config('app.env') !== 'production') {
+            $adminEmail = 'gr1mmp4ck@gmail.com'; 
+            $operatorEmail = 'pakaji08432@gmail.com'; 
 
-        // Blok Try-Catch hanya membungkus proses pengiriman email
-        try {
-            if ($operatorEmail != '') {
-                Mail::to($operatorEmail)->send(new FaqNotificationMail($faq, 'Operator', false));
-                Mail::to($adminEmail)->send(new FaqNotificationMail($faq, 'Admin', true));
-            } else {
-                Mail::to($adminEmail)->send(new FaqNotificationMail($faq, 'Admin', false));
+            try {
+                if ($operatorEmail != '') {
+                    Mail::to($operatorEmail)->send(new FaqNotificationMail($faq, 'Operator', false));
+                    Mail::to($adminEmail)->send(new FaqNotificationMail($faq, 'Admin', true));
+                } else {
+                    Mail::to($adminEmail)->send(new FaqNotificationMail($faq, 'Admin', false));
+                }
+            } catch (\Throwable $e) {
+                // Abaikan jika ada error di lokal
             }
-        } catch (\Exception $e) {
-            // Jika Railway memblokir email, error ditangkap di sini sehingga web tidak crash 500.
-            // Di lokal (XAMPP), email akan tetap terkirim normal karena tidak diblokir.
         }
 
-        // Baris ini akan SELALU tereksekusi untuk memunculkan pop-up overlay
+        // Baris ini akan langsung dieksekusi di Railway tanpa nungguin email, 
+        // Pop-up overlay dijamin 100% muncul.
         return back()->with('success', 'Pertanyaan Anda berhasil diajukan dan sedang menunggu ulasan.');
     }
 }
