@@ -1,21 +1,34 @@
 @php
-    $role = Auth::user()->role;
-    $isAdmin = $role === 'admin';
+    $realRole = Auth::user()->role;
+    $mode = request()->query('mode');
+    
+    // Cek apakah Admin sedang simulasi halaman operator
+    $isSimulatingOperator = ($realRole === 'admin' && $mode === 'operator');
+    
+    // Tentukan tema visual (Hanya hijau kalau murni admin dan BUKAN simulasi)
+    $isAdminTheme = ($realRole === 'admin' && !$isSimulatingOperator);
+    
+    // Parameter mode untuk menjaga state di URL saat pindah-pindah link
+    $modeParam = $isSimulatingOperator ? ['mode' => 'operator'] : [];
 
-    $bgSidebar = $isAdmin ? 'bg-[#0E4D2B]' : 'bg-[#FBC02D]';
-    $textSidebar = $isAdmin ? 'text-white' : 'text-[#0E4D2B]';
-    $borderSidebar = $isAdmin ? 'border-[#2E7D32]' : 'border-yellow-400';
-    $headerSidebar = $isAdmin ? 'bg-[#0A3D22]' : 'bg-[#F9A825]';
-    $titleSidebar = $isAdmin ? 'PANEL ADMIN' : 'PANEL OPERATOR';
-    $menuTitle = $isAdmin ? 'text-[#A5D6A7]' : 'text-[#0A3D22]';
-    $hoverBg = $isAdmin ? 'hover:bg-[#2E7D32]' : 'hover:bg-[#F9A825]';
-    $hoverText = $isAdmin ? 'hover:text-white' : 'hover:text-[#0A3D22]';
-    $activeBg = $isAdmin ? 'bg-[#2E7D32]' : 'bg-white';
-    $activeText = $isAdmin ? 'text-white' : 'text-[#0E4D2B]';
+    // Setup Warna UI
+    $bgSidebar = $isAdminTheme ? 'bg-[#0E4D2B]' : 'bg-[#FBC02D]';
+    $textSidebar = $isAdminTheme ? 'text-white' : 'text-[#0E4D2B]';
+    $borderSidebar = $isAdminTheme ? 'border-[#2E7D32]' : 'border-yellow-400';
+    $headerSidebar = $isAdminTheme ? 'bg-[#0A3D22]' : 'bg-[#F9A825]';
+    $titleSidebar = $isAdminTheme ? 'PANEL ADMIN' : 'PANEL OPERATOR';
+    $menuTitle = $isAdminTheme ? 'text-[#A5D6A7]' : 'text-[#0A3D22]';
+    $hoverBg = $isAdminTheme ? 'hover:bg-[#2E7D32]' : 'hover:bg-[#F9A825]';
+    $hoverText = $isAdminTheme ? 'hover:text-white' : 'hover:text-[#0A3D22]';
+    $activeBg = $isAdminTheme ? 'bg-[#2E7D32]' : 'bg-white';
+    $activeText = $isAdminTheme ? 'text-white' : 'text-[#0E4D2B]';
+    
+    // Untuk text Hak Akses di pojok kanan atas
+    $displayRole = $isSimulatingOperator ? 'operator' : $realRole;
     
     $rawAvatar = Auth::user()->avatar;
     $avatarColor = '0E4D2B';
-    $avatarBgColor = $isAdmin ? 'A5D6A7' : 'FBC02D';
+    $avatarBgColor = $isAdminTheme ? 'A5D6A7' : 'FBC02D';
     $avatarUrl = $rawAvatar ? (str_starts_with($rawAvatar, 'http') ? $rawAvatar : asset($rawAvatar)) : 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) . "&color=$avatarColor&background=$avatarBgColor&bold=true";
 @endphp
 <!DOCTYPE html>
@@ -32,7 +45,7 @@
 
     <div x-show="sidebarOpen" @click="sidebarOpen = false" x-transition.opacity class="fixed inset-0 z-20 bg-black bg-opacity-50 md:hidden" style="display: none;"></div>
 
-    <aside class="w-64 {{ $bgSidebar }} h-screen {{ $textSidebar }} flex flex-col shadow-xl fixed z-30 transform transition-transform duration-300 md:translate-x-0 {{ $isAdmin ? '' : $borderSidebar }}" :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'">
+    <aside class="w-64 {{ $bgSidebar }} h-screen {{ $textSidebar }} flex flex-col shadow-xl fixed z-30 transform transition-transform duration-300 md:translate-x-0 {{ $isAdminTheme ? '' : $borderSidebar }}" :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'">
         <div class="h-20 flex-shrink-0 flex items-center justify-center border-b {{ $borderSidebar }} {{ $headerSidebar }}">
             <h1 class="text-xl font-extrabold tracking-wider">{{ $titleSidebar }}</h1>
         </div>
@@ -40,12 +53,12 @@
         <nav class="flex-1 overflow-y-auto px-4 py-4 space-y-2 custom-scrollbar">
             <p class="text-xs font-bold {{ $menuTitle }} uppercase tracking-wider mb-2 mt-0 px-2">Menu Utama</p>
             
-            <a href="{{ $isAdmin ? route('admin.dashboard') : route('operator.dashboard') }}" class="flex items-center gap-3 {{ $hoverBg }} {{ $isAdmin ? 'text-gray-200' : 'text-[#0E4D2B]' }} {{ $hoverText }} px-4 py-3 rounded-lg font-semibold transition">
+            <a href="{{ $isAdminTheme ? route('admin.dashboard') : route('operator.dashboard') }}" class="flex items-center gap-3 {{ $hoverBg }} {{ $isAdminTheme ? 'text-gray-200' : 'text-[#0E4D2B]' }} {{ $hoverText }} px-4 py-3 rounded-lg font-semibold transition">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
                 Dashboard
             </a>
 
-            @if($isAdmin)
+            @if($isAdminTheme)
             <a href="{{ route('operator.dashboard') }}" class="flex items-center gap-3 hover:bg-[#2E7D32] text-gray-200 hover:text-white px-4 py-3 rounded-lg font-semibold transition">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
                 Halaman Operator
@@ -53,28 +66,28 @@
             @endif
             
             <p class="text-xs font-bold {{ $menuTitle }} uppercase tracking-wider mb-2 mt-6 px-2">Kustomisasi Web</p>
-            <a href="#" class="flex items-center gap-3 {{ $hoverBg }} {{ $isAdmin ? 'text-gray-200' : 'text-[#0E4D2B]' }} {{ $hoverText }} px-4 py-3 rounded-lg font-semibold transition">
+            <a href="#" class="flex items-center gap-3 {{ $hoverBg }} {{ $isAdminTheme ? 'text-gray-200' : 'text-[#0E4D2B]' }} {{ $hoverText }} px-4 py-3 rounded-lg font-semibold transition">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                 Manajemen Gambar (UI)
             </a>
-            <a href="{{ route('admin.pemetaan.index') }}" class="flex items-center gap-3 {{ $hoverBg }} {{ $isAdmin ? 'text-gray-200' : 'text-[#0E4D2B]' }} {{ $hoverText }} px-4 py-3 rounded-lg font-semibold transition">
+            <a href="{{ route('admin.pemetaan.index', $modeParam) }}" class="flex items-center gap-3 {{ $hoverBg }} {{ $isAdminTheme ? 'text-gray-200' : 'text-[#0E4D2B]' }} {{ $hoverText }} px-4 py-3 rounded-lg font-semibold transition">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg>
                 Manajemen Peta
             </a>
             
             <p class="text-xs font-bold {{ $menuTitle }} uppercase tracking-wider mb-2 mt-6 px-2">Data & Laporan</p>
 
-            <a href="{{ route('admin.faq.index') }}" class="flex items-center gap-3 {{ $hoverBg }} {{ $isAdmin ? 'text-gray-200' : 'text-[#0E4D2B]' }} {{ $hoverText }} px-4 py-3 rounded-lg font-semibold transition">
+            <a href="{{ route('admin.faq.index', $modeParam) }}" class="flex items-center gap-3 {{ $hoverBg }} {{ $isAdminTheme ? 'text-gray-200' : 'text-[#0E4D2B]' }} {{ $hoverText }} px-4 py-3 rounded-lg font-semibold transition">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                 Manajemen FAQ
             </a>
 
-            <a href="{{ route('admin.data-warga.index') }}" class="flex items-center gap-3 {{ $activeBg }} {{ $activeText }} px-4 py-3 rounded-lg font-bold transition {{ $isAdmin ? '' : 'shadow-sm' }}">
+            <a href="{{ route('admin.data-warga.index', $modeParam) }}" class="flex items-center gap-3 {{ $activeBg }} {{ $activeText }} px-4 py-3 rounded-lg font-bold transition {{ $isAdminTheme ? '' : 'shadow-sm' }}">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
                 Data Warga
             </a>
             
-            @if($isAdmin)
+            @if($isAdminTheme)
             <a href="#" class="flex items-center gap-3 hover:bg-[#2E7D32] text-gray-200 hover:text-white px-4 py-3 rounded-lg font-semibold transition mb-4">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
                 Laporan Web
@@ -105,12 +118,12 @@
             </div>
             
             <div class="flex items-center gap-3 md:gap-4">
-                <span class="hidden sm:inline-block text-[10px] md:text-xs font-bold {{ $isAdmin ? 'bg-[#FBC02D] text-[#0E4D2B] border-yellow-400' : 'bg-[#0E4D2B] text-white border-[#0A3D22]' }} px-2 md:px-3 py-1 rounded-full uppercase tracking-wider border">HAK AKSES: {{ strtoupper($role) }}</span>
+                <span class="hidden sm:inline-block text-[10px] md:text-xs font-bold {{ $isAdminTheme ? 'bg-[#0E4D2B] text-white border-[#0A3D22]' : 'bg-[#FBC02D] text-[#0E4D2B] border-yellow-400' }} px-2 md:px-3 py-1 rounded-full uppercase tracking-wider border">HAK AKSES: {{ strtoupper($displayRole) }}</span>
                 <div class="hidden sm:block h-8 w-px bg-gray-300"></div>
                 
                 <div x-data="{ openProfile: false }" class="relative">
                     <button @click="openProfile = !openProfile" class="flex items-center gap-2 px-2 md:px-4 py-2 bg-gray-50 border border-gray-200 rounded-full hover:bg-gray-100 transition focus:outline-none">
-                        <div class="w-8 h-8 rounded-full {{ $isAdmin ? 'bg-[#A5D6A7]' : 'bg-[#FBC02D]' }} flex items-center justify-center overflow-hidden border border-[#0E4D2B]">
+                        <div class="w-8 h-8 rounded-full {{ $isAdminTheme ? 'bg-[#A5D6A7]' : 'bg-[#FBC02D]' }} flex items-center justify-center overflow-hidden border border-[#0E4D2B]">
                             <img src="{{ $avatarUrl }}" alt="Avatar" class="w-full h-full object-cover">
                         </div>
                         <span class="hidden sm:inline-block text-sm font-bold text-gray-800">{{ Auth::user()->name }}</span>
@@ -151,9 +164,9 @@
 
                 <!-- TABS -->
                 <div class="px-6 pt-4 flex gap-6 border-b border-gray-200 text-sm font-semibold">
-                    <a href="{{ route('admin.data-warga.index', ['tab' => 'semua']) }}" class="pb-3 border-b-2 transition {{ $tab === 'semua' ? 'border-[#0E4D2B] text-[#0E4D2B]' : 'border-transparent text-gray-500 hover:text-gray-700' }}">Semua Akun</a>
-                    <a href="{{ route('admin.data-warga.index', ['tab' => 'manual']) }}" class="pb-3 border-b-2 transition {{ $tab === 'manual' ? 'border-[#0E4D2B] text-[#0E4D2B]' : 'border-transparent text-gray-500 hover:text-gray-700' }}">Akun User (Manual)</a>
-                    <a href="{{ route('admin.data-warga.index', ['tab' => 'google']) }}" class="pb-3 border-b-2 transition {{ $tab === 'google' ? 'border-[#0E4D2B] text-[#0E4D2B]' : 'border-transparent text-gray-500 hover:text-gray-700' }}">Akun Google</a>
+                    <a href="{{ route('admin.data-warga.index', array_merge(['tab' => 'semua'], $modeParam)) }}" class="pb-3 border-b-2 transition {{ $tab === 'semua' ? 'border-[#0E4D2B] text-[#0E4D2B]' : 'border-transparent text-gray-500 hover:text-gray-700' }}">Semua Akun</a>
+                    <a href="{{ route('admin.data-warga.index', array_merge(['tab' => 'manual'], $modeParam)) }}" class="pb-3 border-b-2 transition {{ $tab === 'manual' ? 'border-[#0E4D2B] text-[#0E4D2B]' : 'border-transparent text-gray-500 hover:text-gray-700' }}">Akun User (Manual)</a>
+                    <a href="{{ route('admin.data-warga.index', array_merge(['tab' => 'google'], $modeParam)) }}" class="pb-3 border-b-2 transition {{ $tab === 'google' ? 'border-[#0E4D2B] text-[#0E4D2B]' : 'border-transparent text-gray-500 hover:text-gray-700' }}">Akun Google</a>
                 </div>
 
                 <!-- TABLE -->
@@ -251,8 +264,8 @@
     <style>
         .custom-scrollbar::-webkit-scrollbar { width: 6px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background-color: {{ $isAdmin ? '#A5D6A7' : '#F9A825' }}; border-radius: 10px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background-color: {{ $isAdmin ? '#2E7D32' : '#F57F17' }}; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background-color: {{ $isAdminTheme ? '#A5D6A7' : '#F9A825' }}; border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background-color: {{ $isAdminTheme ? '#2E7D32' : '#F57F17' }}; }
     </style>
 </body>
 </html>
