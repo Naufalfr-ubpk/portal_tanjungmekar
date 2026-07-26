@@ -58,14 +58,15 @@ class FaqController extends Controller
         ]);
 
         $adminEmail = 'gr1mmp4ck@gmail.com'; 
-        $operatorEmail = ''; // Nanti isi email Pak Aji di sini kalau udah ada
+        $operatorEmail = 'pakaji08432@gmail.com'; // Email Google Asli Pak Aji
 
-        if ($operatorEmail != '') {
-            Mail::to($operatorEmail)->send(new FaqNotificationMail($faq, 'Operator', false));
-            Mail::to($adminEmail)->send(new FaqNotificationMail($faq, 'Admin', true));
-        } else {
-            Mail::to($adminEmail)->send(new FaqNotificationMail($faq, 'Admin', false));
-        }
+        // 1. Kirim ke Operator (dengan BCC ke Admin agar Admin dapat salinan pantauan)
+        Mail::to($operatorEmail)
+            ->bcc($adminEmail)
+            ->send(new FaqNotificationMail($faq, 'Operator', false));
+            
+        // 2. Kirim pesan utama khusus ke Admin
+        Mail::to($adminEmail)->send(new FaqNotificationMail($faq, 'Admin', false));
 
         return back()->with('success', 'Pertanyaan Anda berhasil diajukan dan sedang menunggu ulasan.');
     }
