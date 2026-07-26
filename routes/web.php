@@ -56,6 +56,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         // ROUTE DATA WARGA
         Route::get('/data-warga', [\App\Http\Controllers\Admin\DataWargaController::class, 'index'])->name('admin.data-warga.index');
         Route::delete('/data-warga/{id}', [\App\Http\Controllers\Admin\DataWargaController::class, 'destroy'])->name('admin.data-warga.destroy');
+
+        // ROUTE BANK SAMPAH
+        Route::get('/bank-sampah', [\App\Http\Controllers\Admin\BankSampahController::class, 'index'])->name('admin.bank-sampah.index');
     });
 
     // 3. KHUSUS OPERATOR
