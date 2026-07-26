@@ -201,12 +201,22 @@
                                     <td class="px-6 py-4">
                                         @if($w->last_seen_at)
                                             @php 
+                                                $diffInMinutes = $w->last_seen_at->diffInMinutes(now());
                                                 $daysInactive = $w->last_seen_at->diffInDays(now());
                                             @endphp
-                                            @if($daysInactive >= 30)
+                                            
+                                            @if($diffInMinutes < 2)
+                                                <span class="inline-flex items-center gap-1.5 text-green-600 font-bold text-sm">
+                                                    <span class="relative flex h-2.5 w-2.5">
+                                                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                                                      <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
+                                                    </span>
+                                                    Sedang Online
+                                                </span>
+                                            @elseif($daysInactive >= 30)
                                                 <span class="text-red-600 font-bold text-sm">{{ $w->last_seen_at->diffForHumans() }}</span>
                                             @else
-                                                <span class="text-green-600 font-bold text-sm">{{ $w->last_seen_at->diffForHumans() }}</span>
+                                                <span class="text-gray-600 font-bold text-sm">{{ $w->last_seen_at->diffForHumans() }}</span>
                                             @endif
                                         @else
                                             <span class="text-gray-400 text-sm italic">Belum pernah online</span>
