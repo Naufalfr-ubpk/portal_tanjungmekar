@@ -16,11 +16,11 @@ class FaqController extends Controller
         // Mengabaikan "data hantu" sisa tes sebelumnya.
         $faqs = Faq::whereIn('status', ['dipublikasi', 'Dipublikasi'])
             ->where(function($query) {
-                // 1. Ambil FAQ Bawaan Web yang valid (Sama persis kayak filter Admin Kelola Web)
+                // 1. Ambil FAQ Bawaan Web yang valid
                 $query->where('is_bawaan', 1)
                       ->orWhere('is_bawaan', true)
                       ->orWhere('is_bawaan', '1')
-                // 2. ATAU Ambil FAQ Warga yang valid (Sama persis kayak filter Admin Daftar Warga)
+                // 2. ATAU Ambil FAQ Warga yang valid
                       ->orWhere(function($subQuery) {
                           $subQuery->where(function($q) {
                               $q->whereNull('is_bawaan')
@@ -48,6 +48,7 @@ class FaqController extends Controller
             'detail_pertanyaan' => 'nullable|string',
         ]);
 
+        // Simpan data ke Database (Ini akan selalu berhasil)
         $faq = Faq::create([
             'pertanyaan' => $request->pertanyaan,
             'detail_pertanyaan' => $request->detail_pertanyaan,
@@ -57,17 +58,26 @@ class FaqController extends Controller
             'is_bawaan' => false,
         ]);
 
-        $adminEmail = 'gr1mmp4ck@gmail.com'; 
-        $operatorEmail = 'pakaji08432@gmail.com'; // Email Google Asli Pak Aji
+        // SABUK PENGAMAN LEVEL DEWA (\Throwable)
+        try {
+            $adminEmail = 'gr1mmp4ck@gmail.com'; 
+            $operatorEmail = 'pakaji08432@gmail.com'; 
 
-        // 1. Kirim ke Operator (dengan BCC ke Admin agar Admin dapat salinan pantauan)
-        Mail::to($operatorEmail)
-            ->bcc($adminEmail)
-            ->send(new FaqNotificationMail($faq, 'Operator', false));
-            
-        // 2. Kirim pesan utama khusus ke Admin
-        Mail::to($adminEmail)->send(new FaqNotificationMail($faq, 'Admin', false));
+            // 1. Kirim ke Operator (dengan BCC ke Admin agar Admin dapat salinan)
+            Mail::to($operatorEmail)
+                ->bcc($adminEmail)
+                ->send(new FaqNotificationMail($faq, 'Operator', false));
+                
+            // 2. Kirim pesan utama khusus ke Admin
+            Mail::to($adminEmail)->send(new FaqNotificationMail($faq, 'Admin', false));
 
+        } catch (\Throwable $e) {
+            // Tangkap SEGALA jenis error email (termasuk fatal error dari server Gmail)
+            // Error dicatat di background, web akan tetap lanjut jalan dengan mulus
+            \Illuminate\Support\Facades\Log::error('Error Kirim Email FAQ: ' . $e->getMessage());
+        }
+
+        // Return sukses, user akan melihat overlay kotak hijau tanpa layar hitam 500
         return back()->with('success', 'Pertanyaan Anda berhasil diajukan dan sedang menunggu ulasan.');
     }
 }
