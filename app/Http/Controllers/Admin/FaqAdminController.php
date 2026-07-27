@@ -24,7 +24,7 @@ class FaqAdminController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'jawaban' => 'required|string',
+            'jawaban' => 'required_unless:status,ditolak|nullable|string',
             'status' => 'required|in:pending,dipublikasi,ditolak',
             'action_button_text' => 'nullable|string|max:50',
             'action_link' => 'nullable|string',
@@ -38,7 +38,7 @@ class FaqAdminController extends Controller
             'action_link' => $request->action_link,
         ]);
 
-        return back()->with('success', 'FAQ warga berhasil diulas!');
+        return back()->with('success', 'Pengajuan FAQ berhasil diulas!');
     }
 
     public function destroy($id)

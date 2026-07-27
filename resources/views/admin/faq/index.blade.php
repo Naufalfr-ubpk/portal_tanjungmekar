@@ -44,7 +44,9 @@
 
         <!-- KHUSUS TAMPIL DI HP: Link Navigasi Publik -->
             <div class="md:hidden mb-4 pb-4 border-b border-gray-300 border-opacity-30">
-                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2 px-2">Navigasi</p>
+
+                <p class="text-xs font-bold uppercase tracking-wider mb-2 px-2 {{ $isOp ? 'text-[#0A3D22]' : 'text-[#A5D6A7]' }}">Navigasi</p>
+
                 <a href="{{ url('/') }}" class="block px-4 py-2 text-sm font-semibold hover:bg-black hover:bg-opacity-10 rounded-lg transition">Beranda</a>
                 <a href="{{ route('pemetaan') }}" class="block px-4 py-2 text-sm font-semibold hover:bg-black hover:bg-opacity-10 rounded-lg transition">Peta Wilayah</a>
                 <a href="{{ route('faq') }}" class="block px-4 py-2 text-sm font-semibold hover:bg-black hover:bg-opacity-10 rounded-lg transition">Pusat FAQ</a>
@@ -218,7 +220,9 @@
 
                         <div class="mb-5">
                             <label class="block text-sm font-bold text-gray-700 mb-2">Jawaban <span class="text-red-500">*</span></label>
-                            <textarea name="jawaban" x-model="formData.jawaban" rows="4" required class="w-full rounded-lg border-gray-300 shadow-sm focus:border-[#0E4D2B]" placeholder="Ketikkan jawaban Anda di sini..."></textarea>
+
+                            <textarea name="jawaban" x-model="formData.jawaban" rows="4" :required="formData.status !== 'ditolak'" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-[#0E4D2B]" placeholder="Ketikkan jawaban Anda di sini..."></textarea>
+
                         </div>
 
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5 p-4 bg-gray-50 rounded-xl border border-gray-200">
@@ -277,7 +281,7 @@
                         
                         <!-- Teks yang disesuaikan -->
 
-                        <p class="text-sm text-gray-500 mb-6" x-text="deleteStatus === 'ditolak' ? 'Pertanyaan ini akan dihapus secara PERMANEN dari sistem. Tindakan ini tidak dapat dibatalkan.' : 'Pertanyaan ini akan dipindahkan ke tab Ditolak terlebih dahulu.'"></p>
+                        <p class="text-sm text-gray-500 mb-6" x-text="deleteStatus === 'ditolak' ? 'Pertanyaan ini akan dihapus secara PERMANEN dari sistem. Apakah anda yakin untuk menghapusnya?. ' : 'Pertanyaan ini akan dipindahkan ke tab Ditolak terlebih dahulu.'"></p>
                         
                         <div class="flex justify-center gap-3">
                             <button @click="closeDeleteModal()" class="px-6 py-2.5 bg-gray-200 text-gray-800 font-bold rounded-lg hover:bg-gray-300 transition">Batal</button>

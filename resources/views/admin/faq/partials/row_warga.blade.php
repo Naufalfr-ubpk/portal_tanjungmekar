@@ -15,7 +15,7 @@
         <br>
         <span class="text-xs font-semibold text-gray-500">
             @if($faq->status === 'pending') Belum dijawab
-            @elseif($faq->status === 'dipublikasi') Sudah disetujui
+            @elseif($faq->status === 'dipublikasi') Disetujui
             @else Tidak disetujui
             @endif
         </span>
