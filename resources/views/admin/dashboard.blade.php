@@ -163,13 +163,6 @@
                     </div>
                 </a>
 
-                <a href="#" class="block bg-white rounded-2xl shadow-sm border border-gray-200 p-6 hover:shadow-md hover:-translate-y-1 transition transform">
-                    <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-4">Pengaduan Warga <span class="text-[10px] text-red-500 ml-1">(Segera Hadir)</span></h4>
-                    <div class="flex items-end gap-2">
-                        <span class="text-4xl font-black text-[#1976D2] leading-none">0</span>
-                        <span class="text-sm font-semibold text-gray-500 mb-1">Laporan</span>
-                    </div>
-                </a>
                 
                 @if(Auth::user()->role === 'admin')
                 <a href="#" class="block bg-white rounded-2xl shadow-sm border border-gray-200 p-6 hover:shadow-md hover:-translate-y-1 transition transform">
