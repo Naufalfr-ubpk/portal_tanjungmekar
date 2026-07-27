@@ -281,7 +281,7 @@
                         
                         <!-- Teks yang disesuaikan -->
 
-                        <p class="text-sm text-gray-500 mb-6" x-text="deleteStatus === 'ditolak' ? 'Pertanyaan ini akan dihapus secara PERMANEN dari sistem. Apakah anda yakin untuk menghapusnya?. ' : 'Pertanyaan ini akan dipindahkan ke tab Ditolak terlebih dahulu.'"></p>
+                        <p class="text-sm text-gray-500 mb-6" x-text="deleteStatus === 'ditolak' ? 'Pertanyaan ini akan dihapus secara PERMANEN dari sistem. Apakah anda yakin untuk menghapusnya? ' : 'Pertanyaan ini akan dipindahkan ke tab Ditolak terlebih dahulu.'"></p>
                         
                         <div class="flex justify-center gap-3">
                             <button @click="closeDeleteModal()" class="px-6 py-2.5 bg-gray-200 text-gray-800 font-bold rounded-lg hover:bg-gray-300 transition">Batal</button>
