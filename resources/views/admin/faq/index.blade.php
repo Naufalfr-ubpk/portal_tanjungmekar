@@ -41,6 +41,15 @@
         </div>
         
         <nav class="flex-1 overflow-y-auto px-4 py-4 space-y-2 custom-scrollbar">
+
+        <!-- KHUSUS TAMPIL DI HP: Link Navigasi Publik -->
+            <div class="md:hidden mb-4 pb-4 border-b border-gray-300 border-opacity-30">
+                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2 px-2">Navigasi Publik</p>
+                <a href="{{ url('/') }}" class="block px-4 py-2 text-sm font-semibold hover:bg-black hover:bg-opacity-10 rounded-lg transition">Beranda</a>
+                <a href="{{ route('pemetaan') }}" class="block px-4 py-2 text-sm font-semibold hover:bg-black hover:bg-opacity-10 rounded-lg transition">Peta Wilayah</a>
+                <a href="{{ route('faq') }}" class="block px-4 py-2 text-sm font-semibold hover:bg-black hover:bg-opacity-10 rounded-lg transition">Pusat FAQ</a>
+            </div>
+
             <p class="text-xs font-bold uppercase tracking-wider mb-2 px-2 {{ $isOp ? 'text-[#0A3D22]' : 'text-[#A5D6A7]' }}">Menu Utama</p>
             <a href="{{ $isOp ? route('operator.dashboard') : route('admin.dashboard') }}" class="flex items-center gap-3 sidebar-link {{ $navLinkText }} px-4 py-3 rounded-lg font-semibold"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg> Dashboard</a>
             
@@ -234,11 +243,13 @@
 
                         <div class="mb-6">
                             <label class="block text-sm font-bold text-gray-700 mb-2">Status Visibilitas</label>
+
                             <select name="status" x-model="formData.status" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-[#0E4D2B]">
                                 <option value="pending">Tetap Pending (Belum dipublikasi)</option>
-                                <option value="dipublikasi">Dipublikasi (Kirim Notif & Tampil Publik)</option>
-                                <option value="ditolak">Ditolak (Kirim Notif Email Saja)</option>
+                                <option value="dipublikasi">Dipublikasi (Tampil di FAQ)</option>
+                                <option value="ditolak">Ditolak (Pindah ke Tab Ditolak)</option>
                             </select>
+
                         </div>
 
                         <div class="flex justify-end gap-3 pt-4 border-t">
@@ -250,22 +261,34 @@
             </div>
 
             <!-- MODAL KONFIRMASI HAPUS -->
-            <div x-show="deleteModalOpen" style="display: none;" class="fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-70 p-4">
-                <div @click.away="closeDeleteModal()" class="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full text-center">
-                    <div class="w-16 h-16 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-4">
-                        <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-                    </div>
-                    <h3 class="text-2xl font-bold text-gray-900 mb-2">Hapus Pertanyaan?</h3>
-                    <p class="text-sm text-gray-500 mb-6">Pertanyaan ini akan dihapus permanen dan warga akan menerima notifikasi penolakan.</p>
-                    <div class="flex justify-center gap-3">
-                        <button @click="closeDeleteModal()" class="px-6 py-2.5 bg-gray-200 text-gray-800 font-bold rounded-lg hover:bg-gray-300 transition">Batal</button>
-                        <form :action="deleteUrl" method="POST" class="inline-block">
-                            @csrf @method('DELETE')
-                            <button type="submit" class="px-6 py-2.5 bg-red-600 text-white font-bold rounded-lg hover:bg-red-700 shadow-md">Ya, Hapus!</button>
-                        </form>
+
+                <div x-show="deleteModalOpen" style="display: none;" class="fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-70 p-4">
+                    <div @click.away="closeDeleteModal()" class="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full text-center relative">
+                        
+                        <!-- Tombol X Tambahan -->
+                        <button @click="closeDeleteModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                        </button>
+
+                        <div class="w-16 h-16 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-4 mt-2">
+                            <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-2">Hapus Pertanyaan?</h3>
+                        
+                        <!-- Teks yang disesuaikan -->
+
+                        <p class="text-sm text-gray-500 mb-6" x-text="deleteStatus === 'ditolak' ? 'Pertanyaan ini akan dihapus secara PERMANEN dari sistem. Tindakan ini tidak dapat dibatalkan.' : 'Pertanyaan ini akan dipindahkan ke tab Ditolak terlebih dahulu.'"></p>
+                        
+                        <div class="flex justify-center gap-3">
+                            <button @click="closeDeleteModal()" class="px-6 py-2.5 bg-gray-200 text-gray-800 font-bold rounded-lg hover:bg-gray-300 transition">Batal</button>
+                            <form :action="deleteUrl" method="POST" class="inline-block">
+                                @csrf @method('DELETE')
+                                <button type="submit" class="px-6 py-2.5 bg-red-600 text-white font-bold rounded-lg hover:bg-red-700 shadow-md">Ya, Hapus!</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
-            </div>
+
         </div>
     </main>
 
@@ -274,13 +297,17 @@
         return {
             sidebarOpen: false, 
             activeTab: 'semua', isModalOpen: false, deleteModalOpen: false, deleteUrl: '',
-            formData: { id: '', pertanyaan: '', detail_pertanyaan: '', nama_penanya: '', jawaban: '', status: 'pending', action_button_text: '', action_link: '' },
+
+            formData: { id: '', pertanyaan: '', detail_pertanyaan: '', nama_penanya: '', jawaban: '', status: 'pending', action_button_text: '', action_link: '' }, deleteStatus: '',
+
             openModal(data) {
                 this.formData = { ...data };
                 this.isModalOpen = true;
             },
             closeModal() { this.isModalOpen = false; },
-            openDeleteModal(url) { this.deleteUrl = url; this.deleteModalOpen = true; },
+            
+            openDeleteModal(url, status = '') { this.deleteUrl = url; this.deleteStatus = status; this.deleteModalOpen = true; },
+
             closeDeleteModal() { this.deleteModalOpen = false; this.deleteUrl = ''; }
         }
     }

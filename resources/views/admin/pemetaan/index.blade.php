@@ -34,6 +34,16 @@
         </div>
         
         <nav class="flex-1 overflow-y-auto px-4 py-4 space-y-2 custom-scrollbar">
+
+        <!-- KHUSUS TAMPIL DI HP: Link Navigasi Publik -->
+            <div class="md:hidden mb-4 pb-4 border-b border-gray-300 border-opacity-30">
+                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2 px-2">Navigasi Publik</p>
+                <a href="{{ url('/') }}" class="block px-4 py-2 text-sm font-semibold hover:bg-black hover:bg-opacity-10 rounded-lg transition">Beranda</a>
+                <a href="{{ route('pemetaan') }}" class="block px-4 py-2 text-sm font-semibold hover:bg-black hover:bg-opacity-10 rounded-lg transition">Peta Wilayah</a>
+                <a href="{{ route('faq') }}" class="block px-4 py-2 text-sm font-semibold hover:bg-black hover:bg-opacity-10 rounded-lg transition">Pusat FAQ</a>
+            </div>
+
+
             <p class="text-xs font-bold uppercase tracking-wider mb-2 mt-0 px-2 {{ $isOp ? 'text-[#0A3D22]' : 'text-[#A5D6A7]' }}">Menu Utama</p>
             
             <a href="{{ $isOp ? route('operator.dashboard') : route('admin.dashboard') }}" class="flex items-center gap-3 px-4 py-3 rounded-lg font-semibold transition {{ $navLink }}">

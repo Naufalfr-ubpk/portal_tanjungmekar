@@ -5,17 +5,12 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Faq;
-use Illuminate\Support\Facades\Mail;
-use App\Mail\FaqUserStatusMail;
 
 class FaqAdminController extends Controller
 {
     // === BAGIAN FAQ WARGA ===
-
     public function index()
     {
-        // Proteksi super ketat. Hanya menampilkan pengajuan yang BUKAN bawaan web 
-        // dan menghindari FAQ yang diinput manual oleh nama penanya "Sistem Web"
         $faqs = Faq::where(function($query) {
             $query->whereNull('is_bawaan')
                   ->orWhere('is_bawaan', 0)
@@ -35,25 +30,13 @@ class FaqAdminController extends Controller
             'action_link' => 'nullable|string',
         ]);
 
-        $faq = Faq::findOrFail($id);
-        
-        // Simpan status lama sebelum diupdate
-        $oldStatus = strtolower($faq->status);
-
-        $faq->update([
+        // Langsung update tanpa ngirim email apa-apa
+        Faq::findOrFail($id)->update([
             'jawaban' => $request->jawaban,
             'status' => $request->status,
             'action_button_text' => $request->action_button_text,
             'action_link' => $request->action_link,
         ]);
-
-        // Kirim email HANYA JIKA status SEBELUMNYA 'pending' DAN status BARU BUKAN 'pending'
-        // Jadi kalau diedit lagi dari dipublikasi ke ditolak (atau sebaliknya), email gak bakal dikirim lagi.
-        if ($oldStatus === 'pending' && strtolower($request->status) !== 'pending' && $faq->email_penanya) {
-            Mail::to($faq->email_penanya)
-                ->bcc('gr1mmp4ck@gmail.com') // Salinan rahasia ke Admin
-                ->send(new FaqUserStatusMail($faq));
-        }
 
         return back()->with('success', 'FAQ warga berhasil diulas!');
     }
@@ -63,21 +46,13 @@ class FaqAdminController extends Controller
         $faq = Faq::findOrFail($id);
         $oldStatus = strtolower($faq->status);
 
-        // LOGIKA SHORTCUT: Jika status belum ditolak, ubah jadi ditolak
+        // Jika status BUKAN ditolak -> Pindahkan ke Tab Ditolak (Tanpa Email)
         if ($oldStatus !== 'ditolak') {
             $faq->update(['status' => 'ditolak']);
-            
-            // Kirim email penolakan HANYA JIKA status awalnya dari 'pending'
-            if ($oldStatus === 'pending' && $faq->email_penanya) {
-                Mail::to($faq->email_penanya)
-                    ->bcc('gr1mmp4ck@gmail.com') // Salinan rahasia ke Admin
-                    ->send(new FaqUserStatusMail($faq));
-            }
-            
             return back()->with('success', 'FAQ ditolak! Dipindahkan ke tab Ditolak.');
         }
 
-        // LOGIKA PERMANEN: Jika status sudah ditolak (dihapus dari tab Ditolak), hapus beneran
+        // Jika SUDAH di Tab Ditolak -> Hapus Permanen
         $faq->delete();
         return back()->with('success', 'Pertanyaan berhasil dihapus secara permanen.');
     }

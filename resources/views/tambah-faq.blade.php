@@ -3,7 +3,7 @@
     @if(session('success'))
     <div id="success-modal" class="fixed inset-0 z-[999999] flex items-center justify-center p-4">
         <!-- Background Overlay Hitam Terpisah -->
-        <div class="fixed inset-0 bg-black bg-opacity-70" onclick="document.getElementById('success-modal').remove()"></div>
+        <div class="fixed inset-0 bg-black bg-opacity-70"></div> 
         
         <!-- Konten Modal -->
         <div class="bg-white rounded-3xl shadow-2xl p-8 max-w-md w-full text-center relative z-50">
