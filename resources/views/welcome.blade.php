@@ -167,7 +167,7 @@
     <section id="fitur" class="py-12 sm:py-16 bg-[#F4F8F4]">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h3 class="text-3xl font-extrabold text-[#0E4D2B] mb-4">Layanan Digital Tanjungmekar</h3>
-            <p class="text-gray-600 max-w-2xl mx-auto mb-10 sm:mb-12 leading-relaxed px-2">Fasilitas terpadu untuk mempermudah akses informasi dan pelaporan warga.</p>
+            <p class="text-gray-600 max-w-2xl mx-auto mb-10 sm:mb-12 leading-relaxed px-2">Fasilitas terpadu untuk mempermudah akses informasi dan fasilitas warga.</p>
             
 
 
