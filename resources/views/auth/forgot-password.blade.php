@@ -23,7 +23,7 @@
             </a>
 
             <button type="submit" class="bg-[#0E4D2B] hover:bg-[#2E7D32] text-white font-bold py-2 px-4 rounded transition">
-                Kirim Link Reset Password
+                Konfirmasi Reset Password
             </button>
         </div>
     </form>
