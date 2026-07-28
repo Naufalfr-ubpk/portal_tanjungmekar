@@ -59,6 +59,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         // ROUTE BANK SAMPAH
         Route::get('/bank-sampah', [\App\Http\Controllers\Admin\BankSampahController::class, 'index'])->name('admin.bank-sampah.index');
+
+        Route::post('/bank-sampah/kategori', [\App\Http\Controllers\Admin\BankSampahController::class, 'storeKategori'])->name('admin.bank-sampah.kategori.store');
+        Route::post('/bank-sampah/transaksi', [\App\Http\Controllers\Admin\BankSampahController::class, 'storeTransaksi'])->name('admin.bank-sampah.transaksi.store');
+
     });
 
     // 3. KHUSUS OPERATOR
