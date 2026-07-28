@@ -62,11 +62,17 @@
             </a>
 
             <a href="{{ route('admin.data-warga.index', $modeParam) }}" class="flex items-center gap-3 hover:bg-[#F9A825] text-[#0E4D2B] hover:text-[#0A3D22] px-4 py-3 rounded-lg font-semibold transition mb-4">
-
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
                 Data Warga
             </a>
             
+
+            <a href="{{ route('admin.bank-sampah.index', $modeParam) }}" class="flex items-center gap-3 hover:bg-[#F9A825] text-[#0E4D2B] hover:text-[#0A3D22] px-4 py-3 rounded-lg font-semibold transition">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                Bank Sampah
+            </a>
+
+
         </nav>
         
         <div class="p-4 border-t border-yellow-500 flex-shrink-0">
@@ -143,6 +149,16 @@
                         <span class="text-sm font-semibold text-gray-500 mb-1">Menunggu Validasi</span>
                     </div>
                 </a>
+
+
+                <a href="{{ route('admin.bank-sampah.index', $modeParam) }}" class="block bg-white rounded-2xl shadow-sm border border-gray-200 p-6 hover:shadow-md hover:-translate-y-1 transition transform">
+                    <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-4">Bank Sampah Digital</h4>
+                    <div class="flex items-end gap-2">
+                        <span class="text-4xl font-black text-[#2E7D32] leading-none">{{ \App\Models\TransaksiSampah::count() }}</span>
+                        <span class="text-sm font-semibold text-gray-500 mb-1">Setoran Warga</span>
+                    </div>
+                </a>
+
 
                 
             </div>
