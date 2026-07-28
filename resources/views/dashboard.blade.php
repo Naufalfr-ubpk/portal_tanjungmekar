@@ -37,16 +37,17 @@
                     <a href="{{ route('pemetaan') }}" class="w-full text-center bg-[#0E4D2B] hover:bg-[#2E7D32] text-white font-bold py-2 px-4 rounded-lg text-sm transition-colors block">Buka Peta Wilayah</a>
                 </div>
 
+
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col justify-between border-b-4 border-dashed border-gray-300 opacity-80">
-                    <div>
-                        <div class="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center text-gray-400 mb-4">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                        </div>
-                        <h4 class="text-lg font-bold text-gray-400 mb-1">Tabungan Bank Sampah</h4>
-                        <p class="text-xs text-gray-400 mb-4 leading-relaxed">Fitur monitoring tabungan sampah dan saldo rupiah milik warga.</p>
+                <div>
+                    <div class="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center text-gray-400 mb-4">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
                     </div>
-                    <span class="w-full text-center bg-gray-100 text-gray-400 font-bold py-2 px-4 rounded-lg text-sm cursor-not-allowed block">Fitur Belum Rilis</span>
+                    <h4 class="text-lg font-bold text-gray-400 mb-1">Bank Sampah Digital</h4>
+                    <p class="text-xs text-gray-400 mb-4 leading-relaxed">Sistem monitoring terpadu untuk pencatatan tabungan sampah dan saldo rupiah milik warga.</p>
                 </div>
+                <span class="w-full text-center bg-gray-100 text-gray-400 font-bold py-2 px-4 rounded-lg text-sm cursor-not-allowed block">Fitur Belum Rilis</span>
+            </div>
 
 
             </div>

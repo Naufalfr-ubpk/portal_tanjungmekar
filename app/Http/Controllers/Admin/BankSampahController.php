@@ -12,53 +12,74 @@ class BankSampahController extends Controller
 {
     public function index()
     {
-        // Ambil data untuk ditampilkan di tabel
         $kategori = KategoriSampah::orderBy('nama_kategori', 'asc')->get();
         $transaksi = TransaksiSampah::with(['user', 'kategoriSampah'])->latest()->get();
-        
-        // Ambil daftar warga untuk dropdown pilihan "Nama Warga" saat input setoran
         $warga = User::where('role', 'user')->orderBy('name', 'asc')->get();
 
         return view('admin.bank-sampah.index', compact('kategori', 'transaksi', 'warga'));
     }
 
-    // FUNGSI SIMPAN KATEGORI HARGA
     public function storeKategori(Request $request)
     {
-        $request->validate([
-            'nama_kategori' => 'required|string|max:255',
-            'satuan' => 'required|string|max:50',
-            'harga_per_satuan' => 'required|numeric|min:0',
-        ]);
+        try {
+            $request->validate([
+                'nama_kategori' => 'required|string|max:255',
+                'satuan' => 'required|string|max:50',
+                'harga_per_satuan' => 'required|numeric|min:0',
+            ]);
 
-        KategoriSampah::create($request->all());
-        return back()->with('success', 'Kategori sampah berhasil ditambahkan!');
+            KategoriSampah::create($request->all());
+            return back()->with('success', 'Kategori sampah berhasil ditambahkan!');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Gagal menyimpan kategori. Info Error: ' . $e->getMessage());
+        }
     }
 
-    // FUNGSI SIMPAN TRANSAKSI SETORAN
     public function storeTransaksi(Request $request)
     {
-        $request->validate([
-            'user_id' => 'required|exists:users,id',
-            'kategori_id' => 'required|exists:kategori_sampahs,id',
-            'berat_jumlah' => 'required|numeric|min:0.1',
-            'tanggal_setor' => 'required|date',
-        ]);
+        try {
+            $request->validate([
+                'user_id' => 'required|exists:users,id',
+                'kategori_id' => 'required|exists:kategori_sampahs,id',
+                'berat_jumlah' => 'required|numeric|min:0.1',
+                'tanggal_setor' => 'required|date',
+            ]);
 
-        // Cari tahu harga per satuan dari kategori yang dipilih
-        $kategori = KategoriSampah::findOrFail($request->kategori_id);
-        
-        // Kalkulasi otomatis: Berat x Harga per Satuan
-        $total_harga = $kategori->harga_per_satuan * $request->berat_jumlah;
+            $kategori = KategoriSampah::findOrFail($request->kategori_id);
+            $total_harga = $kategori->harga_per_satuan * $request->berat_jumlah;
 
-        TransaksiSampah::create([
-            'user_id' => $request->user_id,
-            'kategori_id' => $request->kategori_id,
-            'berat_jumlah' => $request->berat_jumlah,
-            'total_harga' => $total_harga,
-            'tanggal_setor' => $request->tanggal_setor,
-        ]);
+            TransaksiSampah::create([
+                'user_id' => $request->user_id,
+                'kategori_id' => $request->kategori_id,
+                'berat_jumlah' => $request->berat_jumlah,
+                'total_harga' => $total_harga,
+                'tanggal_setor' => $request->tanggal_setor,
+            ]);
 
-        return back()->with('success', 'Setoran warga berhasil dicatat!');
+            return back()->with('success', 'Setoran warga berhasil dicatat!');
+        } catch (\Exception $e) {
+            // INI YANG PALING PENTING: Mencegah layar 500 dan memunculkan notifikasi merah
+            return back()->with('error', 'Gagal mencatat setoran! Info Error DB: ' . $e->getMessage());
+        }
+    }
+
+    public function destroyKategori($id)
+    {
+        try {
+            KategoriSampah::findOrFail($id)->delete();
+            return back()->with('success', 'Kategori berhasil dihapus!');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Gagal menghapus! Pastikan kategori ini belum dipakai di transaksi.');
+        }
+    }
+
+    public function destroyTransaksi($id)
+    {
+        try {
+            TransaksiSampah::findOrFail($id)->delete();
+            return back()->with('success', 'Data setoran berhasil dihapus!');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Gagal menghapus setoran: ' . $e->getMessage());
+        }
     }
 }

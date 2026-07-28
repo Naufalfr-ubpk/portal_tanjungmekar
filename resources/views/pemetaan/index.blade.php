@@ -36,14 +36,14 @@
     <div class="bg-[#F4F8F4] h-[calc(100vh-140px)] w-full flex flex-col lg:flex-row">
         
         <!-- KOLOM ATAS/KANAN (MAP) -->
-        <div class="w-full h-[45vh] lg:h-full lg:w-2/3 p-4 lg:p-6 lg:order-last shrink-0">
+        <div class="w-full h-[35vh] md:h-[45vh] lg:h-full lg:w-2/3 p-4 lg:p-6 lg:order-last shrink-0">
             <div class="bg-white p-2 rounded-2xl shadow-sm border-2 border-gray-200 h-full">
                 <div id="map" class="w-full h-full rounded-xl relative z-0"></div>
             </div>
         </div>
 
         <!-- KOLOM BAWAH/KIRI (CARD & LIST) - Horizontal Carousel Mobile, Vertical Scroll Laptop -->
-        <div class="flex-1 w-full lg:w-1/3 flex flex-row lg:flex-col gap-4 lg:gap-6 overflow-x-auto lg:overflow-x-hidden lg:overflow-y-auto px-4 pb-6 lg:px-6 lg:py-6 custom-scrollbar snap-x-mandatory lg:snap-none shrink-0 lg:shrink items-start">
+        <div class="flex-1 w-full lg:w-1/3 flex flex-row lg:flex-col gap-4 lg:gap-6 overflow-x-auto lg:overflow-x-hidden lg:overflow-y-auto px-4 pb-6 lg:px-6 lg:py-6 custom-scrollbar snap-x snap-mandatory lg:snap-none shrink-0 lg:shrink items-start">
             
             <!-- GROUP: LOKASI SAYA -->
             <div class="flex flex-col shrink-0 w-max lg:w-full relative">

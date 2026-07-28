@@ -119,6 +119,11 @@
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
                 </button>
                 <h2 class="text-lg md:text-xl font-bold text-gray-800 border-r-2 pr-4 md:pr-6 border-gray-300">Bank Sampah</h2>
+                <nav class="hidden md:flex gap-5 text-sm font-bold text-gray-500">
+                    <a href="{{ url('/') }}" class="hover:text-[#0E4D2B] transition">Beranda</a>
+                    <a href="{{ route('pemetaan') }}" class="hover:text-[#0E4D2B] transition">Peta Wilayah</a>
+                    <a href="{{ route('faq') }}" class="hover:text-[#0E4D2B] transition">Pusat FAQ</a>
+                </nav>
             </div>
             
             <div class="flex items-center gap-3 md:gap-4">
@@ -137,11 +142,17 @@
         </header>
 
         <div class="p-4 md:p-8">
-            <!-- Alert Notifikasi -->
             @if(session('success'))
             <div x-data="{ show: true }" x-show="show" class="bg-green-100 border border-green-400 text-green-800 px-4 py-3 rounded-lg mb-6 flex justify-between items-center font-bold shadow-sm">
                 <span>{{ session('success') }}</span>
                 <button @click="show = false" class="text-green-700 hover:text-green-900 text-2xl leading-none">&times;</button>
+            </div>
+            @endif
+
+            @if(session('error'))
+            <div x-data="{ show: true }" x-show="show" class="bg-red-100 border border-red-400 text-red-800 px-4 py-3 rounded-lg mb-6 flex justify-between items-center font-bold shadow-sm">
+                <span>{{ session('error') }}</span>
+                <button @click="show = false" class="text-red-700 hover:text-red-900 text-2xl leading-none">&times;</button>
             </div>
             @endif
 
@@ -151,72 +162,28 @@
                         <h3 class="text-xl font-extrabold text-[#0E4D2B]">Manajemen Bank Sampah</h3>
                         <p class="text-sm text-gray-500 mt-1">Kelola data kategori sampah dan riwayat setoran tabungan warga.</p>
                     </div>
-                    <!-- Tombol Aksi dinamis tergantung Tab yang aktif -->
-                    <button x-show="activeTab === 'transaksi'" @click="isTransaksiOpen = true" class="w-full md:w-auto bg-[#0E4D2B] text-white px-5 py-2.5 rounded-lg font-semibold hover:bg-green-800 transition flex items-center justify-center gap-2 shadow-md">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                        Tambah Setoran
-                    </button>
-                    <button x-show="activeTab === 'kategori'" style="display: none;" @click="isKategoriOpen = true" class="w-full md:w-auto bg-[#F59E0B] text-white px-5 py-2.5 rounded-lg font-semibold hover:bg-yellow-600 transition flex items-center justify-center gap-2 shadow-md">
+                    <button x-show="activeTab === 'kategori'" @click="isKategoriOpen = true" class="w-full md:w-auto bg-[#F59E0B] text-white px-5 py-2.5 rounded-lg font-semibold hover:bg-yellow-600 transition flex items-center justify-center gap-2 shadow-md">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
                         Tambah Kategori
                     </button>
+                    <button x-show="activeTab === 'transaksi'" style="display: none;" @click="isTransaksiOpen = true" class="w-full md:w-auto bg-[#0E4D2B] text-white px-5 py-2.5 rounded-lg font-semibold hover:bg-green-800 transition flex items-center justify-center gap-2 shadow-md">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                        Tambah Setoran
+                    </button>
                 </div>
 
-                <!-- TABS -->
                 <div class="px-6 pt-4 flex gap-6 border-b border-gray-200 text-sm font-semibold">
-                    <button @click="activeTab = 'transaksi'" :class="activeTab === 'transaksi' ? 'border-[#0E4D2B] text-[#0E4D2B]' : 'border-transparent text-gray-500 hover:text-gray-700'" class="pb-3 border-b-2 transition">Riwayat Transaksi</button>
                     <button @click="activeTab = 'kategori'" :class="activeTab === 'kategori' ? 'border-[#0E4D2B] text-[#0E4D2B]' : 'border-transparent text-gray-500 hover:text-gray-700'" class="pb-3 border-b-2 transition">Kategori & Harga Sampah</button>
+                    <button @click="activeTab = 'transaksi'" :class="activeTab === 'transaksi' ? 'border-[#0E4D2B] text-[#0E4D2B]' : 'border-transparent text-gray-500 hover:text-gray-700'" class="pb-3 border-b-2 transition">Riwayat Transaksi</button>
                 </div>
 
-                <!-- TABEL TRANSAKSI -->
-                <div x-show="activeTab === 'transaksi'" class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse">
-                        <thead>
-                            <tr class="bg-gray-50 text-gray-600 text-xs uppercase tracking-wider border-b border-gray-200">
-                                <th class="px-6 py-4 font-bold">Tanggal</th>
-                                <th class="px-6 py-4 font-bold">Nama Warga</th>
-                                <th class="px-6 py-4 font-bold">Jenis Sampah</th>
-                                <th class="px-6 py-4 font-bold">Berat / Qty</th>
-                                <th class="px-6 py-4 font-bold">Total Rupiah</th>
-                                <th class="px-6 py-4 font-bold text-center">Status</th>
-                                <th class="px-6 py-4 font-bold text-center uppercase">{{ $isAdminTheme ? 'Tindakan' : 'Aksi' }}</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-200">
-                            @forelse($transaksi as $t)
-                                <tr class="hover:bg-gray-50 transition">
-                                    <td class="px-6 py-4 text-sm text-gray-600">{{ \Carbon\Carbon::parse($t->tanggal_setor)->format('d M Y') }}</td>
-                                    <td class="px-6 py-4 font-bold text-gray-900">{{ $t->user->name ?? 'User Dihapus' }}</td>
-                                    <td class="px-6 py-4 text-sm text-gray-600">{{ $t->kategoriSampah->nama_kategori ?? 'Tidak Diketahui' }}</td>
-                                    <td class="px-6 py-4 text-sm font-semibold text-gray-700">{{ $t->berat_jumlah }} {{ $t->kategoriSampah->satuan ?? '' }}</td>
-                                    <td class="px-6 py-4 font-bold text-green-600">Rp {{ number_format($t->total_harga, 0, ',', '.') }}</td>
-                                    <td class="px-6 py-4 text-center">
-                                        <span class="bg-green-100 text-green-800 text-[10px] font-bold px-2 py-1 rounded-full uppercase">Selesai</span>
-                                    </td>
-                                    <td class="px-6 py-4 text-center">
-                                        <span class="text-xs text-gray-400 font-semibold cursor-not-allowed">Hanya Lihat</span>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="7" class="px-6 py-12 text-center text-gray-500">
-                                        <svg class="w-12 h-12 mx-auto text-gray-300 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
-                                        <p class="font-semibold text-lg">Belum ada transaksi setoran sampah.</p>
-                                    </td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- TABEL KATEGORI -->
-                <div x-show="activeTab === 'kategori'" style="display: none;" class="overflow-x-auto">
+                <div x-show="activeTab === 'kategori'" class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
                         <thead>
                             <tr class="bg-gray-50 text-gray-600 text-xs uppercase tracking-wider border-b border-gray-200">
                                 <th class="px-6 py-4 font-bold">Kategori Sampah</th>
                                 <th class="px-6 py-4 font-bold">Harga per Satuan</th>
-                                <th class="px-6 py-4 font-bold text-center uppercase">{{ $isAdminTheme ? 'Tindakan' : 'Aksi' }}</th>
+                                <th class="px-6 py-4 font-bold text-center uppercase">TINDAKAN</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-200">
@@ -224,8 +191,13 @@
                                 <tr class="hover:bg-gray-50 transition">
                                     <td class="px-6 py-4 font-bold text-gray-900">{{ $k->nama_kategori }}</td>
                                     <td class="px-6 py-4 font-bold text-green-600">Rp {{ number_format($k->harga_per_satuan, 0, ',', '.') }} <span class="text-gray-500 text-xs font-normal">/ {{ $k->satuan }}</span></td>
-                                    <td class="px-6 py-4 text-center">
-                                        <span class="text-xs text-gray-400 font-semibold cursor-not-allowed">Hanya Lihat</span>
+                                    <td class="px-6 py-4 flex items-center justify-center gap-2">
+                                        <button @click="alert('Fitur Edit akan ditambahkan pada tahap selanjutnya!')" class="bg-yellow-400 hover:bg-yellow-500 text-white p-1.5 rounded-lg transition shadow-sm" title="Edit">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                                        </button>
+                                        <button @click="openDeleteModal('{{ route('admin.bank-sampah.kategori.destroy', $k->id) }}')" class="bg-red-500 hover:bg-red-600 text-white p-1.5 rounded-lg transition shadow-sm" title="Hapus">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                        </button>
                                     </td>
                                 </tr>
                             @empty
@@ -240,17 +212,93 @@
                     </table>
                 </div>
 
+                <div x-show="activeTab === 'transaksi'" style="display: none;" class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-gray-50 text-gray-600 text-xs uppercase tracking-wider border-b border-gray-200">
+                                <th class="px-6 py-4 font-bold">Tanggal</th>
+                                <th class="px-6 py-4 font-bold">Nama Warga</th>
+                                <th class="px-6 py-4 font-bold">Jenis Sampah</th>
+                                <th class="px-6 py-4 font-bold">Berat / Qty</th>
+                                <th class="px-6 py-4 font-bold">Total Rupiah</th>
+                                <th class="px-6 py-4 font-bold text-center">Status</th>
+                                <th class="px-6 py-4 font-bold text-center uppercase">TINDAKAN</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200">
+                            @forelse($transaksi as $t)
+                                <tr class="hover:bg-gray-50 transition">
+                                    <td class="px-6 py-4 text-sm text-gray-600">{{ \Carbon\Carbon::parse($t->tanggal_setor)->format('d M Y') }}</td>
+                                    <td class="px-6 py-4 font-bold text-gray-900">{{ $t->user->name ?? 'User Dihapus' }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-600">{{ $t->kategoriSampah->nama_kategori ?? 'Tidak Diketahui' }}</td>
+                                    <td class="px-6 py-4 text-sm font-semibold text-gray-700">{{ $t->berat_jumlah }} {{ $t->kategoriSampah->satuan ?? '' }}</td>
+                                    <td class="px-6 py-4 font-bold text-green-600">Rp {{ number_format($t->total_harga, 0, ',', '.') }}</td>
+                                    <td class="px-6 py-4 text-center">
+                                        <span class="bg-green-100 text-green-800 text-[10px] font-bold px-2 py-1 rounded-full uppercase">Selesai</span>
+                                    </td>
+                                    <td class="px-6 py-4 flex items-center justify-center gap-2">
+                                        <button @click="alert('Fitur Edit akan ditambahkan pada tahap selanjutnya!')" class="bg-yellow-400 hover:bg-yellow-500 text-white p-1.5 rounded-lg transition shadow-sm" title="Edit">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                                        </button>
+                                        <button @click="openDeleteModal('{{ route('admin.bank-sampah.transaksi.destroy', $t->id) }}')" class="bg-red-500 hover:bg-red-600 text-white p-1.5 rounded-lg transition shadow-sm" title="Hapus">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                        </button>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="7" class="px-6 py-12 text-center text-gray-500">
+                                        <svg class="w-12 h-12 mx-auto text-gray-300 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+                                        <p class="font-semibold text-lg">Belum ada transaksi setoran sampah.</p>
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+
             </div>
         </div>
 
-        <!-- MODAL TAMBAH SETORAN (TRANSAKSI) -->
+        <div x-show="isKategoriOpen" style="display: none;" class="fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-70 p-4">
+            <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden relative">
+                <button @click="isKategoriOpen = false" class="absolute top-4 right-4 text-white hover:text-gray-200 transition">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+                <div class="bg-[#F59E0B] p-5 text-white flex justify-between items-center">
+                    <h3 class="text-xl font-bold">Tambah Kategori Sampah</h3>
+                </div>
+                <form action="{{ route('admin.bank-sampah.kategori.store') }}" method="POST" class="p-6">
+                    @csrf
+                    <div class="mb-5">
+                        <label class="block text-sm font-bold text-gray-700 mb-2">Nama Kategori <span class="text-red-500">*</span></label>
+                        <input type="text" name="nama_kategori" required class="w-full rounded-lg border-gray-300 shadow-sm focus:border-[#F59E0B] focus:ring-[#F59E0B]" placeholder="Cth: Botol Plastik / Kardus Bekas">
+                    </div>
+                    <div class="grid grid-cols-2 gap-4 mb-6">
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-2">Satuan <span class="text-red-500">*</span></label>
+                            <input type="text" name="satuan" required class="w-full rounded-lg border-gray-300 shadow-sm focus:border-[#F59E0B] focus:ring-[#F59E0B]" placeholder="Cth: Kg, Liter, Pcs">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-2">Harga (Rp) <span class="text-red-500">*</span></label>
+                            <input type="number" name="harga_per_satuan" required min="0" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-[#F59E0B] focus:ring-[#F59E0B]" placeholder="Cth: 2500">
+                        </div>
+                    </div>
+                    <div class="flex justify-end gap-3 pt-4 border-t">
+                        <button type="button" @click="isKategoriOpen = false" class="px-5 py-2.5 bg-gray-200 text-gray-700 font-bold rounded-lg hover:bg-gray-300 transition">Batal</button>
+                        <button type="submit" class="px-5 py-2.5 bg-[#F59E0B] text-white font-bold rounded-lg shadow hover:bg-yellow-600 transition">Simpan Kategori</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
         <div x-show="isTransaksiOpen" style="display: none;" class="fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-70 p-4">
-            <div @click.away="isTransaksiOpen = false" class="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden">
+            <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden relative">
+                <button @click="isTransaksiOpen = false" class="absolute top-4 right-4 text-white hover:text-gray-300 transition">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
                 <div class="bg-[#0E4D2B] p-5 text-white flex justify-between items-center">
                     <h3 class="text-xl font-bold">Catat Setoran Warga</h3>
-                    <button type="button" @click="isTransaksiOpen = false" class="text-white hover:text-gray-300 transition">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                    </button>
                 </div>
                 <form action="{{ route('admin.bank-sampah.transaksi.store') }}" method="POST" class="p-6">
                     @csrf
@@ -290,36 +338,23 @@
             </div>
         </div>
 
-        <!-- MODAL TAMBAH KATEGORI -->
-        <div x-show="isKategoriOpen" style="display: none;" class="fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-70 p-4">
-            <div @click.away="isKategoriOpen = false" class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
-                <div class="bg-[#F59E0B] p-5 text-white flex justify-between items-center">
-                    <h3 class="text-xl font-bold">Tambah Kategori Sampah</h3>
-                    <button type="button" @click="isKategoriOpen = false" class="text-white hover:text-gray-200 transition">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                    </button>
+        <div x-show="deleteModalOpen" style="display: none;" class="fixed inset-0 z-[120] flex items-center justify-center bg-black bg-opacity-70 p-4">
+            <div class="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-md text-center relative">
+                <button @click="closeDeleteModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+                <div class="w-16 h-16 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
                 </div>
-                <form action="{{ route('admin.bank-sampah.kategori.store') }}" method="POST" class="p-6">
-                    @csrf
-                    <div class="mb-5">
-                        <label class="block text-sm font-bold text-gray-700 mb-2">Nama Kategori <span class="text-red-500">*</span></label>
-                        <input type="text" name="nama_kategori" required class="w-full rounded-lg border-gray-300 shadow-sm focus:border-[#F59E0B] focus:ring-[#F59E0B]" placeholder="Cth: Botol Plastik / Kardus Bekas">
-                    </div>
-                    <div class="grid grid-cols-2 gap-4 mb-6">
-                        <div>
-                            <label class="block text-sm font-bold text-gray-700 mb-2">Satuan <span class="text-red-500">*</span></label>
-                            <input type="text" name="satuan" required class="w-full rounded-lg border-gray-300 shadow-sm focus:border-[#F59E0B] focus:ring-[#F59E0B]" placeholder="Cth: Kg, Liter, Pcs">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-bold text-gray-700 mb-2">Harga (Rp) <span class="text-red-500">*</span></label>
-                            <input type="number" name="harga_per_satuan" required min="0" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-[#F59E0B] focus:ring-[#F59E0B]" placeholder="Cth: 2500">
-                        </div>
-                    </div>
-                    <div class="flex justify-end gap-3 pt-4 border-t">
-                        <button type="button" @click="isKategoriOpen = false" class="px-5 py-2.5 bg-gray-200 text-gray-700 font-bold rounded-lg hover:bg-gray-300 transition">Batal</button>
-                        <button type="submit" class="px-5 py-2.5 bg-[#F59E0B] text-white font-bold rounded-lg shadow hover:bg-yellow-600 transition">Simpan Kategori</button>
-                    </div>
-                </form>
+                <h3 class="text-2xl font-bold text-gray-900 mb-2">Yakin Ingin Menghapus?</h3>
+                <p class="text-sm text-gray-500 mb-6">Data ini akan dihapus secara permanen dari sistem. Tindakan ini tidak bisa dibatalkan.</p>
+                <div class="flex flex-col sm:flex-row justify-center gap-3">
+                    <button @click="closeDeleteModal()" class="w-full sm:w-auto px-6 py-2.5 bg-gray-200 text-gray-800 font-bold rounded-lg hover:bg-gray-300 transition">Batal</button>
+                    <form :action="deleteUrl" method="POST" class="w-full sm:w-auto inline-block">
+                        @csrf @method('DELETE')
+                        <button type="submit" class="w-full px-6 py-2.5 bg-red-600 text-white font-bold rounded-lg hover:bg-red-700 transition shadow-md">Ya, Hapus!</button>
+                    </form>
+                </div>
             </div>
         </div>
 
@@ -329,10 +364,21 @@
         function bankSampahManager() {
             return {
                 sidebarOpen: false,
-                activeTab: 'transaksi',
+                activeTab: 'kategori',
                 isTransaksiOpen: false,
                 isKategoriOpen: false,
-                todayDate: new Date().toISOString().split('T')[0]
+                deleteModalOpen: false,
+                deleteUrl: '',
+                todayDate: new Date().toISOString().split('T')[0],
+
+                openDeleteModal(url) {
+                    this.deleteUrl = url;
+                    this.deleteModalOpen = true;
+                },
+                closeDeleteModal() {
+                    this.deleteModalOpen = false;
+                    this.deleteUrl = '';
+                }
             }
         }
     </script>

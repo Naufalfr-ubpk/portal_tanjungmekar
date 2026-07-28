@@ -170,8 +170,6 @@
             <p class="text-gray-600 max-w-2xl mx-auto mb-10 sm:mb-12 leading-relaxed px-2">Fasilitas terpadu untuk mempermudah akses informasi dan fasilitas warga.</p>
             
 
-
-
             <div class="grid grid-cols-1 md:grid-cols-2 max-w-4xl mx-auto gap-6 sm:gap-8 px-2 sm:px-0">
                 <a href="{{ Auth::check() ? route('pemetaan') : route('register') }}" class="bg-white p-8 rounded-2xl shadow-lg border-t-4 border-[#2E7D32] hover:-translate-y-2 hover:shadow-xl transition-all duration-300 block">
                     <div class="w-14 h-14 bg-[#A5D6A7] rounded-full flex items-center justify-center mx-auto mb-6">
@@ -181,13 +179,16 @@
                     <p class="text-gray-600 text-sm leading-relaxed">Cari tahu informasi letak Kantor Kelurahan, kepengurusan RW, dan Bank Sampah.</p>
                 </a>
                 
+
+
                 <a href="{{ Auth::check() ? route('dashboard') : route('register') }}" class="bg-white p-8 rounded-2xl shadow-lg border-t-4 border-[#FBC02D] hover:-translate-y-2 hover:shadow-xl transition-all duration-300 block">
-                    <div class="w-14 h-14 bg-[#FBC02D] bg-opacity-30 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <svg class="w-7 h-7 text-[#0E4D2B]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
-                    </div>
-                    <h4 class="text-xl font-bold text-[#0E4D2B] mb-2">Bank Sampah Digital</h4>
-                    <p class="text-gray-600 text-sm leading-relaxed">Lokasi operasional Bank Sampah beserta sistem manajemen laporan setoran tabungan warga.</p>
+                <div class="w-14 h-14 bg-[#FBC02D] bg-opacity-30 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <svg class="w-7 h-7 text-[#0E4D2B]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                </div>
+                <h4 class="text-xl font-bold text-[#0E4D2B] mb-2">Bank Sampah Digital</h4>
+                <p class="text-gray-600 text-sm leading-relaxed">Sistem monitoring terpadu untuk pencatatan tabungan sampah dan saldo rupiah milik warga.</p>
                 </a>
+
             </div>
 
 
