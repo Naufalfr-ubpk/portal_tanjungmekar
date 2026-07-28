@@ -98,7 +98,10 @@
                 Data Warga
             </a>
             
-            <a href="{{ route('admin.bank-sampah.index', $modeParam) }}" class="flex items-center gap-3 sidebar-link {{ isset($navLinkText) ? $navLinkText : (isset($navLink) ? $navLink : '') }} px-4 py-3 rounded-lg font-semibold transition"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg> Bank Sampah</a>
+            <a href="{{ route('admin.bank-sampah.index', $modeParam) }}" class="flex items-center gap-3 {{ $hoverBg }} {{ $isAdminTheme ? 'text-gray-200' : 'text-[#0E4D2B]' }} {{ $hoverText }} px-4 py-3 rounded-lg font-semibold transition">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg> 
+                Bank Sampah
+            </a>
 
             @if($isAdminTheme)
             <a href="#" class="flex items-center gap-3 hover:bg-[#2E7D32] text-gray-200 hover:text-white px-4 py-3 rounded-lg font-semibold transition mb-4">
