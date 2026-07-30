@@ -33,10 +33,10 @@
     </style>
 
     <!-- Kunci tinggi ngikutin layar utuh dikurang area navbar atas -->
-    <div class="bg-[#F4F8F4] h-[calc(100vh-140px)] w-full flex flex-col lg:flex-row">
+    <div class="bg-[#F4F8F4] h-[calc(100vh-140px)] w-full flex flex-col lg:flex-row" x-data="mapManager()">
         
-        <!-- KOLOM ATAS/KANAN (MAP) -->
-        <div class="w-full h-[35vh] md:h-[45vh] lg:h-full lg:w-2/3 p-4 lg:p-6 lg:order-last shrink-0">
+        <!-- KOLOM ATAS/KANAN (MAP) - TINGGI DIKEMBALIKAN NORMAL -->
+        <div class="w-full h-[45vh] lg:h-full lg:w-2/3 p-4 lg:p-6 lg:order-last shrink-0">
             <div class="bg-white p-2 rounded-2xl shadow-sm border-2 border-gray-200 h-full">
                 <div id="map" class="w-full h-full rounded-xl relative z-0"></div>
             </div>
@@ -45,12 +45,19 @@
         <!-- KOLOM BAWAH/KIRI (CARD & LIST) - Horizontal Carousel Mobile, Vertical Scroll Laptop -->
         <div class="flex-1 w-full lg:w-1/3 flex flex-row lg:flex-col gap-4 lg:gap-6 overflow-x-auto lg:overflow-x-hidden lg:overflow-y-auto px-4 pb-6 lg:px-6 lg:py-6 custom-scrollbar snap-x snap-mandatory lg:snap-none shrink-0 lg:shrink items-start">
             
-            <!-- GROUP: LOKASI SAYA -->
-            <div class="flex flex-col shrink-0 w-max lg:w-full relative">
-                <!-- Spasi tersembunyi biar posisinya sejajar di mobile, tapi hilang di desktop -->
-                <h4 class="invisible text-sm mb-3 pb-1 border-b-2 block lg:hidden">Spasi</h4>
-                <div class="flex flex-row flex-nowrap lg:flex-col gap-4 lg:gap-0 w-max lg:w-full">
-                    <div class="w-[85vw] lg:w-full shrink-0 snap-center bg-white p-5 rounded-2xl shadow-sm border border-gray-200 h-fit self-start mb-0 lg:mb-4">
+            <!-- GROUP: LOKASI SAYA & PENCARIAN -->
+            <div class="flex flex-col shrink-0 w-max lg:w-full relative mt-0 lg:mt-0 pt-0 lg:pt-8">
+                <!-- Tidak ada invisible h4, biar kotak langsung naik sejajar title Kelurahan -->
+                <div class="flex flex-col lg:flex-col gap-4 w-[85vw] lg:w-full shrink-0 snap-center snap-always self-start mb-0 lg:mb-4">
+                    
+                    <!-- KOTAK PENCARIAN (Bawah di Mobile, Atas di Web) -->
+                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-200 order-2 lg:order-1 flex items-center border-l-4 border-blue-500">
+                        <svg class="w-5 h-5 text-gray-400 mr-2 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                        <input type="text" x-model="searchQuery" placeholder="Ketik disini untuk mencari lokasi (cth: RW 01)..." class="w-full text-sm border-none focus:ring-0 p-0 text-gray-700 font-medium bg-transparent outline-none">
+                    </div>
+
+                    <!-- KOTAK LOKASI SAYA (Atas di Mobile, Bawah di Web) -->
+                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-200 order-1 lg:order-2">
                         <button onclick="lokasiSaya()" class="w-full flex items-center justify-center gap-2 bg-[#0E4D2B] hover:bg-[#2E7D32] text-white font-bold py-3 px-4 rounded-xl shadow transition-colors">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path></svg>
                             Lokasi Saya
@@ -65,11 +72,10 @@
             <!-- GROUP: KELURAHAN -->
             @if($locations->where('type', 'kelurahan')->count() > 0)
             <div class="flex flex-col shrink-0 w-max lg:w-full relative">
-                <!-- lg:w-full dan lg:pr-0 mengembalikan tampilan normal di desktop -->
                 <h4 class="sticky left-4 lg:static z-10 w-max lg:w-full text-sm font-extrabold text-[#0E4D2B] uppercase tracking-widest mb-3 border-b-2 border-gray-300 pb-1 pr-4 lg:pr-0 lg:pl-0">Area Kelurahan</h4>
                 <div class="flex flex-row flex-nowrap lg:flex-col gap-4 lg:gap-0 w-max lg:w-full">
                     @foreach($locations->where('type', 'kelurahan') as $loc)
-                    <div class="w-[85vw] lg:w-full shrink-0 snap-center h-fit bg-white rounded-xl shadow-sm border-l-4 border-[#0E4D2B] overflow-hidden mb-0 lg:mb-4">
+                    <div x-show="searchQuery === '' || '{{ strtolower($loc->title) }}'.includes(searchQuery.toLowerCase())" class="w-[85vw] lg:w-full shrink-0 snap-center snap-always h-fit bg-white rounded-xl shadow-sm border-l-4 border-[#0E4D2B] overflow-hidden mb-0 lg:mb-4">
                         <div class="p-5 cursor-pointer hover:bg-gray-50" onclick="fokusPeta({{ $loc->koordinat }})">
                             <h5 class="font-bold text-gray-800 text-lg">{{ $loc->title }}</h5>
                             <p class="text-sm text-gray-600 mt-1"><span class="font-semibold">{{ $loc->manager_label }}:</span> {{ $loc->manager_name }}</p>
@@ -97,7 +103,7 @@
                 <h4 class="sticky left-4 lg:static z-10 w-max lg:w-full text-sm font-extrabold text-[#66BB6A] uppercase tracking-widest mb-3 border-b-2 border-gray-300 pb-1 pr-4 lg:pr-0 lg:pl-0">Rukun Warga (RW)</h4>
                 <div class="flex flex-row flex-nowrap lg:flex-col gap-4 lg:gap-0 w-max lg:w-full">
                     @foreach($locations->where('type', 'rw') as $loc)
-                    <div class="w-[85vw] lg:w-full shrink-0 snap-center h-fit bg-white rounded-xl shadow-sm border-l-4 border-[#66BB6A] overflow-hidden mb-0 lg:mb-4">
+                    <div x-show="searchQuery === '' || '{{ strtolower($loc->title) }}'.includes(searchQuery.toLowerCase())" class="w-[85vw] lg:w-full shrink-0 snap-center snap-always h-fit bg-white rounded-xl shadow-sm border-l-4 border-[#66BB6A] overflow-hidden mb-0 lg:mb-4">
                         <div class="p-5 cursor-pointer hover:bg-gray-50" onclick="fokusPeta({{ $loc->koordinat }})">
                             <h5 class="font-bold text-gray-800 text-lg">{{ $loc->title }}</h5>
                             <p class="text-sm text-gray-600 mt-1"><span class="font-semibold">{{ $loc->manager_label }}:</span> {{ $loc->manager_name }}</p>
@@ -125,7 +131,7 @@
                 <h4 class="sticky left-4 lg:static z-10 w-max lg:w-full text-sm font-extrabold text-yellow-600 uppercase tracking-widest mb-3 border-b-2 border-gray-300 pb-1 pr-4 lg:pr-0 lg:pl-0">Bank Sampah</h4>
                 <div class="flex flex-row flex-nowrap lg:flex-col gap-4 lg:gap-0 w-max lg:w-full">
                     @foreach($locations->where('type', 'banksampah') as $loc)
-                    <div class="w-[85vw] lg:w-full shrink-0 snap-center h-fit bg-white rounded-xl shadow-sm border-l-4 border-[#FBC02D] overflow-hidden mb-0 lg:mb-4">
+                    <div x-show="searchQuery === '' || '{{ strtolower($loc->title) }}'.includes(searchQuery.toLowerCase())" class="w-[85vw] lg:w-full shrink-0 snap-center snap-always h-fit bg-white rounded-xl shadow-sm border-l-4 border-[#FBC02D] overflow-hidden mb-0 lg:mb-4">
                         <div class="p-5 cursor-pointer hover:bg-gray-50" onclick="fokusPeta({{ $loc->koordinat }})">
                             <h5 class="font-bold text-gray-800 text-lg">{{ $loc->title }}</h5>
                             <p class="text-sm text-gray-600 mt-1"><span class="font-semibold">{{ $loc->manager_label }}:</span> {{ $loc->manager_name }}</p>
@@ -158,6 +164,14 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
     <script>
+        function mapManager() {
+            return {
+                searchQuery: '',
+                sidebarOpen: false,
+                activeTab: 'semua',
+            }
+        }
+
         var map = L.map('map').setView([-6.284241, 107.288424], 15);
         var userMarker = null;
 

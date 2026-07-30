@@ -12,11 +12,15 @@ class BankSampahController extends Controller
 {
     public function index()
     {
-        $kategori = KategoriSampah::orderBy('nama_kategori', 'asc')->get();
-        $transaksi = TransaksiSampah::with(['user', 'kategoriSampah'])->latest()->get();
-        $warga = User::where('role', 'user')->orderBy('name', 'asc')->get();
+        try {
+            $kategori = KategoriSampah::orderBy('nama_kategori', 'asc')->get();
+            $transaksi = TransaksiSampah::with(['user', 'kategoriSampah'])->latest()->get();
+            $warga = User::where('role', 'user')->orderBy('name', 'asc')->get();
 
-        return view('admin.bank-sampah.index', compact('kategori', 'transaksi', 'warga'));
+            return view('admin.bank-sampah.index', compact('kategori', 'transaksi', 'warga'));
+        } catch (\Exception $e) {
+            dd("CRASH SAAT MEMUAT HALAMAN. PESAN ERROR DB: " . $e->getMessage());
+        }
     }
 
     public function storeKategori(Request $request)
@@ -58,7 +62,6 @@ class BankSampahController extends Controller
 
             return back()->with('success', 'Setoran warga berhasil dicatat!');
         } catch (\Exception $e) {
-            // INI YANG PALING PENTING: Mencegah layar 500 dan memunculkan notifikasi merah
             return back()->with('error', 'Gagal mencatat setoran! Info Error DB: ' . $e->getMessage());
         }
     }

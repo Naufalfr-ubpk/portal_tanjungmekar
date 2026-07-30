@@ -119,6 +119,8 @@
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
                 </button>
                 <h2 class="text-lg md:text-xl font-bold text-gray-800 border-r-2 pr-4 md:pr-6 border-gray-300">Bank Sampah</h2>
+                
+                <!-- MENU NAVBAR MUNCUL -->
                 <nav class="hidden md:flex gap-5 text-sm font-bold text-gray-500">
                     <a href="{{ url('/') }}" class="hover:text-[#0E4D2B] transition">Beranda</a>
                     <a href="{{ route('pemetaan') }}" class="hover:text-[#0E4D2B] transition">Peta Wilayah</a>
@@ -142,6 +144,7 @@
         </header>
 
         <div class="p-4 md:p-8">
+            <!-- Alert Notifikasi -->
             @if(session('success'))
             <div x-data="{ show: true }" x-show="show" class="bg-green-100 border border-green-400 text-green-800 px-4 py-3 rounded-lg mb-6 flex justify-between items-center font-bold shadow-sm">
                 <span>{{ session('success') }}</span>
@@ -149,6 +152,7 @@
             </div>
             @endif
 
+            <!-- Alert Notifikasi Error (Tangkapan Try-Catch Backend) -->
             @if(session('error'))
             <div x-data="{ show: true }" x-show="show" class="bg-red-100 border border-red-400 text-red-800 px-4 py-3 rounded-lg mb-6 flex justify-between items-center font-bold shadow-sm">
                 <span>{{ session('error') }}</span>
@@ -162,6 +166,8 @@
                         <h3 class="text-xl font-extrabold text-[#0E4D2B]">Manajemen Bank Sampah</h3>
                         <p class="text-sm text-gray-500 mt-1">Kelola data kategori sampah dan riwayat setoran tabungan warga.</p>
                     </div>
+                    
+                    <!-- Tombol Aksi dinamis (Kategori Default Muncul) -->
                     <button x-show="activeTab === 'kategori'" @click="isKategoriOpen = true" class="w-full md:w-auto bg-[#F59E0B] text-white px-5 py-2.5 rounded-lg font-semibold hover:bg-yellow-600 transition flex items-center justify-center gap-2 shadow-md">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
                         Tambah Kategori
@@ -172,11 +178,13 @@
                     </button>
                 </div>
 
+                <!-- TABS (KATEGORI DI KIRI) -->
                 <div class="px-6 pt-4 flex gap-6 border-b border-gray-200 text-sm font-semibold">
                     <button @click="activeTab = 'kategori'" :class="activeTab === 'kategori' ? 'border-[#0E4D2B] text-[#0E4D2B]' : 'border-transparent text-gray-500 hover:text-gray-700'" class="pb-3 border-b-2 transition">Kategori & Harga Sampah</button>
                     <button @click="activeTab = 'transaksi'" :class="activeTab === 'transaksi' ? 'border-[#0E4D2B] text-[#0E4D2B]' : 'border-transparent text-gray-500 hover:text-gray-700'" class="pb-3 border-b-2 transition">Riwayat Transaksi</button>
                 </div>
 
+                <!-- TABEL KATEGORI -->
                 <div x-show="activeTab === 'kategori'" class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
                         <thead>
@@ -212,6 +220,7 @@
                     </table>
                 </div>
 
+                <!-- TABEL TRANSAKSI -->
                 <div x-show="activeTab === 'transaksi'" style="display: none;" class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
                         <thead>
@@ -260,6 +269,7 @@
             </div>
         </div>
 
+        <!-- MODAL TAMBAH KATEGORI (Terkunci Klik Luar) -->
         <div x-show="isKategoriOpen" style="display: none;" class="fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-70 p-4">
             <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden relative">
                 <button @click="isKategoriOpen = false" class="absolute top-4 right-4 text-white hover:text-gray-200 transition">
@@ -292,6 +302,7 @@
             </div>
         </div>
 
+        <!-- MODAL TAMBAH SETORAN (TRANSAKSI) (Terkunci Klik Luar) -->
         <div x-show="isTransaksiOpen" style="display: none;" class="fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-70 p-4">
             <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden relative">
                 <button @click="isTransaksiOpen = false" class="absolute top-4 right-4 text-white hover:text-gray-300 transition">
@@ -338,8 +349,9 @@
             </div>
         </div>
 
+        <!-- MODAL KONFIRMASI HAPUS -->
         <div x-show="deleteModalOpen" style="display: none;" class="fixed inset-0 z-[120] flex items-center justify-center bg-black bg-opacity-70 p-4">
-            <div class="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-md text-center relative">
+            <div @click.away="closeDeleteModal()" class="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-md text-center relative">
                 <button @click="closeDeleteModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>
@@ -364,7 +376,7 @@
         function bankSampahManager() {
             return {
                 sidebarOpen: false,
-                activeTab: 'kategori',
+                activeTab: 'kategori', // DEFAULT KATEGORI DI KIRI SEKARANG
                 isTransaksiOpen: false,
                 isKategoriOpen: false,
                 deleteModalOpen: false,
