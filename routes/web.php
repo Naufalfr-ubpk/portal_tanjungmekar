@@ -63,6 +63,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/bank-sampah/kategori', [\App\Http\Controllers\Admin\BankSampahController::class, 'storeKategori'])->name('admin.bank-sampah.kategori.store');
         Route::post('/bank-sampah/transaksi', [\App\Http\Controllers\Admin\BankSampahController::class, 'storeTransaksi'])->name('admin.bank-sampah.transaksi.store');
 
+        Route::delete('/bank-sampah/kategori/{id}', [\App\Http\Controllers\Admin\BankSampahController::class, 'destroyKategori'])->name('admin.bank-sampah.kategori.destroy');
+        Route::delete('/bank-sampah/transaksi/{id}', [\App\Http\Controllers\Admin\BankSampahController::class, 'destroyTransaksi'])->name('admin.bank-sampah.transaksi.destroy');
+
     });
 
     // 3. KHUSUS OPERATOR
