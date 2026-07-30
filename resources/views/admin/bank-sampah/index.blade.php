@@ -139,12 +139,20 @@
                         </div>
                         <span class="hidden sm:inline-block text-sm font-bold text-gray-800">{{ Auth::user()->name }}</span>
                     </button>
+                    <!-- Dropdown Profile -->
+                    <div x-show="openProfile" @click.away="openProfile = false" style="display: none;" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 border border-gray-200 z-50">
+                        <a href="{{ route('profile.edit') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 font-semibold">Profil Saya</a>
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit" class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100 font-semibold">Sign Out</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </header>
 
         <div class="p-4 md:p-8">
-            <!-- Alert Notifikasi -->
+            <!-- Alert Notifikasi Sukses -->
             @if(session('success'))
             <div x-data="{ show: true }" x-show="show" class="bg-green-100 border border-green-400 text-green-800 px-4 py-3 rounded-lg mb-6 flex justify-between items-center font-bold shadow-sm">
                 <span>{{ session('success') }}</span>
@@ -152,7 +160,7 @@
             </div>
             @endif
 
-            <!-- Alert Notifikasi Error (Tangkapan Try-Catch Backend) -->
+            <!-- Alert Notifikasi Error (Tangkapan Try-Catch 500) -->
             @if(session('error'))
             <div x-data="{ show: true }" x-show="show" class="bg-red-100 border border-red-400 text-red-800 px-4 py-3 rounded-lg mb-6 flex justify-between items-center font-bold shadow-sm">
                 <span>{{ session('error') }}</span>
@@ -238,9 +246,10 @@
                             @forelse($transaksi as $t)
                                 <tr class="hover:bg-gray-50 transition">
                                     <td class="px-6 py-4 text-sm text-gray-600">{{ \Carbon\Carbon::parse($t->tanggal_setor)->format('d M Y') }}</td>
-                                    <td class="px-6 py-4 font-bold text-gray-900">{{ $t->user->name ?? 'User Dihapus' }}</td>
-                                    <td class="px-6 py-4 text-sm text-gray-600">{{ $t->kategoriSampah->nama_kategori ?? 'Tidak Diketahui' }}</td>
-                                    <td class="px-6 py-4 text-sm font-semibold text-gray-700">{{ $t->berat_jumlah }} {{ $t->kategoriSampah->satuan ?? '' }}</td>
+                                    <!-- PERBAIKAN: Gunakan Nullsafe (?->) mencegah error 500 kalau data user terhapus -->
+                                    <td class="px-6 py-4 font-bold text-gray-900">{{ $t->user?->name ?? 'User Dihapus' }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-600">{{ $t->kategoriSampah?->nama_kategori ?? 'Tidak Diketahui' }}</td>
+                                    <td class="px-6 py-4 text-sm font-semibold text-gray-700">{{ $t->berat_jumlah }} {{ $t->kategoriSampah?->satuan ?? '' }}</td>
                                     <td class="px-6 py-4 font-bold text-green-600">Rp {{ number_format($t->total_harga, 0, ',', '.') }}</td>
                                     <td class="px-6 py-4 text-center">
                                         <span class="bg-green-100 text-green-800 text-[10px] font-bold px-2 py-1 rounded-full uppercase">Selesai</span>
@@ -269,7 +278,7 @@
             </div>
         </div>
 
-        <!-- MODAL TAMBAH KATEGORI (Terkunci Klik Luar) -->
+        <!-- MODAL TAMBAH KATEGORI (Terkunci klik luar) -->
         <div x-show="isKategoriOpen" style="display: none;" class="fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-70 p-4">
             <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden relative">
                 <button @click="isKategoriOpen = false" class="absolute top-4 right-4 text-white hover:text-gray-200 transition">
@@ -302,7 +311,7 @@
             </div>
         </div>
 
-        <!-- MODAL TAMBAH SETORAN (TRANSAKSI) (Terkunci Klik Luar) -->
+        <!-- MODAL TAMBAH SETORAN (Terkunci klik luar) -->
         <div x-show="isTransaksiOpen" style="display: none;" class="fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-70 p-4">
             <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden relative">
                 <button @click="isTransaksiOpen = false" class="absolute top-4 right-4 text-white hover:text-gray-300 transition">
@@ -376,7 +385,7 @@
         function bankSampahManager() {
             return {
                 sidebarOpen: false,
-                activeTab: 'kategori', // DEFAULT KATEGORI DI KIRI SEKARANG
+                activeTab: 'kategori', // DEFAULT TAB KATEGORI DI KIRI
                 isTransaksiOpen: false,
                 isKategoriOpen: false,
                 deleteModalOpen: false,

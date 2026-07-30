@@ -19,7 +19,8 @@ class BankSampahController extends Controller
 
             return view('admin.bank-sampah.index', compact('kategori', 'transaksi', 'warga'));
         } catch (\Exception $e) {
-            dd("CRASH SAAT MEMUAT HALAMAN. PESAN ERROR DB: " . $e->getMessage());
+            // NAMPILIN ERROR ASLI BUKAN LAYAR 500
+            dd("ERROR SAAT LOAD HALAMAN: " . $e->getMessage());
         }
     }
 

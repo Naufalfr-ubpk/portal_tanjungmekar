@@ -35,8 +35,8 @@
     <!-- Kunci tinggi ngikutin layar utuh dikurang area navbar atas -->
     <div class="bg-[#F4F8F4] h-[calc(100vh-140px)] w-full flex flex-col lg:flex-row" x-data="mapManager()">
         
-        <!-- KOLOM ATAS/KANAN (MAP) - TINGGI DIKEMBALIKAN NORMAL -->
-        <div class="w-full h-[45vh] lg:h-full lg:w-2/3 p-4 lg:p-6 lg:order-last shrink-0">
+        <!-- KOLOM ATAS/KANAN (MAP) - TINGGI DIKEMBALIKAN KE VERSI LU YANG BAGUS -->
+        <div class="w-full h-[35vh] md:h-[45vh] lg:h-full lg:w-2/3 p-4 lg:p-6 lg:order-last shrink-0">
             <div class="bg-white p-2 rounded-2xl shadow-sm border-2 border-gray-200 h-full">
                 <div id="map" class="w-full h-full rounded-xl relative z-0"></div>
             </div>
@@ -45,10 +45,11 @@
         <!-- KOLOM BAWAH/KIRI (CARD & LIST) - Horizontal Carousel Mobile, Vertical Scroll Laptop -->
         <div class="flex-1 w-full lg:w-1/3 flex flex-row lg:flex-col gap-4 lg:gap-6 overflow-x-auto lg:overflow-x-hidden lg:overflow-y-auto px-4 pb-6 lg:px-6 lg:py-6 custom-scrollbar snap-x snap-mandatory lg:snap-none shrink-0 lg:shrink items-start">
             
-            <!-- GROUP: LOKASI SAYA & PENCARIAN -->
-            <div class="flex flex-col shrink-0 w-max lg:w-full relative mt-0 lg:mt-0 pt-0 lg:pt-8">
-                <!-- Tidak ada invisible h4, biar kotak langsung naik sejajar title Kelurahan -->
-                <div class="flex flex-col lg:flex-col gap-4 w-[85vw] lg:w-full shrink-0 snap-center snap-always self-start mb-0 lg:mb-4">
+            <!-- GROUP: PENCARIAN & LOKASI SAYA -->
+            <!-- Ruang kosong di atasnya udah gua hapus biar sejajar sama Area Kelurahan -->
+            <div class="flex flex-col shrink-0 w-max lg:w-full relative">
+                <!-- Flex-col dengan order: Mobile (Lokasi Saya atas, Pencarian bawah), Web (Pencarian atas, Lokasi Saya bawah) -->
+                <div class="flex flex-col gap-4 w-[85vw] lg:w-full shrink-0 snap-center snap-always self-start mb-0 lg:mb-4">
                     
                     <!-- KOTAK PENCARIAN (Bawah di Mobile, Atas di Web) -->
                     <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-200 order-2 lg:order-1 flex items-center border-l-4 border-blue-500">
@@ -66,6 +67,7 @@
                             Mendeteksi lokasi...
                         </div>
                     </div>
+
                 </div>
             </div>
 
