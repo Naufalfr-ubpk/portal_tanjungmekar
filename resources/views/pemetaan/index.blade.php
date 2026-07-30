@@ -13,11 +13,10 @@
 
     <!-- JURUS SAKTI: Membunuh scroll body bawaan browser khusus di laptop -->
     <style>
-        @media (min-width: 1024px) {
-            body, html {
-                overflow: hidden !important;
-            }
+        body, html {
+            overflow: hidden !important;
         }
+        
         .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #A5D6A7; border-radius: 10px; }
