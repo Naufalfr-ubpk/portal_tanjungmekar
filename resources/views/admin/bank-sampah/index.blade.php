@@ -21,7 +21,9 @@
     $rawAvatar = Auth::user()->avatar;
     $avatarColor = '0E4D2B';
     $avatarBgColor = $isAdminTheme ? 'A5D6A7' : 'FBC02D';
-    $avatarUrl = $rawAvatar ? (str_starts_with($rawAvatar, 'http') ? $rawAvatar : asset($rawAvatar)) : 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) . "&color=$avatarColor&background=$avatarBgColor&bold=true";
+
+    $avatarUrl = ($rawAvatar && str_starts_with($rawAvatar, 'http')) ? $rawAvatar : 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) . "&color=$avatarColor&background=$avatarBgColor&bold=true";
+
 @endphp
 <!DOCTYPE html>
 <html lang="id">
@@ -135,7 +137,9 @@
                 <div x-data="{ openProfile: false }" class="relative">
                     <button @click="openProfile = !openProfile" class="flex items-center gap-2 px-2 md:px-4 py-2 bg-gray-50 border border-gray-200 rounded-full hover:bg-gray-100 transition focus:outline-none">
                         <div class="w-8 h-8 rounded-full {{ $isAdminTheme ? 'bg-[#A5D6A7]' : 'bg-[#FBC02D]' }} flex items-center justify-center overflow-hidden border border-[#0E4D2B]">
-                            <img src="{{ $avatarUrl }}" alt="Avatar" class="w-full h-full object-cover">
+                            
+                            <img src="{{ $avatarUrl }}" alt="Avatar" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&color=0E4D2B&background=A5D6A7&bold=true';">
+
                         </div>
                         <span class="hidden sm:inline-block text-sm font-bold text-gray-800">{{ Auth::user()->name }}</span>
                     </button>
@@ -360,7 +364,7 @@
 
         <!-- MODAL KONFIRMASI HAPUS -->
         <div x-show="deleteModalOpen" style="display: none;" class="fixed inset-0 z-[120] flex items-center justify-center bg-black bg-opacity-70 p-4">
-            <div @click.away="closeDeleteModal()" class="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-md text-center relative">
+            <div class="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-md text-center relative">
                 <button @click="closeDeleteModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>
@@ -368,7 +372,7 @@
                     <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
                 </div>
                 <h3 class="text-2xl font-bold text-gray-900 mb-2">Yakin Ingin Menghapus?</h3>
-                <p class="text-sm text-gray-500 mb-6">Data ini akan dihapus secara permanen dari sistem. Tindakan ini tidak bisa dibatalkan.</p>
+                <p class="text-sm text-gray-500 mb-6">Data ini akan dihapus secara permanen dari sistem. Apakah Anda yakin ingin menghapusnya?</p>
                 <div class="flex flex-col sm:flex-row justify-center gap-3">
                     <button @click="closeDeleteModal()" class="w-full sm:w-auto px-6 py-2.5 bg-gray-200 text-gray-800 font-bold rounded-lg hover:bg-gray-300 transition">Batal</button>
                     <form :action="deleteUrl" method="POST" class="w-full sm:w-auto inline-block">

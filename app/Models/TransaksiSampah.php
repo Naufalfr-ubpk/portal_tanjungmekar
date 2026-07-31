@@ -9,16 +9,14 @@ class TransaksiSampah extends Model
 {
     use HasFactory;
 
-    // Kolom yang boleh diisi
+    protected $table = 'transaksi_sampahs';
     protected $fillable = ['user_id', 'kategori_id', 'berat_jumlah', 'total_harga', 'tanggal_setor'];
 
-    // Relasi: Transaksi ini punya siapa? (User)
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 
-    // Relasi: Transaksi ini kategori sampahnya apa?
     public function kategoriSampah()
     {
         return $this->belongsTo(KategoriSampah::class, 'kategori_id');

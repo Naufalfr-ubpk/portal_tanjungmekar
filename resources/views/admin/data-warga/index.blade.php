@@ -29,7 +29,9 @@
     $rawAvatar = Auth::user()->avatar;
     $avatarColor = '0E4D2B';
     $avatarBgColor = $isAdminTheme ? 'A5D6A7' : 'FBC02D';
-    $avatarUrl = $rawAvatar ? (str_starts_with($rawAvatar, 'http') ? $rawAvatar : asset($rawAvatar)) : 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) . "&color=$avatarColor&background=$avatarBgColor&bold=true";
+
+    $avatarUrl = ($rawAvatar && str_starts_with($rawAvatar, 'http')) ? $rawAvatar : 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) . "&color=$avatarColor&background=$avatarBgColor&bold=true";
+
 @endphp
 <!DOCTYPE html>
 <html lang="id">
@@ -140,7 +142,9 @@
                 <div x-data="{ openProfile: false }" class="relative">
                     <button @click="openProfile = !openProfile" class="flex items-center gap-2 px-2 md:px-4 py-2 bg-gray-50 border border-gray-200 rounded-full hover:bg-gray-100 transition focus:outline-none">
                         <div class="w-8 h-8 rounded-full {{ $isAdminTheme ? 'bg-[#A5D6A7]' : 'bg-[#FBC02D]' }} flex items-center justify-center overflow-hidden border border-[#0E4D2B]">
-                            <img src="{{ $avatarUrl }}" alt="Avatar" class="w-full h-full object-cover">
+                            
+                            <img src="{{ $avatarUrl }}" alt="Avatar" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&color=0E4D2B&background=A5D6A7&bold=true';">
+
                         </div>
                         <span class="hidden sm:inline-block text-sm font-bold text-gray-800">{{ Auth::user()->name }}</span>
                         <svg class="w-4 h-4 text-gray-600 font-bold" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">

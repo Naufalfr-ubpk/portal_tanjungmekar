@@ -8,11 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class KategoriSampah extends Model
 {
     use HasFactory;
-    
-    // Kolom yang boleh diisi
+
+    protected $table = 'kategori_sampahs';
     protected $fillable = ['nama_kategori', 'satuan', 'harga_per_satuan'];
 
-    // Relasi: 1 Kategori bisa punya banyak transaksi setoran
     public function transaksi()
     {
         return $this->hasMany(TransaksiSampah::class, 'kategori_id');
