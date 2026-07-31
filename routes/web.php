@@ -37,7 +37,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         })->name('admin.dashboard');
     });
 
-    // 2. BISA DIAKSES ADMIN & OPERATOR (Manajemen Peta, FAQ, & DATA WARGA)
+    // 2. BISA DIAKSES ADMIN & OPERATOR (Manajemen Peta, FAQ, DATA WARGA, BANK SAMPAH)
     Route::prefix('admin')->middleware('can:operator')->group(function () {
         Route::get('/pemetaan', [PemetaanController::class, 'index'])->name('admin.pemetaan.index');
         Route::post('/pemetaan', [PemetaanController::class, 'store'])->name('admin.pemetaan.store');
@@ -63,9 +63,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/bank-sampah/kategori', [\App\Http\Controllers\Admin\BankSampahController::class, 'storeKategori'])->name('admin.bank-sampah.kategori.store');
         Route::post('/bank-sampah/transaksi', [\App\Http\Controllers\Admin\BankSampahController::class, 'storeTransaksi'])->name('admin.bank-sampah.transaksi.store');
 
+        Route::put('/bank-sampah/kategori/{id}', [\App\Http\Controllers\Admin\BankSampahController::class, 'updateKategori'])->name('admin.bank-sampah.kategori.update');
+        Route::put('/bank-sampah/transaksi/{id}', [\App\Http\Controllers\Admin\BankSampahController::class, 'updateTransaksi'])->name('admin.bank-sampah.transaksi.update');
+
         Route::delete('/bank-sampah/kategori/{id}', [\App\Http\Controllers\Admin\BankSampahController::class, 'destroyKategori'])->name('admin.bank-sampah.kategori.destroy');
         Route::delete('/bank-sampah/transaksi/{id}', [\App\Http\Controllers\Admin\BankSampahController::class, 'destroyTransaksi'])->name('admin.bank-sampah.transaksi.destroy');
-
     });
 
     // 3. KHUSUS OPERATOR
