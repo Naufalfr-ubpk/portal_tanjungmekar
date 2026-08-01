@@ -12,10 +12,21 @@
             </div>
             <span class="text-xs font-bold bg-[#0E4D2B] text-white px-3 py-1 rounded-full uppercase tracking-wider">Akun Warga</span>
         </div>
+
+
     </x-slot>
+
+    <!-- JURUS SAKTI: Membunuh scroll body bawaan browser -->
+    <style>
+        body, html {
+            overflow: hidden !important;
+        }
+    </style>
 
     <div class="py-6 bg-[#F4F8F4] h-[calc(100vh-5rem)] overflow-hidden">
 
+
+    
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
             
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-2xl border-l-8 border-[#FBC02D] p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
