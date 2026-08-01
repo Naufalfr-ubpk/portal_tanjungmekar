@@ -14,7 +14,8 @@
         </div>
     </x-slot>
 
-    <div class="py-12 bg-[#F4F8F4] min-h-[calc(100vh-5rem)]">
+    <div class="py-6 bg-[#F4F8F4] h-[calc(100vh-5rem)] overflow-hidden">
+
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
             
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-2xl border-l-8 border-[#FBC02D] p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
@@ -24,36 +25,40 @@
                 </div>
             </div>
 
+
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 
+                <!-- CARD PEMETAAN -->
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col justify-between hover:shadow-md transition-shadow">
                     <div>
                         <div class="w-12 h-12 bg-[#A5D6A7] rounded-xl flex items-center justify-center text-[#0E4D2B] mb-4">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path></svg>
                         </div>
-                        <h4 class="text-lg font-bold text-gray-800 mb-1">Pemetaan Wilayah</h4>
-                        <p class="text-xs text-gray-500 mb-4 leading-relaxed">Cari tahu informasi letak Kantor Kelurahan, kepengurusan RW, dan Bank Sampah.</p>
+                        <h4 class="text-lg font-bold text-gray-900 mb-2">Pemetaan Wilayah</h4>
+                        <p class="text-sm text-gray-600 mb-6">Cari tahu informasi letak Kantor Kelurahan, kepengurusan RW, dan Bank Sampah.</p>
                     </div>
-                    <a href="{{ route('pemetaan') }}" class="w-full text-center bg-[#0E4D2B] hover:bg-[#2E7D32] text-white font-bold py-2 px-4 rounded-lg text-sm transition-colors block">Buka Peta Wilayah</a>
+                    <a href="{{ route('pemetaan') }}" class="block w-full bg-[#0E4D2B] hover:bg-[#2E7D32] text-white text-center font-bold py-3 px-4 rounded-xl transition-colors shadow-sm">
+                        Buka Peta Wilayah
+                    </a>
                 </div>
 
-
-                <div class="bg-white rounded-2xl p-6 shadow-sm border-2 border-transparent hover:border-[#FBC02D] hover:shadow-lg transition-all relative overflow-hidden group">
-                        <!-- Aksen Kuning di Pojok -->
-                        <div class="absolute top-0 right-0 w-24 h-24 bg-[#FBC02D] opacity-10 rounded-bl-full transform translate-x-8 -translate-y-8 group-hover:scale-110 transition-transform"></div>
-                        
-                        <div class="w-12 h-12 bg-yellow-100 text-[#F59E0B] rounded-xl flex items-center justify-center mb-4 relative z-10 border border-yellow-200">
+                <!-- CARD BANK SAMPAH -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col justify-between hover:shadow-md transition-shadow">
+                    <div>
+                        <div class="w-12 h-12 bg-yellow-100 text-[#F59E0B] rounded-xl flex items-center justify-center mb-4 border border-yellow-200">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
                         </div>
-                        <h4 class="text-lg font-bold text-gray-900 mb-2 relative z-10">Bank Sampah Digital</h4>
-                        <p class="text-sm text-gray-600 mb-6 relative z-10">Sistem monitoring terpadu untuk pencatatan tabungan sampah dan saldo rupiah milik warga.</p>
-                        
-                        <a href="{{ route('user.bank-sampah') }}" class="block w-full bg-[#FBC02D] hover:bg-yellow-500 text-[#0E4D2B] text-center font-bold py-3 px-4 rounded-xl transition-colors relative z-10 shadow-sm">
-                            Buka Bank Sampah
-                        </a>
+                        <h4 class="text-lg font-bold text-gray-900 mb-2">Bank Sampah Digital</h4>
+                        <p class="text-sm text-gray-600 mb-6">Sistem monitoring terpadu pencatatan tabungan sampah dan saldo rupiah warga.</p>
                     </div>
+                    <a href="{{ route('user.bank-sampah') }}" class="block w-full bg-[#FBC02D] hover:bg-yellow-500 text-[#0E4D2B] text-center font-bold py-3 px-4 rounded-xl transition-colors shadow-sm">
+                        Buka Bank Sampah
+                    </a>
+                </div>
 
             </div>
+
+
         </div>
     </div>
 </x-app-layout>

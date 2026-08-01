@@ -42,16 +42,24 @@
                     @endif
                     
                     @auth
+
+
+
                         @php
+                            $isOp = Auth::user()->role === 'operator';
+                            $bgAva = $isOp ? 'FBC02D' : 'A5D6A7';
+                            $bgClass = $isOp ? 'bg-[#FBC02D]' : 'bg-[#A5D6A7]';
                             $rawAvatar = Auth::user()->avatar;
-                            $avatarUrl = $rawAvatar ? (str_starts_with($rawAvatar, 'http') ? $rawAvatar : asset($rawAvatar)) : 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) . '&color=0E4D2B&background=A5D6A7&bold=true';
-                            $fallbackAvatar = 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) . '&color=0E4D2B&background=A5D6A7&bold=true';
+                            $avatarUrl = ($rawAvatar && str_starts_with($rawAvatar, 'http')) ? $rawAvatar : 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) . "&color=0E4D2B&background={$bgAva}&bold=true";
                         @endphp
                         <div x-data="{ openProfile: false }" class="relative ml-4">
                             <button @click="openProfile = !openProfile" class="flex items-center gap-2 px-4 py-2 bg-gray-50 border border-gray-200 rounded-full hover:bg-gray-100 transition">
-                                <div class="w-8 h-8 rounded-full bg-[#A5D6A7] flex items-center justify-center overflow-hidden border border-[#0E4D2B]">
-                                    <img src="{{ $avatarUrl }}" alt="Avatar" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='{{ $fallbackAvatar }}';">
+                                <div class="w-8 h-8 rounded-full {{ $bgClass }} flex items-center justify-center overflow-hidden border border-[#0E4D2B]">
+                                    <img src="{{ $avatarUrl }}" alt="Avatar" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&color=0E4D2B&background={{ $bgAva }}&bold=true';">
                                 </div>
+
+
+
                                 <span class="text-sm font-bold text-gray-800">{{ Auth::user()->name }}</span>
                                 <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                             </button>
@@ -86,17 +94,25 @@
         <!-- Penambahan absolute, w-full, left-0, dan shadow-2xl biar menunya ngambang di atas konten -->
         <div x-show="openMobileMenu" x-transition style="display: none;" class="absolute w-full left-0 top-[100%] lg:hidden bg-white border-b-4 border-[#0E4D2B] shadow-2xl z-50">
             <div class="px-4 pt-4 pb-6 space-y-1">
-                @auth
+
+
+
+               @auth
                     @php
+                        $isOp = Auth::user()->role === 'operator';
+                        $bgAva = $isOp ? 'FBC02D' : 'A5D6A7';
+                        $bgClass = $isOp ? 'bg-[#FBC02D]' : 'bg-[#A5D6A7]';
                         $rawAvatar = Auth::user()->avatar;
-                        $avatarUrl = $rawAvatar ? (str_starts_with($rawAvatar, 'http') ? $rawAvatar : asset($rawAvatar)) : 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) . '&color=0E4D2B&background=A5D6A7&bold=true';
-                        $fallbackAvatar = 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) . '&color=0E4D2B&background=A5D6A7&bold=true';
+                        $avatarUrl = ($rawAvatar && str_starts_with($rawAvatar, 'http')) ? $rawAvatar : 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) . "&color=0E4D2B&background={$bgAva}&bold=true";
                     @endphp
                     <div class="mb-5 pb-5 border-b border-gray-200">
                         <div class="flex items-center gap-3 px-3 mb-4">
-                            <div class="w-12 h-12 rounded-full bg-[#A5D6A7] overflow-hidden border-2 border-[#0E4D2B]">
-                                <img src="{{ $avatarUrl }}" alt="Avatar" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='{{ $fallbackAvatar }}';">
+                            <div class="w-12 h-12 rounded-full {{ $bgClass }} overflow-hidden border-2 border-[#0E4D2B]">
+                                <img src="{{ $avatarUrl }}" alt="Avatar" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&color=0E4D2B&background={{ $bgAva }}&bold=true';">
                             </div>
+
+
+
                             <span class="font-bold text-gray-800 text-lg">{{ Auth::user()->name }}</span>
                         </div>
                         <a href="{{ route('dashboard') }}" class="block px-3 py-2.5 rounded-md text-base font-bold text-gray-700 hover:bg-gray-50">Dashboard</a>
