@@ -18,12 +18,15 @@
 
     <!-- JURUS SAKTI: Membunuh scroll body bawaan browser -->
     <style>
-        body, html {
-            overflow: hidden !important;
+        @media (min-width: 1024px) {
+            body, html {
+                overflow: hidden !important;
+            }
         }
     </style>
 
-    <div class="py-6 bg-[#F4F8F4] h-[calc(100vh-5rem)] overflow-hidden">
+
+    <div class="py-6 bg-[#F4F8F4] min-h-[calc(100vh-5rem)] lg:h-[calc(100vh-5rem)] lg:overflow-hidden">
 
 
     
