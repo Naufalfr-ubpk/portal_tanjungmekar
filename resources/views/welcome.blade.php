@@ -181,18 +181,19 @@
                 
 
 
-                <a href="{{ Auth::check() ? route('dashboard') : route('register') }}" class="bg-white p-8 rounded-2xl shadow-lg border-t-4 border-[#FBC02D] hover:-translate-y-2 hover:shadow-xl transition-all duration-300 block">
-                <div class="w-14 h-14 bg-[#FBC02D] bg-opacity-30 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <svg class="w-7 h-7 text-[#0E4D2B]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
-                </div>
-                <h4 class="text-xl font-bold text-[#0E4D2B] mb-2">Bank Sampah Digital</h4>
-                <p class="text-gray-600 text-sm leading-relaxed">Sistem monitoring terpadu untuk pencatatan tabungan sampah dan saldo rupiah milik warga.</p>
+                <!-- KARTU BANK SAMPAH (Udah aktif link-nya) -->
+                <!-- KARTU BANK SAMPAH (Arahkan ke Register jika belum login) -->
+                <a href="{{ Auth::check() ? route('user.bank-sampah') : route('register') }}" class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border-t-4 border-t-[#FBC02D] group block cursor-pointer">
+
+                    <div class="w-14 h-14 bg-[#FFF9E6] rounded-full flex items-center justify-center mb-6 mx-auto group-hover:scale-110 transition-transform duration-300 border border-[#FDE68A]">
+                        <svg class="w-7 h-7 text-[#0E4D2B]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                    </div>
+                    <h4 class="text-xl font-bold text-[#0E4D2B] mb-2">Bank Sampah Digital</h4>
+                    <p class="text-gray-600 text-sm leading-relaxed">Sistem monitoring terpadu untuk pencatatan tabungan sampah dan saldo rupiah milik warga.</p>
                 </a>
 
+
             </div>
-
-
-
 
         </div>
     </section>

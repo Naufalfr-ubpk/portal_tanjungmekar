@@ -38,17 +38,20 @@
                 </div>
 
 
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col justify-between border-b-4 border-dashed border-gray-300 opacity-80">
-                <div>
-                    <div class="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center text-gray-400 mb-4">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                <div class="bg-white rounded-2xl p-6 shadow-sm border-2 border-transparent hover:border-[#FBC02D] hover:shadow-lg transition-all relative overflow-hidden group">
+                        <!-- Aksen Kuning di Pojok -->
+                        <div class="absolute top-0 right-0 w-24 h-24 bg-[#FBC02D] opacity-10 rounded-bl-full transform translate-x-8 -translate-y-8 group-hover:scale-110 transition-transform"></div>
+                        
+                        <div class="w-12 h-12 bg-yellow-100 text-[#F59E0B] rounded-xl flex items-center justify-center mb-4 relative z-10 border border-yellow-200">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                        </div>
+                        <h4 class="text-lg font-bold text-gray-900 mb-2 relative z-10">Bank Sampah Digital</h4>
+                        <p class="text-sm text-gray-600 mb-6 relative z-10">Sistem monitoring terpadu untuk pencatatan tabungan sampah dan saldo rupiah milik warga.</p>
+                        
+                        <a href="{{ route('user.bank-sampah') }}" class="block w-full bg-[#FBC02D] hover:bg-yellow-500 text-[#0E4D2B] text-center font-bold py-3 px-4 rounded-xl transition-colors relative z-10 shadow-sm">
+                            Buka Bank Sampah
+                        </a>
                     </div>
-                    <h4 class="text-lg font-bold text-gray-400 mb-1">Bank Sampah Digital</h4>
-                    <p class="text-xs text-gray-400 mb-4 leading-relaxed">Sistem monitoring terpadu untuk pencatatan tabungan sampah dan saldo rupiah milik warga.</p>
-                </div>
-                <span class="w-full text-center bg-gray-100 text-gray-400 font-bold py-2 px-4 rounded-lg text-sm cursor-not-allowed block">Fitur Belum Rilis</span>
-            </div>
-
 
             </div>
         </div>

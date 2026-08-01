@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\GoogleController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\PemetaanController;
 use App\Http\Controllers\FaqController;
+use App\Http\Controllers\UserBankSampahController;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Location; 
 use App\Models\Faq;
@@ -30,6 +31,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return view('dashboard');
     })->name('dashboard');
 
+    // ROUTE BANK SAMPAH UNTUK USER/WARGA
+    Route::get('/bank-sampah', [UserBankSampahController::class, 'index'])->name('user.bank-sampah');
+
     // 1. MURNI KHUSUS ADMIN (Hanya Dashboard Admin)
     Route::prefix('admin')->middleware('can:admin')->group(function () {
         Route::get('/dashboard', function () {
@@ -37,7 +41,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         })->name('admin.dashboard');
     });
 
-    // 2. BISA DIAKSES ADMIN & OPERATOR (Manajemen Peta, FAQ, DATA WARGA, BANK SAMPAH)
+    // 2. BISA DIAKSES ADMIN & OPERATOR
     Route::prefix('admin')->middleware('can:operator')->group(function () {
         Route::get('/pemetaan', [PemetaanController::class, 'index'])->name('admin.pemetaan.index');
         Route::post('/pemetaan', [PemetaanController::class, 'store'])->name('admin.pemetaan.store');
@@ -57,15 +61,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/data-warga', [\App\Http\Controllers\Admin\DataWargaController::class, 'index'])->name('admin.data-warga.index');
         Route::delete('/data-warga/{id}', [\App\Http\Controllers\Admin\DataWargaController::class, 'destroy'])->name('admin.data-warga.destroy');
 
-        // ROUTE BANK SAMPAH
+        // ROUTE BANK SAMPAH ADMIN
         Route::get('/bank-sampah', [\App\Http\Controllers\Admin\BankSampahController::class, 'index'])->name('admin.bank-sampah.index');
-
         Route::post('/bank-sampah/kategori', [\App\Http\Controllers\Admin\BankSampahController::class, 'storeKategori'])->name('admin.bank-sampah.kategori.store');
         Route::post('/bank-sampah/transaksi', [\App\Http\Controllers\Admin\BankSampahController::class, 'storeTransaksi'])->name('admin.bank-sampah.transaksi.store');
-
         Route::put('/bank-sampah/kategori/{id}', [\App\Http\Controllers\Admin\BankSampahController::class, 'updateKategori'])->name('admin.bank-sampah.kategori.update');
         Route::put('/bank-sampah/transaksi/{id}', [\App\Http\Controllers\Admin\BankSampahController::class, 'updateTransaksi'])->name('admin.bank-sampah.transaksi.update');
-
         Route::delete('/bank-sampah/kategori/{id}', [\App\Http\Controllers\Admin\BankSampahController::class, 'destroyKategori'])->name('admin.bank-sampah.kategori.destroy');
         Route::delete('/bank-sampah/transaksi/{id}', [\App\Http\Controllers\Admin\BankSampahController::class, 'destroyTransaksi'])->name('admin.bank-sampah.transaksi.destroy');
     });
