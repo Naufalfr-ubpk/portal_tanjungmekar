@@ -319,8 +319,10 @@
                 <button @click="isEditKategoriOpen = false" class="absolute top-4 right-4 text-white hover:text-gray-200 transition">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>
-                <div class="bg-blue-600 p-5 text-white flex justify-between items-center">
+                
+                <div class="bg-[#2E7D32] p-5 text-white flex justify-between items-center">
                     <h3 class="text-xl font-bold">Edit Kategori Sampah</h3>
+
                 </div>
                 <form :action="editKategoriAction" method="POST" class="p-6">
                     @csrf @method('PUT')
@@ -340,7 +342,9 @@
                     </div>
                     <div class="flex justify-end gap-3 pt-4 border-t">
                         <button type="button" @click="isEditKategoriOpen = false" class="px-5 py-2.5 bg-gray-200 text-gray-700 font-bold rounded-lg hover:bg-gray-300 transition">Batal</button>
-                        <button type="submit" class="px-5 py-2.5 bg-blue-600 text-white font-bold rounded-lg shadow hover:bg-blue-700 transition">Simpan Perubahan</button>
+
+                        <button type="submit" class="px-5 py-2.5 bg-[#2E7D32] text-white font-bold rounded-lg shadow hover:bg-[#0E4D2B] transition">Simpan Perubahan</button>
+
                     </div>
                 </form>
             </div>
@@ -399,8 +403,10 @@
                 <button @click="isEditTransaksiOpen = false" class="absolute top-4 right-4 text-white hover:text-gray-300 transition">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>
-                <div class="bg-blue-600 p-5 text-white flex justify-between items-center">
+
+                <div class="bg-[#2E7D32] p-5 text-white flex justify-between items-center">
                     <h3 class="text-xl font-bold">Edit Setoran Warga</h3>
+
                 </div>
                 <form :action="editTransaksiAction" method="POST" class="p-6">
                     @csrf @method('PUT')
@@ -432,7 +438,9 @@
                     </div>
                     <div class="flex justify-end gap-3 pt-4 border-t">
                         <button type="button" @click="isEditTransaksiOpen = false" class="px-5 py-2.5 bg-gray-200 text-gray-700 font-bold rounded-lg hover:bg-gray-300 transition">Batal</button>
-                        <button type="submit" class="px-5 py-2.5 bg-blue-600 text-white font-bold rounded-lg shadow hover:bg-blue-700 transition">Simpan Perubahan</button>
+
+                        <button type="submit" class="px-5 py-2.5 bg-[#2E7D32] text-white font-bold rounded-lg shadow hover:bg-[#0E4D2B] transition">Simpan Perubahan</button>
+
                     </div>
                 </form>
             </div>
@@ -494,6 +502,8 @@
 
                 openEditKategori(kategori) {
                     this.editKategoriData = { ...kategori };
+                    // Fungsi Math.round buat ngebuang angka desimal di belakang koma
+                    this.editKategoriData.harga_per_satuan = Math.round(kategori.harga_per_satuan);
                     this.editKategoriAction = `/admin/bank-sampah/kategori/${kategori.id}`;
                     this.isEditKategoriOpen = true;
                 },
