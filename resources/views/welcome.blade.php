@@ -1,5 +1,11 @@
+@php
+    $heroImage = \Illuminate\Support\Facades\Storage::disk('public')->exists('ui/hero_image.png') 
+        ? asset('storage/ui/hero_image.png') . '?v=' . time() 
+        : asset('images/kelurahan.png');
+@endphp
 <!DOCTYPE html>
 <html lang="id" class="scroll-smooth">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -46,6 +52,8 @@
 
 
                         @php
+
+
                             $isOp = Auth::user()->role === 'operator';
                             $bgAva = $isOp ? 'FBC02D' : 'A5D6A7';
                             $bgClass = $isOp ? 'bg-[#FBC02D]' : 'bg-[#A5D6A7]';
@@ -153,9 +161,13 @@
             <div class="pt-8 pb-4 md:pt-14 md:pb-6 flex flex-col lg:flex-row lg:items-center lg:gap-12">
                 
                 <div class="order-first lg:order-last w-full lg:w-1/2 relative mb-8 lg:mb-0">
+
+
                     <div class="aspect-w-16 aspect-h-9 sm:aspect-h-10 rounded-2xl overflow-hidden shadow-2xl border-4 border-[#2E7D32]">
-                        <img src="{{ asset('images/kelurahan.png') }}" alt="Lingkungan Bersih Tanjungmekar" class="object-cover w-full h-full">
+                        <img src="{{ $heroImage }}" alt="Lingkungan Bersih Tanjungmekar" class="object-cover w-full h-full">
                     </div>
+
+
                 </div>
 
                 <div class="order-last lg:order-first text-center lg:text-left lg:w-1/2">

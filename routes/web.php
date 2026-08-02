@@ -69,6 +69,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::put('/bank-sampah/transaksi/{id}', [\App\Http\Controllers\Admin\BankSampahController::class, 'updateTransaksi'])->name('admin.bank-sampah.transaksi.update');
         Route::delete('/bank-sampah/kategori/{id}', [\App\Http\Controllers\Admin\BankSampahController::class, 'destroyKategori'])->name('admin.bank-sampah.kategori.destroy');
         Route::delete('/bank-sampah/transaksi/{id}', [\App\Http\Controllers\Admin\BankSampahController::class, 'destroyTransaksi'])->name('admin.bank-sampah.transaksi.destroy');
+
+        // ROUTE MANAJEMEN GAMBAR
+        Route::get('/manajemen-gambar', [\App\Http\Controllers\Admin\ManajemenGambarController::class, 'index'])->name('admin.manajemen-gambar.index');
+        Route::post('/manajemen-gambar', [\App\Http\Controllers\Admin\ManajemenGambarController::class, 'update'])->name('admin.manajemen-gambar.update');
+        Route::delete('/manajemen-gambar', [\App\Http\Controllers\Admin\ManajemenGambarController::class, 'destroy'])->name('admin.manajemen-gambar.destroy');
+
     });
 
     // 3. KHUSUS OPERATOR
