@@ -32,7 +32,9 @@
                         Total Saldo Tabungan
                     </p>
                     <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold mb-3">Rp {{ number_format($totalSaldo, 0, ',', '.') }}</h1>
-                    <p class="text-xs sm:text-sm md:text-base text-gray-200 relative z-20">Kumpulkan terus sampah organik dan anorganikmu dan tukarkan menjadi saldo rupiah!</p>
+
+                    <p class="text-xs sm:text-sm md:text-base text-gray-200">Kumpulkan terus sampah organik dan anorganikmu dan tukarkan menjadi saldo rupiah!</p>
+                    
                 </div>
                 <!-- Icon background -->
                 <div class="absolute right-[-1.5rem] bottom-[-1.5rem] md:absolute md:right-8 md:top-1/2 md:-translate-y-1/2 z-10 opacity-20 transform scale-110 md:scale-150 pointer-events-none">
