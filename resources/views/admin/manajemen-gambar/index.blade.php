@@ -160,7 +160,7 @@
             <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden mb-6">
                 <div class="p-6 border-b border-gray-200 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                     <div>
-                        <h3 class="text-xl font-extrabold text-[#0E4D2B]">Gambar Pahlawan (Hero Image)</h3>
+                        <h3 class="text-xl font-extrabold text-[#0E4D2B]">Gambar (Hero Image)</h3>
                         <p class="text-sm text-gray-500 mt-1">Gambar utama yang tampil di beranda (Landing Page).</p>
                     </div>
                     
@@ -270,26 +270,25 @@
             if (cropper) { cropper.rotate(degree); }
         }
 
+
+
+
         function saveImage() {
             if (cropper) {
                 // Konversi hasil crop ke Base64 (resolusi ditahan di 1280x720 biar enteng dimuat)
-                cropper.getCroppedCanvas({
+                const canvas = cropper.getCroppedCanvas({
                     width: 1280,
                     height: 720
-                }).toDataURL('image/png', 0.9).then(function(base64data) {
-                    document.getElementById('cropped_image').value = base64data;
-                    document.getElementById('upload-form').submit();
                 });
+                
+                const base64data = canvas.toDataURL('image/png', 0.9);
+                document.getElementById('cropped_image').value = base64data;
+                document.getElementById('upload-form').submit();
             }
         }
-        
-        // Polyfill untuk toDataURL yang Promise based
-        HTMLCanvasElement.prototype.toDataURL = function(type, encoderOptions) {
-            return new Promise((resolve) => {
-                const data = this.toDataURL(type, encoderOptions);
-                resolve(data);
-            });
-        };
+
+
+
     </script>
 </body>
 </html>
