@@ -26,6 +26,19 @@
                     </div>
                     
 
+                    @if(session('success'))
+                    <div x-data="{ showModal: true }" x-show="showModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 px-4" style="display: none;">
+                        <div @click.away="showModal = false" class="bg-white rounded-2xl shadow-xl w-full max-w-sm p-6 text-center transform transition-all">
+                            <div class="w-16 h-16 bg-[#e8f5e9] text-[#2E7D32] border border-[#A5D6A7] rounded-full flex items-center justify-center mx-auto mb-4">
+                                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            </div>
+                            <h3 class="text-xl font-extrabold text-gray-900 mb-2">Terkirim!</h3>
+                            <p class="text-sm text-gray-600 mb-6">{{ session('success') }}</p>
+                            <button @click="showModal = false" class="w-full bg-[#0E4D2B] hover:bg-[#2E7D32] text-white font-bold py-3 rounded-xl transition shadow-sm">Oke, Mengerti</button>
+                        </div>
+                    </div>
+                    @endif
+
 
                     <form action="{{ route('laporan-web.store') }}" method="POST">
                         @csrf
@@ -33,10 +46,12 @@
                             <label class="block text-sm font-bold text-gray-700 mb-2">Jenis Kendala</label>
                             <select name="jenis_kendala" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-[#0E4D2B] focus:ring focus:ring-[#0E4D2B] focus:ring-opacity-50 py-3" required>
                                 <option value="" disabled selected hidden>-- Pilih Jenis Kendala --</option>
-                                <option value="peta">Peta Tidak Muncul / Error</option>
-                                <option value="login">Masalah Login / Akun</option>
-                                <option value="ui">Tampilan Berantakan</option>
-                                <option value="lainnya">Lainnya</option>
+                                
+                                <option value="Error">Error</option>
+                                <option value="Bug">Bug</option>
+                                <option value="UI">Masalah Tampilan</option>
+                                <option value="Lainnya">Lainnya</option>
+
                             </select>
                         </div>
 

@@ -14,7 +14,8 @@ class LaporanWebAdminController extends Controller
     public function resolve($id)
     {
         LaporanWeb::findOrFail($id)->delete();
-        return back()->with('success', 'Mantap! Kendala berhasil ditandai sebagai telah diperbaiki.');
+
+        return back()->with('success', 'Bagus! Kendala telah berhasil diperbaiki.');
     }
 
     public function destroy($id)
