@@ -189,8 +189,10 @@
                     
 
                     <h4 class="text-xs font-bold text-gray-500 mb-4 uppercase tracking-wider">Laporan Web</h4>
-                    <div class="flex items-center gap-3">
-                    <h2 class="text-4xl font-black text-red-600">{{ \App\Models\LaporanWeb::count() }}</h2>
+                        <div class="flex items-center gap-3">
+                            <h2 class="text-4xl font-black text-red-600">{{ \App\Models\LaporanWeb::count() }}</h2>
+                            <p class="text-sm font-bold text-gray-500 mt-2">Kendala</p>
+                        </div>
 
 
                         <span class="text-4xl font-black text-[#D32F2F] leading-none">0</span>
