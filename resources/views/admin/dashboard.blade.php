@@ -184,22 +184,18 @@
                 </a>
 
                 
-                @if(Auth::user()->role === 'admin')
+
+               @if(Auth::user()->role === 'admin')
                 <a href="{{ route('admin.laporan-web.index', isset($modeParam) ? $modeParam : []) }}" class="block bg-white rounded-2xl shadow-sm border border-gray-200 p-6 hover:shadow-md hover:-translate-y-1 transition transform">
-                    
-
                     <h4 class="text-xs font-bold text-gray-500 mb-4 uppercase tracking-wider">Laporan Web</h4>
-                        <div class="flex items-center gap-3">
-                            <h2 class="text-4xl font-black text-red-600">{{ \App\Models\LaporanWeb::count() }}</h2>
-                            <p class="text-sm font-bold text-gray-500 mt-2">Kendala</p>
-                        </div>
-
-
-                        <span class="text-4xl font-black text-[#D32F2F] leading-none">0</span>
-                        <span class="text-sm font-semibold text-gray-500 mb-1">Kendala</span>
+                    <div class="flex items-center gap-3">
+                        <h2 class="text-4xl font-black text-red-600">{{ \App\Models\LaporanWeb::count() }}</h2>
+                        <p class="text-sm font-bold text-gray-500 mt-2">Kendala</p>
                     </div>
                 </a>
                 @endif
+
+
 
             </div>
         </div>
