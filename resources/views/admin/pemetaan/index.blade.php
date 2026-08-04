@@ -61,10 +61,11 @@
             @endif
             
             <p class="text-xs font-bold uppercase tracking-wider mb-2 mt-6 px-2 {{ $isOp ? 'text-[#0A3D22]' : 'text-[#A5D6A7]' }}">Kustomisasi Web</p>
-            <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-lg font-semibold transition {{ $navLink }}">
+            <a href="{{ route('admin.manajemen-gambar.index', isset($modeParam) ? $modeParam : []) }}" class="flex items-center gap-3 px-4 py-3 rounded-lg font-semibold transition {{ $navLink }}">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                 Manajemen Gambar
             </a>
+
             <a href="{{ route('admin.pemetaan.index', $modeParam) }}" class="flex items-center gap-3 px-4 py-3 rounded-lg font-bold transition {{ $isOp ? 'bg-white text-[#0E4D2B] shadow-sm' : 'bg-[#2E7D32] text-white' }}">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg>
                 Manajemen Peta
@@ -88,7 +89,7 @@
             </a>
             
             @if(Auth::user()->role === 'admin' && !$isOp)
-            <a href="#" class="flex items-center gap-3 hover:bg-[#2E7D32] text-gray-200 hover:text-white px-4 py-3 rounded-lg font-semibold transition mb-4">
+            <a href="{{ route('admin.laporan-web.index', isset($modeParam) ? $modeParam : []) }}" class="flex items-center gap-3 hover:bg-[#2E7D32] text-gray-200 hover:text-white px-4 py-3 rounded-lg font-semibold transition mb-4">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
                 Laporan Web
             </a>

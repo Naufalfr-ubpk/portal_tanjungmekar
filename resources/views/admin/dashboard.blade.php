@@ -83,7 +83,7 @@
 
 
             @if(Auth::user()->role === 'admin')
-            <a href="#" class="flex items-center gap-3 hover:bg-[#2E7D32] text-gray-200 hover:text-white px-4 py-3 rounded-lg font-semibold transition mb-4">
+            <a href="{{ route('admin.laporan-web.index', isset($modeParam) ? $modeParam : []) }}" class="flex items-center gap-3 hover:bg-[#2E7D32] text-gray-200 hover:text-white px-4 py-3 rounded-lg font-semibold transition mb-4">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
                 Laporan Web
             </a>
@@ -185,9 +185,14 @@
 
                 
                 @if(Auth::user()->role === 'admin')
-                <a href="#" class="block bg-white rounded-2xl shadow-sm border border-gray-200 p-6 hover:shadow-md hover:-translate-y-1 transition transform">
-                    <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-4">Laporan Web <span class="text-[10px] text-red-500 ml-1">(Segera Hadir)</span></h4>
-                    <div class="flex items-end gap-2">
+                <a href="{{ route('admin.laporan-web.index', isset($modeParam) ? $modeParam : []) }}" class="block bg-white rounded-2xl shadow-sm border border-gray-200 p-6 hover:shadow-md hover:-translate-y-1 transition transform">
+                    
+
+                    <h4 class="text-xs font-bold text-gray-500 mb-4 uppercase tracking-wider">Laporan Web</h4>
+                    <div class="flex items-center gap-3">
+                    <h2 class="text-4xl font-black text-red-600">{{ \App\Models\LaporanWeb::count() }}</h2>
+
+
                         <span class="text-4xl font-black text-[#D32F2F] leading-none">0</span>
                         <span class="text-sm font-semibold text-gray-500 mb-1">Kendala</span>
                     </div>

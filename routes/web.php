@@ -75,6 +75,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/manajemen-gambar', [\App\Http\Controllers\Admin\ManajemenGambarController::class, 'update'])->name('admin.manajemen-gambar.update');
         Route::delete('/manajemen-gambar', [\App\Http\Controllers\Admin\ManajemenGambarController::class, 'destroy'])->name('admin.manajemen-gambar.destroy');
 
+        // ROUTE LAPORAN WEB (ADMIN)
+        Route::get('/laporan-web', [\App\Http\Controllers\Admin\LaporanWebAdminController::class, 'index'])->name('admin.laporan-web.index');
+        Route::delete('/laporan-web/{id}/resolve', [\App\Http\Controllers\Admin\LaporanWebAdminController::class, 'resolve'])->name('admin.laporan-web.resolve');
+        Route::delete('/laporan-web/{id}/destroy', [\App\Http\Controllers\Admin\LaporanWebAdminController::class, 'destroy'])->name('admin.laporan-web.destroy');
+
     });
 
     // 3. KHUSUS OPERATOR
@@ -96,6 +101,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/tambah-faq', [FaqController::class, 'store'])->name('faq.store');
     
     Route::get('/laporan-web', function () { return view('laporan-web'); })->name('laporan-web');
+
+    Route::post('/laporan-web', [\App\Http\Controllers\LaporanWebController::class, 'store'])->name('laporan-web.store');
 });
 
 Route::middleware('auth')->group(function () {
