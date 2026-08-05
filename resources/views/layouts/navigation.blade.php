@@ -48,7 +48,9 @@
                     <x-slot name="trigger">
                         <button class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm leading-4 font-bold rounded-full text-gray-700 bg-gray-50 hover:text-[#0E4D2B] hover:border-[#0E4D2B] focus:outline-none transition">
                             <div class="w-7 h-7 rounded-full bg-[#{{ $bgAva }}] mr-2 flex items-center justify-center overflow-hidden border border-[#0E4D2B]">
-                                <img src="{{ $avatarUrl }}" alt="Avatar" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='{{ $fallbackAvatar }}';">
+
+                                <img src="{{ Auth::user()->avatar ? (str_starts_with(Auth::user()->avatar, 'http') ? Auth::user()->avatar : asset(str_starts_with(Auth::user()->avatar, 'storage/') ? Auth::user()->avatar : 'storage/' . Auth::user()->avatar)) : 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) . '&color=0E4D2B&background=' . (Auth::user()->role === 'operator' ? 'FBC02D' : 'A5D6A7') . '&bold=true' }}" alt="Avatar" class="w-full h-full object-cover">
+
                             </div>
                             <div>{{ Auth::user()->name }}</div>
                             <div class="ms-1">
@@ -84,7 +86,9 @@
             <div class="mb-5 pb-5 border-b border-gray-200">
                 <div class="flex items-center gap-3 px-3 mb-4">
                     <div class="w-12 h-12 rounded-full bg-[#{{ $bgAva }}] overflow-hidden border-2 border-[#0E4D2B]">
-                        <img src="{{ $avatarUrl }}" alt="Avatar" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='{{ $fallbackAvatar }}';">
+
+                        <img src="{{ Auth::user()->avatar ? (str_starts_with(Auth::user()->avatar, 'http') ? Auth::user()->avatar : asset(str_starts_with(Auth::user()->avatar, 'storage/') ? Auth::user()->avatar : 'storage/' . Auth::user()->avatar)) : 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) . '&color=0E4D2B&background=' . (Auth::user()->role === 'operator' ? 'FBC02D' : 'A5D6A7') . '&bold=true' }}" alt="Avatar" class="w-full h-full object-cover">
+
                     </div>
                     <div>
                         <div class="font-bold text-lg text-gray-800">{{ Auth::user()->name }}</div>
