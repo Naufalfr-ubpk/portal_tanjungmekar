@@ -58,7 +58,9 @@
                             $bgAva = $isOp ? 'FBC02D' : 'A5D6A7';
                             $bgClass = $isOp ? 'bg-[#FBC02D]' : 'bg-[#A5D6A7]';
                             $rawAvatar = Auth::user()->avatar;
-                            $avatarUrl = ($rawAvatar && str_starts_with($rawAvatar, 'http')) ? $rawAvatar : 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) . "&color=0E4D2B&background={$bgAva}&bold=true";
+
+                            $avatarUrl = $rawAvatar ? (str_starts_with($rawAvatar, 'http') ? $rawAvatar : asset(str_starts_with($rawAvatar, 'storage/') ? $rawAvatar : 'storage/' . $rawAvatar)) : 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) . "&color=0E4D2B&background={$bgAva}&bold=true";
+
                         @endphp
                         <div x-data="{ openProfile: false }" class="relative ml-4">
                             <button @click="openProfile = !openProfile" class="flex items-center gap-2 px-4 py-2 bg-gray-50 border border-gray-200 rounded-full hover:bg-gray-100 transition">
@@ -111,7 +113,9 @@
                         $bgAva = $isOp ? 'FBC02D' : 'A5D6A7';
                         $bgClass = $isOp ? 'bg-[#FBC02D]' : 'bg-[#A5D6A7]';
                         $rawAvatar = Auth::user()->avatar;
-                        $avatarUrl = ($rawAvatar && str_starts_with($rawAvatar, 'http')) ? $rawAvatar : 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) . "&color=0E4D2B&background={$bgAva}&bold=true";
+
+                        $avatarUrl = $rawAvatar ? (str_starts_with($rawAvatar, 'http') ? $rawAvatar : asset(str_starts_with($rawAvatar, 'storage/') ? $rawAvatar : 'storage/' . $rawAvatar)) : 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) . "&color=0E4D2B&background={$bgAva}&bold=true";
+
                     @endphp
                     <div class="mb-5 pb-5 border-b border-gray-200">
                         <div class="flex items-center gap-3 px-3 mb-4">

@@ -21,7 +21,9 @@
     $rawAvatar = Auth::user()->avatar;
     $avatarColor = '0E4D2B';
     $avatarBgColor = $isAdminTheme ? 'A5D6A7' : 'FBC02D';
-    $avatarUrl = ($rawAvatar && str_starts_with($rawAvatar, 'http')) ? $rawAvatar : 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) . "&color=$avatarColor&background=$avatarBgColor&bold=true";
+
+    $avatarUrl = $rawAvatar ? (str_starts_with($rawAvatar, 'http') ? $rawAvatar : asset(str_starts_with($rawAvatar, 'storage/') ? $rawAvatar : 'storage/' . $rawAvatar)) : 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) . "&color=$avatarColor&background=$avatarBgColor&bold=true";
+
 @endphp
 <!DOCTYPE html>
 <html lang="id">

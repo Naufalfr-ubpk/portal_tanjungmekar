@@ -4,9 +4,10 @@
     $rawAvatar = Auth::user()->avatar;
     
     // Logika avatar utama (pakai raw kalau ada dan http, sisanya pakai inisial dengan warna sesuai role)
-    $avatarUrl = ($rawAvatar && str_starts_with($rawAvatar, 'http')) 
-        ? $rawAvatar 
-        : 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) . "&color=0E4D2B&background={$bgAva}&bold=true";
+
+
+    $avatarUrl = $rawAvatar ? (str_starts_with($rawAvatar, 'http') ? $rawAvatar : asset(str_starts_with($rawAvatar, 'storage/') ? $rawAvatar : 'storage/' . $rawAvatar)) : 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) . "&color=0E4D2B&background={$bgAva}&bold=true";
+
         
     // Logika fallback error (wajib dikirim bareng warna sesuai role)
     $fallbackAvatar = 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) . "&color=0E4D2B&background={$bgAva}&bold=true";
