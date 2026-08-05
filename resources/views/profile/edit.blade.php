@@ -23,11 +23,16 @@
 
                         @php
                             $rawAvatar = Auth::user()->avatar;
-                            $fallbackAvatar = 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) . '&color=0E4D2B&background=' . (Auth::user()->role === 'operator' ? 'FBC02D' : 'A5D6A7') . '&bold=true';
-                            $avatarUrl = $rawAvatar ? (str_starts_with($rawAvatar, 'http') ? $rawAvatar : asset($rawAvatar)) : $fallbackAvatar;
+                            $bgAva = Auth::user()->role === 'operator' ? 'FBC02D' : 'A5D6A7';
+                            $fallbackAvatar = 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) . '&color=0E4D2B&background=' . $bgAva . '&bold=true';
+                            
+                            if ($rawAvatar) {
+                                $avatarUrl = str_starts_with($rawAvatar, 'http') ? $rawAvatar : asset(str_starts_with($rawAvatar, 'storage/') ? $rawAvatar : 'storage/' . $rawAvatar);
+                            } else {
+                                $avatarUrl = $fallbackAvatar;
+                            }
                         @endphp
-
-                        <img src="{{ Auth::user()->avatar ? (str_starts_with(Auth::user()->avatar, 'http') ? Auth::user()->avatar : asset(str_starts_with(Auth::user()->avatar, 'storage/') ? Auth::user()->avatar : 'storage/' . Auth::user()->avatar)) : 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) . '&color=0E4D2B&background=' . (Auth::user()->role === 'operator' ? 'FBC02D' : 'A5D6A7') . '&bold=true' }}" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&color=0E4D2B&background={{ Auth::user()->role === 'operator' ? 'FBC02D' : 'A5D6A7' }}&bold=true';" alt="Avatar" class="w-full h-full object-cover">
+                        <img src="{{ $avatarUrl }}" alt="Avatar" class="w-full h-full object-cover">
                         
                         @if(Auth::user()->password != null)
                             <label for="avatar_upload" class="absolute inset-0 bg-black bg-opacity-50 flex flex-col items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer cursor">
@@ -111,15 +116,10 @@
                     <div class="flex gap-3 w-full sm:w-auto">
                         <button type="button" @click="closeModal()" class="flex-1 sm:flex-none px-5 py-2.5 bg-gray-200 text-gray-800 font-bold rounded-lg hover:bg-gray-300 transition">Batal</button>
                         
-                        <form id="avatar-form" action="{{ route('profile.avatar.update') }}" method="POST" class="m-0 flex-1 sm:flex-none">
-                            @csrf
-                            <input type="hidden" name="avatar" id="avatar-input">
-                            <button type="button" @click="saveCrop()" class="w-full sm:w-auto px-5 py-2.5 bg-[#0E4D2B] text-white font-bold rounded-lg hover:bg-[#2E7D32] transition shadow-md flex items-center justify-center gap-2" :disabled="isUploading">
-                                <span x-show="!isUploading">Simpan Foto</span>
-                                <span x-show="isUploading">Menyimpan...</span>
-                            </button>
-                        </form>
-                        
+                        <button type="button" @click="saveCrop()" class="w-full sm:w-auto px-5 py-2.5 bg-[#0E4D2B] text-white font-bold rounded-lg hover:bg-[#2E7D32] transition shadow-md flex items-center justify-center gap-2" :disabled="isUploading">
+                            <span x-show="!isUploading">Simpan Foto</span>
+                            <span x-show="isUploading">Menyimpan...</span>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -197,8 +197,30 @@
                     });
                     
                     let base64data = canvas.toDataURL('image/jpeg', 0.8);
-                    document.getElementById('avatar-input').value = base64data;
-                    document.getElementById('avatar-form').submit();
+
+                    // KEMBALI PAKAI FETCH BIAR GAK MUNCUL LAYAR HITAM JSON
+                    fetch("{{ route('profile.avatar.update') }}", {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        body: JSON.stringify({ avatar: base64data })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if(data.success) {
+                            window.location.reload();
+                        } else {
+                            alert('Gagal mengupload gambar.');
+                            this.isUploading = false;
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Terjadi kesalahan pada server.');
+                        this.isUploading = false;
+                    });
                 }
             }
         }
