@@ -18,12 +18,13 @@
     $activeText = $isAdminTheme ? 'text-white' : 'text-[#0E4D2B]';
     
     $displayRole = $isSimulatingOperator ? 'operator' : $realRole;
+    
+    // FORMAT STANDAR AVATAR
     $rawAvatar = Auth::user()->avatar;
     $avatarColor = '0E4D2B';
     $avatarBgColor = $isAdminTheme ? 'A5D6A7' : 'FBC02D';
-
-    $avatarUrl = $rawAvatar ? (str_starts_with($rawAvatar, 'http') ? $rawAvatar : asset(str_starts_with($rawAvatar, 'storage/') ? $rawAvatar : 'storage/' . $rawAvatar)) : 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) . "&color=$avatarColor&background=$avatarBgColor&bold=true";
-
+    $fallbackAvatar = 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) . "&color=$avatarColor&background=$avatarBgColor&bold=true";
+    $avatarUrl = $rawAvatar ? (str_starts_with($rawAvatar, 'http') ? $rawAvatar : asset($rawAvatar)) : $fallbackAvatar;
 @endphp
 <!DOCTYPE html>
 <html lang="id">
@@ -42,9 +43,7 @@
     </style>
 </head>
 
-
 <body class="font-sans antialiased bg-gray-100 text-gray-900 flex" x-data="laporanWebManager()">
-
 
     <div x-show="sidebarOpen" @click="sidebarOpen = false" x-transition.opacity class="fixed inset-0 z-20 bg-black bg-opacity-50 md:hidden" style="display: none;"></div>
 
@@ -84,10 +83,7 @@
                 Bank Sampah
             </a>
 
-
             <a id="active-menu-item" href="{{ route('admin.laporan-web.index', $modeParam) }}" class="flex items-center gap-3 {{ $activeBg }} {{ $activeText }} px-4 py-3 rounded-lg font-bold transition mb-4 {{ $isAdminTheme ? '' : 'shadow-sm' }}">
-
-
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
                 Laporan Web
             </a>
@@ -122,7 +118,8 @@
                     <button @click="openProfile = !openProfile" class="flex items-center gap-2 px-2 md:px-4 py-2 bg-gray-50 border border-gray-200 rounded-full hover:bg-gray-100 transition focus:outline-none">
                         <div class="w-8 h-8 rounded-full {{ $isAdminTheme ? 'bg-[#A5D6A7]' : 'bg-[#FBC02D]' }} flex items-center justify-center overflow-hidden border border-[#0E4D2B]">
 
-                            <img src="{{ Auth::user()->avatar ? (str_starts_with(Auth::user()->avatar, 'http') ? Auth::user()->avatar : asset(str_starts_with(Auth::user()->avatar, 'storage/') ? Auth::user()->avatar : 'storage/' . Auth::user()->avatar)) : 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) . '&color=0E4D2B&background=' . (Auth::user()->role === 'operator' ? 'FBC02D' : 'A5D6A7') . '&bold=true' }}" alt="Avatar" class="w-full h-full object-cover">
+                            <!-- PEMANGGILAN AVATAR STANDAR -->
+                            <img src="{{ Auth::user()->avatar ? (str_starts_with(Auth::user()->avatar, 'http') ? Auth::user()->avatar : asset(str_starts_with(Auth::user()->avatar, 'storage/') ? Auth::user()->avatar : 'storage/' . Auth::user()->avatar)) : 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) . '&color=0E4D2B&background=' . (Auth::user()->role === 'operator' ? 'FBC02D' : 'A5D6A7') . '&bold=true' }}" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&color=0E4D2B&background={{ Auth::user()->role === 'operator' ? 'FBC02D' : 'A5D6A7' }}&bold=true';" alt="Avatar" class="w-full h-full object-cover">
 
                         </div>
                         <span class="hidden sm:inline-block text-sm font-bold text-gray-800">{{ Auth::user()->name }}</span>
@@ -138,7 +135,6 @@
             </div>
         </header>
 
-
         <div class="p-4 md:p-8">
             <div class="mb-6">
                 <h3 class="text-xl md:text-2xl font-extrabold text-[#0E4D2B]">Manajemen Laporan Web</h3>
@@ -146,8 +142,6 @@
             </div>
 
             @if(session('success'))
-
-
             <div x-data="{ show: true }" x-show="show" class="bg-green-100 border border-green-400 text-green-800 px-4 py-3 rounded-lg mb-6 flex justify-between items-center font-bold shadow-sm">
                 <span>{{ session('success') }}</span>
                 <button @click="show = false" class="text-green-700 hover:text-green-900 text-2xl leading-none">&times;</button>
@@ -189,12 +183,9 @@
                         </div>
                     </div>
 
-
                     <!-- Modal Detail Laporan -->
                     <div x-show="modalOpen" x-transition.opacity @click.self="modalOpen = false" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4" style="display: none;">
                         <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg overflow-hidden flex flex-col max-h-[90vh]">
-
-
                             <div class="p-6 border-b border-gray-200 flex justify-between items-center bg-gray-50">
                                 <h3 class="font-extrabold text-gray-900 text-lg">Detail Laporan</h3>
                                 <button @click="modalOpen = false" class="text-gray-400 hover:text-red-500 transition focus:outline-none">
@@ -231,7 +222,6 @@
         </div>
     </main>
 
-
     <script>
         function laporanWebManager() {
             return {
@@ -247,7 +237,5 @@
             }
         }
     </script>
-
-
 </body>
 </html>
