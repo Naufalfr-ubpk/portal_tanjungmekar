@@ -32,7 +32,8 @@
                                 $avatarUrl = $fallbackAvatar;
                             }
                         @endphp
-                        <img src="{{ $avatarUrl }}" alt="Avatar" class="w-full h-full object-cover">
+
+                        <img src="{{ Auth::user()->avatar ? (str_starts_with(Auth::user()->avatar, 'http') ? Auth::user()->avatar : '/storage/' . str_replace('storage/', '', Auth::user()->avatar)) : 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) . '&color=0E4D2B&background=' . (Auth::user()->role === 'operator' ? 'FBC02D' : 'A5D6A7') . '&bold=true' }}" alt="Avatar" class="w-full h-full object-cover">
                         
                         @if(Auth::user()->password != null)
                             <label for="avatar_upload" class="absolute inset-0 bg-black bg-opacity-50 flex flex-col items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer cursor">
