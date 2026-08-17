@@ -25,22 +25,34 @@
                 </a>
             </div>
 
+
+
             <div class="hidden lg:flex lg:items-center lg:gap-8">
-                <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="text-sm font-bold text-gray-700 hover:text-[#0E4D2B]">
-                    {{ __('Dashboard') }}
-                </x-nav-link>
+                @if(Auth::user()->role === 'admin' || Auth::user()->role === 'operator')
+                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="text-sm font-bold text-gray-700 hover:text-[#0E4D2B]">
+                        {{ __('Dashboard') }}
+                    </x-nav-link>
+                @endif
                 <x-nav-link :href="route('pemetaan')" :active="request()->routeIs('pemetaan')" class="text-sm font-bold text-gray-700 hover:text-[#0E4D2B]">
                     {{ __('Peta Wilayah') }}
                 </x-nav-link>
+                @if(Auth::user()->role === 'user')
+                    <x-nav-link :href="route('user.bank-sampah')" :active="request()->routeIs('user.bank-sampah')" class="text-sm font-bold text-gray-700 hover:text-[#0E4D2B]">
+                        {{ __('Bank Sampah') }}
+                    </x-nav-link>
+                @endif
                 <x-nav-link :href="route('faq')" :active="request()->routeIs('faq')" class="text-sm font-bold text-gray-700 hover:text-[#0E4D2B]">
                     {{ __('Pusat FAQ') }}
                 </x-nav-link>
-                
+
                 @if(Auth::user()->role !== 'admin' && Auth::user()->role !== 'operator')
                     <x-nav-link :href="route('laporan-web')" :active="request()->routeIs('laporan-web')" class="text-sm font-bold text-gray-700 hover:text-[#0E4D2B]">
-                        {{ __('Layanan') }}
+                        {{ __('Layanan (Web)') }}
                     </x-nav-link>
                 @endif
+
+
+
 
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
@@ -98,13 +110,25 @@
                 </form>
             </div>
 
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">{{ __('Dashboard') }}</x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('pemetaan')" :active="request()->routeIs('pemetaan')">{{ __('Peta Wilayah') }}</x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('faq')" :active="request()->routeIs('faq')">{{ __('Pusat FAQ') }}</x-responsive-nav-link>
-            
-            @if(Auth::user()->role !== 'admin' && Auth::user()->role !== 'operator')
-                <x-responsive-nav-link :href="route('laporan-web')" :active="request()->routeIs('laporan-web')">{{ __('Layanan') }}</x-responsive-nav-link>
+
+
+
+           @if(Auth::user()->role === 'admin' || Auth::user()->role === 'operator')
+                <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">{{ __('Dashboard') }}</x-responsive-nav-link>
             @endif
+            <x-responsive-nav-link :href="route('pemetaan')" :active="request()->routeIs('pemetaan')">{{ __('Peta Wilayah') }}</x-responsive-nav-link>
+            @if(Auth::user()->role === 'user')
+                <x-responsive-nav-link :href="route('user.bank-sampah')" :active="request()->routeIs('user.bank-sampah')">{{ __('Bank Sampah') }}</x-responsive-nav-link>
+            @endif
+            <x-responsive-nav-link :href="route('faq')" :active="request()->routeIs('faq')">{{ __('Pusat FAQ') }}</x-responsive-nav-link>
+
+            @if(Auth::user()->role !== 'admin' && Auth::user()->role !== 'operator')
+                <x-responsive-nav-link :href="route('laporan-web')" :active="request()->routeIs('laporan-web')">{{ __('Layanan (Web)') }}</x-responsive-nav-link>
+            @endif
+
+
+
+
         </div>
     </div>
 </nav>

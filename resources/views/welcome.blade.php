@@ -38,13 +38,25 @@
                     </div>
                 </a>
 
+
                 <div class="hidden lg:flex items-center gap-6 text-sm font-semibold text-[#0E4D2B]">
-                    <a href="{{ url('/') }}" class="hover:text-[#66BB6A] transition">Beranda</a>
+                    @if(Auth::check() && (Auth::user()->role === 'admin' || Auth::user()->role === 'operator'))
+                        <a href="{{ route('dashboard') }}" class="hover:text-[#66BB6A] transition">Dashboard</a>
+                    @else
+                        <a href="{{ url('/') }}" class="hover:text-[#66BB6A] transition">Beranda</a>
+                    @endif
+
+
+
                     <a href="{{ Auth::check() ? route('pemetaan') : route('register') }}" class="hover:text-[#66BB6A] transition">Peta Wilayah</a>
                     <a href="{{ Auth::check() ? route('faq') : route('register') }}" class="hover:text-[#66BB6A] transition">Pusat FAQ</a>
                     
                     @if(!Auth::check() || (Auth::user()->role !== 'admin' && Auth::user()->role !== 'operator'))
-                        <a href="{{ Auth::check() ? route('laporan-web') : route('register') }}" class="hover:text-[#66BB6A] transition">Layanan</a>
+
+
+                        <a href="{{ Auth::check() ? route('laporan-web') : route('register') }}" class="hover:text-[#66BB6A] transition">Layanan (Web)</a>
+
+
                     @endif
                     
                     @auth
@@ -140,12 +152,23 @@
                     </div>
                 @endauth
 
-                <a href="{{ url('/') }}" class="block px-3 py-2 rounded-md text-base font-bold text-[#0E4D2B] hover:bg-gray-50">Beranda</a>
+
+                @if(Auth::check() && (Auth::user()->role === 'admin' || Auth::user()->role === 'operator'))
+                    <a href="{{ route('dashboard') }}" class="block px-3 py-2 rounded-md text-base font-bold text-[#0E4D2B] hover:bg-gray-50">Dashboard</a>
+                @else
+                    <a href="{{ url('/') }}" class="block px-3 py-2 rounded-md text-base font-bold text-[#0E4D2B] hover:bg-gray-50">Beranda</a>
+                @endif
+
+
                 <a href="{{ Auth::check() ? route('pemetaan') : route('register') }}" class="block px-3 py-2 rounded-md text-base font-bold text-gray-700 hover:bg-gray-50">Peta Wilayah</a>
                 <a href="{{ Auth::check() ? route('faq') : route('register') }}" class="block px-3 py-2 rounded-md text-base font-bold text-gray-700 hover:bg-gray-50">Pusat FAQ</a>
                 
                 @if(!Auth::check() || (Auth::user()->role !== 'admin' && Auth::user()->role !== 'operator'))
-                    <a href="{{ Auth::check() ? route('laporan-web') : route('register') }}" class="block px-3 py-2 rounded-md text-base font-bold text-gray-700 hover:bg-gray-50">Layanan</a>
+
+
+                    <a href="{{ Auth::check() ? route('laporan-web') : route('register') }}" class="block px-3 py-2 rounded-md text-base font-bold text-gray-700 hover:bg-gray-50">Layanan (Web)</a>
+
+
                 @endif
 
                 @guest
@@ -207,8 +230,13 @@
             
 
             <div class="grid grid-cols-1 md:grid-cols-2 max-w-4xl mx-auto gap-6 sm:gap-8 px-2 sm:px-0">
-                <a href="{{ Auth::check() ? route('pemetaan') : route('register') }}" class="bg-white p-8 rounded-2xl shadow-lg border-t-4 border-[#2E7D32] hover:-translate-y-2 hover:shadow-xl transition-all duration-300 block">
-                    <div class="w-14 h-14 bg-[#A5D6A7] rounded-full flex items-center justify-center mx-auto mb-6">
+
+                <a href="{{ Auth::check() ? route('pemetaan') : route('register') }}" class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border-t-4 border-[#2E7D32] group block cursor-pointer">
+
+
+                    <div class="w-14 h-14 bg-[#A5D6A7] rounded-full flex items-center justify-center mb-6 mx-auto group-hover:scale-110 transition-transform duration-300 border border-[#81C784]">
+
+
                         <svg class="w-7 h-7 text-[#0E4D2B]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path></svg>
                     </div>
                     <h4 class="text-xl font-bold text-[#0E4D2B] mb-2">Pemetaan Wilayah</h4>
