@@ -130,6 +130,7 @@
 
                         $avatarUrl = $rawAvatar ? (str_starts_with($rawAvatar, 'http') ? $rawAvatar : asset(str_starts_with($rawAvatar, 'storage/') ? $rawAvatar : 'storage/' . $rawAvatar)) : 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) . "&color=0E4D2B&background={$bgAva}&bold=true";
 
+                        
                     @endphp
                     <div class="mb-5 pb-5 border-b border-gray-200">
                         <div class="flex items-center gap-3 px-3 mb-4">
