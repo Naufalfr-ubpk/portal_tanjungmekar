@@ -42,23 +42,30 @@
                 <div class="hidden lg:flex items-center gap-6 text-sm font-semibold text-[#0E4D2B]">
                     @if(Auth::check() && (Auth::user()->role === 'admin' || Auth::user()->role === 'operator'))
                         <a href="{{ route('dashboard') }}" class="hover:text-[#66BB6A] transition">Dashboard</a>
-                    @else
+                    @elseif(!Auth::check())
                         <a href="{{ url('/') }}" class="hover:text-[#66BB6A] transition">Beranda</a>
                     @endif
 
-
-
                     <a href="{{ Auth::check() ? route('pemetaan') : route('register') }}" class="hover:text-[#66BB6A] transition">Peta Wilayah</a>
+
+                    @if(Auth::check())
+                        @if(Auth::user()->role === 'admin')
+                            <a href="{{ url('/admin/bank-sampah') }}" class="hover:text-[#66BB6A] transition">Bank Sampah</a>
+                        @elseif(Auth::user()->role === 'operator')
+                            <a href="{{ url('/operator/bank-sampah') }}" class="hover:text-[#66BB6A] transition">Bank Sampah</a>
+                        @else
+                            <a href="{{ route('user.bank-sampah') }}" class="hover:text-[#66BB6A] transition">Bank Sampah</a>
+                        @endif
+                    @endif
+
                     <a href="{{ Auth::check() ? route('faq') : route('register') }}" class="hover:text-[#66BB6A] transition">Pusat FAQ</a>
-                    
+
                     @if(!Auth::check() || (Auth::user()->role !== 'admin' && Auth::user()->role !== 'operator'))
-
-
                         <a href="{{ Auth::check() ? route('laporan-web') : route('register') }}" class="hover:text-[#66BB6A] transition">Layanan (Web)</a>
-
-
                     @endif
                     
+
+
                     @auth
 
 
@@ -130,7 +137,7 @@
 
                         $avatarUrl = $rawAvatar ? (str_starts_with($rawAvatar, 'http') ? $rawAvatar : asset(str_starts_with($rawAvatar, 'storage/') ? $rawAvatar : 'storage/' . $rawAvatar)) : 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) . "&color=0E4D2B&background={$bgAva}&bold=true";
 
-                        
+
                     @endphp
                     <div class="mb-5 pb-5 border-b border-gray-200">
                         <div class="flex items-center gap-3 px-3 mb-4">
@@ -154,23 +161,33 @@
                 @endauth
 
 
+
                 @if(Auth::check() && (Auth::user()->role === 'admin' || Auth::user()->role === 'operator'))
                     <a href="{{ route('dashboard') }}" class="block px-3 py-2 rounded-md text-base font-bold text-[#0E4D2B] hover:bg-gray-50">Dashboard</a>
-                @else
+                @elseif(!Auth::check())
                     <a href="{{ url('/') }}" class="block px-3 py-2 rounded-md text-base font-bold text-[#0E4D2B] hover:bg-gray-50">Beranda</a>
                 @endif
 
-
                 <a href="{{ Auth::check() ? route('pemetaan') : route('register') }}" class="block px-3 py-2 rounded-md text-base font-bold text-gray-700 hover:bg-gray-50">Peta Wilayah</a>
-                <a href="{{ Auth::check() ? route('faq') : route('register') }}" class="block px-3 py-2 rounded-md text-base font-bold text-gray-700 hover:bg-gray-50">Pusat FAQ</a>
-                
-                @if(!Auth::check() || (Auth::user()->role !== 'admin' && Auth::user()->role !== 'operator'))
 
-
-                    <a href="{{ Auth::check() ? route('laporan-web') : route('register') }}" class="block px-3 py-2 rounded-md text-base font-bold text-gray-700 hover:bg-gray-50">Layanan (Web)</a>
-
-
+                @if(Auth::check())
+                    @if(Auth::user()->role === 'admin')
+                        <a href="{{ url('/admin/bank-sampah') }}" class="block px-3 py-2 rounded-md text-base font-bold text-gray-700 hover:bg-gray-50">Bank Sampah</a>
+                    @elseif(Auth::user()->role === 'operator')
+                        <a href="{{ url('/operator/bank-sampah') }}" class="block px-3 py-2 rounded-md text-base font-bold text-gray-700 hover:bg-gray-50">Bank Sampah</a>
+                    @else
+                        <a href="{{ route('user.bank-sampah') }}" class="block px-3 py-2 rounded-md text-base font-bold text-gray-700 hover:bg-gray-50">Bank Sampah</a>
+                    @endif
                 @endif
+
+                <a href="{{ Auth::check() ? route('faq') : route('register') }}" class="block px-3 py-2 rounded-md text-base font-bold text-gray-700 hover:bg-gray-50">Pusat FAQ</a>
+
+                @if(!Auth::check() || (Auth::user()->role !== 'admin' && Auth::user()->role !== 'operator'))
+                    <a href="{{ Auth::check() ? route('laporan-web') : route('register') }}" class="block px-3 py-2 rounded-md text-base font-bold text-gray-700 hover:bg-gray-50">Layanan (Web)</a>
+                @endif
+
+
+
 
                 @guest
                     <div class="flex flex-col gap-3 mt-5 pt-5 border-t border-gray-200 px-3">
@@ -232,7 +249,7 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 max-w-4xl mx-auto gap-6 sm:gap-8 px-2 sm:px-0">
 
-                <a href="{{ Auth::check() ? route('pemetaan') : route('register') }}" class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border-t-4 border-[#2E7D32] group block cursor-pointer">
+                <a href="{{ Auth::check() ? route('pemetaan') : route('register') }}" class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border-t-4 border-t-[#2E7D32] group block cursor-pointer">
 
 
                     <div class="w-14 h-14 bg-[#A5D6A7] rounded-full flex items-center justify-center mb-6 mx-auto group-hover:scale-110 transition-transform duration-300 border border-[#81C784]">

@@ -27,7 +27,7 @@
 
 
 
-            <div class="hidden lg:flex lg:items-center lg:gap-8">
+           <div class="hidden lg:flex lg:items-center lg:gap-8">
                 @if(Auth::user()->role === 'admin' || Auth::user()->role === 'operator')
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="text-sm font-bold text-gray-700 hover:text-[#0E4D2B]">
                         {{ __('Dashboard') }}
@@ -36,11 +36,23 @@
                 <x-nav-link :href="route('pemetaan')" :active="request()->routeIs('pemetaan')" class="text-sm font-bold text-gray-700 hover:text-[#0E4D2B]">
                     {{ __('Peta Wilayah') }}
                 </x-nav-link>
-                @if(Auth::user()->role === 'user')
+
+                @if(Auth::user()->role === 'admin')
+                    <x-nav-link href="{{ url('/admin/bank-sampah') }}" :active="request()->is('admin/bank-sampah*')" class="text-sm font-bold text-gray-700 hover:text-[#0E4D2B]">
+                        {{ __('Bank Sampah') }}
+                    </x-nav-link>
+                @elseif(Auth::user()->role === 'operator')
+                    <x-nav-link href="{{ url('/operator/bank-sampah') }}" :active="request()->is('operator/bank-sampah*')" class="text-sm font-bold text-gray-700 hover:text-[#0E4D2B]">
+                        {{ __('Bank Sampah') }}
+                    </x-nav-link>
+                @elseif(Auth::user()->role === 'user')
                     <x-nav-link :href="route('user.bank-sampah')" :active="request()->routeIs('user.bank-sampah')" class="text-sm font-bold text-gray-700 hover:text-[#0E4D2B]">
                         {{ __('Bank Sampah') }}
                     </x-nav-link>
                 @endif
+
+
+
                 <x-nav-link :href="route('faq')" :active="request()->routeIs('faq')" class="text-sm font-bold text-gray-700 hover:text-[#0E4D2B]">
                     {{ __('Pusat FAQ') }}
                 </x-nav-link>
@@ -68,8 +80,13 @@
                             </div>
                         </button>
                     </x-slot>
+
+
                     <x-slot name="content">
+                        <x-dropdown-link :href="route('dashboard')" class="font-semibold text-gray-700">{{ __('Dashboard') }}</x-dropdown-link>
                         <x-dropdown-link :href="route('profile.edit')" class="font-semibold text-gray-700">{{ __('Profil Saya') }}</x-dropdown-link>
+
+
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
                             <x-dropdown-link :href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();" class="font-semibold text-red-600">{{ __('Sign Out') }}</x-dropdown-link>
@@ -98,12 +115,17 @@
                         <img src="{{ Auth::user()->avatar ? (str_starts_with(Auth::user()->avatar, 'http') ? Auth::user()->avatar : '/storage/' . str_replace('storage/', '', Auth::user()->avatar)) : 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) . '&color=0E4D2B&background=' . (Auth::user()->role === 'operator' ? 'FBC02D' : 'A5D6A7') . '&bold=true' }}" alt="Avatar" class="w-full h-full object-cover">
 
                     </div>
+
+
                     <div>
                         <div class="font-bold text-lg text-gray-800">{{ Auth::user()->name }}</div>
                         <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
                     </div>
                 </div>
+                <x-responsive-nav-link :href="route('dashboard')" class="font-semibold text-gray-700">{{ __('Dashboard') }}</x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('profile.edit')" class="font-semibold text-gray-700">{{ __('Profil Saya') }}</x-responsive-nav-link>
+
+                
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
                     <x-responsive-nav-link :href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();" class="text-red-600 font-bold">{{ __('Sign Out') }}</x-responsive-nav-link>
@@ -117,9 +139,16 @@
                 <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">{{ __('Dashboard') }}</x-responsive-nav-link>
             @endif
             <x-responsive-nav-link :href="route('pemetaan')" :active="request()->routeIs('pemetaan')">{{ __('Peta Wilayah') }}</x-responsive-nav-link>
-            @if(Auth::user()->role === 'user')
+
+            @if(Auth::user()->role === 'admin')
+                <x-responsive-nav-link href="{{ url('/admin/bank-sampah') }}" :active="request()->is('admin/bank-sampah*')">{{ __('Bank Sampah') }}</x-responsive-nav-link>
+            @elseif(Auth::user()->role === 'operator')
+                <x-responsive-nav-link href="{{ url('/operator/bank-sampah') }}" :active="request()->is('operator/bank-sampah*')">{{ __('Bank Sampah') }}</x-responsive-nav-link>
+            @elseif(Auth::user()->role === 'user')
                 <x-responsive-nav-link :href="route('user.bank-sampah')" :active="request()->routeIs('user.bank-sampah')">{{ __('Bank Sampah') }}</x-responsive-nav-link>
             @endif
+
+
             <x-responsive-nav-link :href="route('faq')" :active="request()->routeIs('faq')">{{ __('Pusat FAQ') }}</x-responsive-nav-link>
 
             @if(Auth::user()->role !== 'admin' && Auth::user()->role !== 'operator')
