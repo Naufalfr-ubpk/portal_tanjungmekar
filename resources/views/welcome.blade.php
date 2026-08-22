@@ -39,31 +39,21 @@
                 </a>
 
 
-                <div class="hidden lg:flex items-center gap-6 text-sm font-semibold text-[#0E4D2B]">
+                
+                   <div class="hidden lg:flex items-center gap-6 text-sm font-semibold text-[#0E4D2B]">
                     @if(Auth::check() && (Auth::user()->role === 'admin' || Auth::user()->role === 'operator'))
                         <a href="{{ route('dashboard') }}" class="hover:text-[#66BB6A] transition">Dashboard</a>
                     @elseif(!Auth::check())
-                        <a href="{{ url('/') }}" class="hover:text-[#66BB6A] transition">Beranda</a>
+                        <a href="{{ route('register') }}" class="hover:text-[#66BB6A] transition">Dashboard</a>
                     @endif
 
                     <a href="{{ Auth::check() ? route('pemetaan') : route('register') }}" class="hover:text-[#66BB6A] transition">Peta Wilayah</a>
-
-                    @if(Auth::check())
-                        @if(Auth::user()->role === 'admin')
-                            <a href="{{ url('/admin/bank-sampah') }}" class="hover:text-[#66BB6A] transition">Bank Sampah</a>
-                        @elseif(Auth::user()->role === 'operator')
-                            <a href="{{ url('/operator/bank-sampah') }}" class="hover:text-[#66BB6A] transition">Bank Sampah</a>
-                        @else
-                            <a href="{{ route('user.bank-sampah') }}" class="hover:text-[#66BB6A] transition">Bank Sampah</a>
-                        @endif
-                    @endif
-
+                    <a href="{{ Auth::check() ? route('user.bank-sampah') : route('register') }}" class="hover:text-[#66BB6A] transition">Bank Sampah</a>
                     <a href="{{ Auth::check() ? route('faq') : route('register') }}" class="hover:text-[#66BB6A] transition">Pusat FAQ</a>
 
                     @if(!Auth::check() || (Auth::user()->role !== 'admin' && Auth::user()->role !== 'operator'))
                         <a href="{{ Auth::check() ? route('laporan-web') : route('register') }}" class="hover:text-[#66BB6A] transition">Layanan (Web)</a>
                     @endif
-                    
 
 
                     @auth
@@ -162,30 +152,19 @@
 
 
 
-                @if(Auth::check() && (Auth::user()->role === 'admin' || Auth::user()->role === 'operator'))
+               @if(Auth::check() && (Auth::user()->role === 'admin' || Auth::user()->role === 'operator'))
                     <a href="{{ route('dashboard') }}" class="block px-3 py-2 rounded-md text-base font-bold text-[#0E4D2B] hover:bg-gray-50">Dashboard</a>
                 @elseif(!Auth::check())
-                    <a href="{{ url('/') }}" class="block px-3 py-2 rounded-md text-base font-bold text-[#0E4D2B] hover:bg-gray-50">Beranda</a>
+                    <a href="{{ route('register') }}" class="block px-3 py-2 rounded-md text-base font-bold text-[#0E4D2B] hover:bg-gray-50">Dashboard</a>
                 @endif
 
                 <a href="{{ Auth::check() ? route('pemetaan') : route('register') }}" class="block px-3 py-2 rounded-md text-base font-bold text-gray-700 hover:bg-gray-50">Peta Wilayah</a>
-
-                @if(Auth::check())
-                    @if(Auth::user()->role === 'admin')
-                        <a href="{{ url('/admin/bank-sampah') }}" class="block px-3 py-2 rounded-md text-base font-bold text-gray-700 hover:bg-gray-50">Bank Sampah</a>
-                    @elseif(Auth::user()->role === 'operator')
-                        <a href="{{ url('/operator/bank-sampah') }}" class="block px-3 py-2 rounded-md text-base font-bold text-gray-700 hover:bg-gray-50">Bank Sampah</a>
-                    @else
-                        <a href="{{ route('user.bank-sampah') }}" class="block px-3 py-2 rounded-md text-base font-bold text-gray-700 hover:bg-gray-50">Bank Sampah</a>
-                    @endif
-                @endif
-
+                <a href="{{ Auth::check() ? route('user.bank-sampah') : route('register') }}" class="block px-3 py-2 rounded-md text-base font-bold text-gray-700 hover:bg-gray-50">Bank Sampah</a>
                 <a href="{{ Auth::check() ? route('faq') : route('register') }}" class="block px-3 py-2 rounded-md text-base font-bold text-gray-700 hover:bg-gray-50">Pusat FAQ</a>
 
                 @if(!Auth::check() || (Auth::user()->role !== 'admin' && Auth::user()->role !== 'operator'))
                     <a href="{{ Auth::check() ? route('laporan-web') : route('register') }}" class="block px-3 py-2 rounded-md text-base font-bold text-gray-700 hover:bg-gray-50">Layanan (Web)</a>
                 @endif
-
 
 
 

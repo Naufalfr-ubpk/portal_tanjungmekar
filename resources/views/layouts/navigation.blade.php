@@ -37,20 +37,10 @@
                     {{ __('Peta Wilayah') }}
                 </x-nav-link>
 
-                @if(Auth::user()->role === 'admin')
-                    <x-nav-link href="{{ url('/admin/bank-sampah') }}" :active="request()->is('admin/bank-sampah*')" class="text-sm font-bold text-gray-700 hover:text-[#0E4D2B]">
-                        {{ __('Bank Sampah') }}
-                    </x-nav-link>
-                @elseif(Auth::user()->role === 'operator')
-                    <x-nav-link href="{{ url('/operator/bank-sampah') }}" :active="request()->is('operator/bank-sampah*')" class="text-sm font-bold text-gray-700 hover:text-[#0E4D2B]">
-                        {{ __('Bank Sampah') }}
-                    </x-nav-link>
-                @elseif(Auth::user()->role === 'user')
-                    <x-nav-link :href="route('user.bank-sampah')" :active="request()->routeIs('user.bank-sampah')" class="text-sm font-bold text-gray-700 hover:text-[#0E4D2B]">
-                        {{ __('Bank Sampah') }}
-                    </x-nav-link>
-                @endif
 
+               <x-nav-link :href="route('user.bank-sampah')" :active="request()->routeIs('user.bank-sampah')" class="text-sm font-bold text-gray-700 hover:text-[#0E4D2B]">
+                    {{ __('Bank Sampah') }}
+                </x-nav-link>
 
 
                 <x-nav-link :href="route('faq')" :active="request()->routeIs('faq')" class="text-sm font-bold text-gray-700 hover:text-[#0E4D2B]">
@@ -140,13 +130,8 @@
             @endif
             <x-responsive-nav-link :href="route('pemetaan')" :active="request()->routeIs('pemetaan')">{{ __('Peta Wilayah') }}</x-responsive-nav-link>
 
-            @if(Auth::user()->role === 'admin')
-                <x-responsive-nav-link href="{{ url('/admin/bank-sampah') }}" :active="request()->is('admin/bank-sampah*')">{{ __('Bank Sampah') }}</x-responsive-nav-link>
-            @elseif(Auth::user()->role === 'operator')
-                <x-responsive-nav-link href="{{ url('/operator/bank-sampah') }}" :active="request()->is('operator/bank-sampah*')">{{ __('Bank Sampah') }}</x-responsive-nav-link>
-            @elseif(Auth::user()->role === 'user')
-                <x-responsive-nav-link :href="route('user.bank-sampah')" :active="request()->routeIs('user.bank-sampah')">{{ __('Bank Sampah') }}</x-responsive-nav-link>
-            @endif
+
+           <x-responsive-nav-link :href="route('user.bank-sampah')" :active="request()->routeIs('user.bank-sampah')">{{ __('Bank Sampah') }}</x-responsive-nav-link>
 
 
             <x-responsive-nav-link :href="route('faq')" :active="request()->routeIs('faq')">{{ __('Pusat FAQ') }}</x-responsive-nav-link>

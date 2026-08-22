@@ -23,13 +23,15 @@
         <!-- MENU (BISA SCROLL) -->
         <nav class="flex-1 overflow-y-auto px-4 py-4 space-y-2 custom-scrollbar">
 
+
         <!-- KHUSUS TAMPIL DI HP: Link Navigasi Publik -->
             <div class="md:hidden mb-4 pb-4 border-b border-gray-300 border-opacity-30">
 
                 <p class="text-xs font-bold text-[#A5D6A7] uppercase tracking-wider mb-2 px-2">Navigasi</p>
-                
+
                 <a href="{{ url('/') }}" class="block px-4 py-2 text-sm font-semibold hover:bg-black hover:bg-opacity-10 rounded-lg transition">Beranda</a>
                 <a href="{{ route('pemetaan') }}" class="block px-4 py-2 text-sm font-semibold hover:bg-black hover:bg-opacity-10 rounded-lg transition">Peta Wilayah</a>
+                <a href="{{ route('user.bank-sampah') }}" class="block px-4 py-2 text-sm font-semibold hover:bg-black hover:bg-opacity-10 rounded-lg transition">Bank Sampah</a>
                 <a href="{{ route('faq') }}" class="block px-4 py-2 text-sm font-semibold hover:bg-black hover:bg-opacity-10 rounded-lg transition">Pusat FAQ</a>
             </div>
 
@@ -111,11 +113,15 @@
 
                 <h2 class="text-lg md:text-xl font-bold text-gray-800 border-r-2 pr-4 md:pr-6 border-gray-300">Dashboard</h2>
                 
+
                 <nav class="hidden md:flex gap-5 text-sm font-bold text-gray-500">
                     <a href="{{ url('/') }}" class="hover:text-[#0E4D2B] transition">Beranda</a>
                     <a href="{{ route('pemetaan') }}" class="hover:text-[#0E4D2B] transition">Peta Wilayah</a>
+                    <a href="{{ route('user.bank-sampah') }}" class="hover:text-[#0E4D2B] transition">Bank Sampah</a>
                     <a href="{{ route('faq') }}" class="hover:text-[#0E4D2B] transition">Pusat FAQ</a>
                 </nav>
+
+
             </div>
             
             <div class="flex items-center gap-3 md:gap-4">
