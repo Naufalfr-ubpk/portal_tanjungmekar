@@ -121,7 +121,7 @@
 
     <main class="flex-1 md:ml-64 bg-gray-50 min-h-screen w-full transition-all duration-300">
 
-        <header class="bg-white h-20 shadow-sm border-b border-gray-200 flex items-center justify-between px-3 lg:px-8 z-10 sticky top-0 w-full">
+        <header class="bg-white h-20 shadow-sm border-b border-gray-200 flex items-center justify-between gap-4 lg:gap-8 px-3 lg:px-8 z-10 sticky top-0 w-full">
 
             <div class="flex items-center gap-3 md:gap-6">
                 <button @click="sidebarOpen = true" class="md:hidden p-2 text-gray-600 hover:bg-gray-100 rounded-lg focus:outline-none transition">

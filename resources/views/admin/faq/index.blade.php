@@ -86,7 +86,7 @@
     <main class="flex-1 w-full min-w-0 md:ml-64 bg-gray-50 min-h-screen transition-all duration-300 overflow-x-hidden">
         <!-- HEADER KONTEN -->
 
-        <header class="bg-white h-20 shadow-sm border-b border-gray-200 flex items-center justify-between px-3 lg:px-8 z-10 sticky top-0 w-full">
+        <header class="bg-white h-20 shadow-sm border-b border-gray-200 flex items-center justify-between gap-4 lg:gap-8 px-3 lg:px-8 z-10 sticky top-0 w-full">
 
             <div class="flex items-center gap-3 md:gap-6">
                 <!-- HAMBURGER BUTTON -->
@@ -110,10 +110,12 @@
 
             <div class="flex items-center gap-2 lg:gap-4">
                 @if($isOp)
-                <span class="hidden sm:inline-block text-[10px] md:text-xs font-bold bg-[#0E4D2B] text-white px-2 py-1 rounded-full uppercase tracking-wider border border-[#0A3D22] whitespace-nowrap shrink-0">HAK AKSES: OPERATOR</span>
+                <span class="hidden sm:inline-block text-[10px] md:text-xs font-bold bg-[#FBC02D] text-[#0E4D2B] px-2 py-1 rounded-full uppercase tracking-wider border border-yellow-400 whitespace-nowrap shrink-0">HAK AKSES: OPERATOR</span>
                 @else
-                <span class="hidden sm:inline-block text-[10px] md:text-xs font-bold bg-[#FBC02D] text-[#0E4D2B] px-2 py-1 rounded-full uppercase tracking-wider border border-yellow-400 whitespace-nowrap shrink-0">HAK AKSES: {{ strtoupper(Auth::user()->role) }}</span>
+                <span class="hidden sm:inline-block text-[10px] md:text-xs font-bold bg-[#0E4D2B] text-white px-2 py-1 rounded-full uppercase tracking-wider border border-[#0A3D22] whitespace-nowrap shrink-0">HAK AKSES: {{ strtoupper(Auth::user()->role) }}</span>
                 @endif
+
+
                 <div class="hidden sm:block h-8 w-px bg-gray-300"></div>
 
                 @php
