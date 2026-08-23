@@ -43,8 +43,6 @@
                    <div class="hidden lg:flex items-center gap-6 text-sm font-semibold text-[#0E4D2B]">
                     @if(Auth::check() && (Auth::user()->role === 'admin' || Auth::user()->role === 'operator'))
                         <a href="{{ route('dashboard') }}" class="hover:text-[#66BB6A] transition">Dashboard</a>
-                    @elseif(!Auth::check())
-                        <a href="{{ route('register') }}" class="hover:text-[#66BB6A] transition">Dashboard</a>
                     @endif
 
                     <a href="{{ Auth::check() ? route('pemetaan') : route('register') }}" class="hover:text-[#66BB6A] transition">Peta Wilayah</a>
@@ -154,8 +152,6 @@
 
                @if(Auth::check() && (Auth::user()->role === 'admin' || Auth::user()->role === 'operator'))
                     <a href="{{ route('dashboard') }}" class="block px-3 py-2 rounded-md text-base font-bold text-[#0E4D2B] hover:bg-gray-50">Dashboard</a>
-                @elseif(!Auth::check())
-                    <a href="{{ route('register') }}" class="block px-3 py-2 rounded-md text-base font-bold text-[#0E4D2B] hover:bg-gray-50">Dashboard</a>
                 @endif
 
                 <a href="{{ Auth::check() ? route('pemetaan') : route('register') }}" class="block px-3 py-2 rounded-md text-base font-bold text-gray-700 hover:bg-gray-50">Peta Wilayah</a>
