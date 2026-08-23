@@ -28,11 +28,13 @@
 
 
            <div class="hidden lg:flex lg:items-center lg:gap-8">
-                @if(Auth::user()->role === 'admin' || Auth::user()->role === 'operator')
+                @if(Auth::user()->role === 'admin' || Auth::user()->role === 'operator' || (Auth::user()->role === 'user' && !request()->routeIs('dashboard')))
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="text-sm font-bold text-gray-700 hover:text-[#0E4D2B]">
                         {{ __('Dashboard') }}
                     </x-nav-link>
                 @endif
+
+
                 <x-nav-link :href="route('pemetaan')" :active="request()->routeIs('pemetaan')" class="text-sm font-bold text-gray-700 hover:text-[#0E4D2B]">
                     {{ __('Peta Wilayah') }}
                 </x-nav-link>
