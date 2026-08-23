@@ -49,9 +49,13 @@
 
                 <p class="text-xs font-bold uppercase tracking-wider mb-2 px-2 {{ $isOp ? 'text-[#0A3D22]' : 'text-[#A5D6A7]' }}">Navigasi</p>
 
+
                 <a href="{{ url('/') }}" class="block px-4 py-2 text-sm font-semibold hover:bg-black hover:bg-opacity-10 rounded-lg transition">Beranda</a>
                 <a href="{{ route('pemetaan') }}" class="block px-4 py-2 text-sm font-semibold hover:bg-black hover:bg-opacity-10 rounded-lg transition">Peta Wilayah</a>
+                <a href="{{ route('user.bank-sampah') }}" class="block px-4 py-2 text-sm font-semibold hover:bg-black hover:bg-opacity-10 rounded-lg transition">Bank Sampah</a>
                 <a href="{{ route('faq') }}" class="block px-4 py-2 text-sm font-semibold hover:bg-black hover:bg-opacity-10 rounded-lg transition">Pusat FAQ</a>
+
+
             </div>
 
             <p class="text-xs font-bold uppercase tracking-wider mb-2 px-2 {{ $isOp ? 'text-[#0A3D22]' : 'text-[#A5D6A7]' }}">Menu Utama</p>
@@ -62,7 +66,9 @@
             @endif
             
             <p class="text-xs font-bold uppercase tracking-wider mb-2 mt-6 px-2 {{ $isOp ? 'text-[#0A3D22]' : 'text-[#A5D6A7]' }}">Kustomisasi Web</p>
-            <a href="#" class="flex items-center gap-3 sidebar-link {{ $navLinkText }} px-4 py-3 rounded-lg font-semibold"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg> Manajemen Gambar</a>
+            <a href="{{ route('admin.manajemen-gambar.index', isset($modeParam) ? $modeParam : []) }}" class="flex items-center gap-3 sidebar-link {{ $navLinkText }} px-4 py-3 rounded-lg font-semibold"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg> Manajemen Gambar</a>
+
+
             <a href="{{ route('admin.pemetaan.index', $modeParam) }}" class="flex items-center gap-3 sidebar-link {{ $navLinkText }} px-4 py-3 rounded-lg font-semibold"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg> Manajemen Peta</a>
             
             <p class="text-xs font-bold uppercase tracking-wider mb-2 mt-6 px-2 {{ $isOp ? 'text-[#0A3D22]' : 'text-[#A5D6A7]' }}">Data & Laporan</p>
@@ -91,11 +97,16 @@
                 </button>
 
                 <h2 class="text-lg md:text-xl font-bold text-gray-800 border-r-2 pr-4 md:pr-6 border-gray-300">Kelola FAQ Web</h2>
-                <nav class="hidden md:flex gap-5 text-sm font-bold text-gray-500">
+
+
+                <nav class="hidden md:flex gap-3 lg:gap-5 text-xs lg:text-sm font-bold text-gray-500 whitespace-nowrap">
                     <a href="{{ url('/') }}" class="hover:text-[#0E4D2B] transition">Beranda</a>
                     <a href="{{ route('pemetaan') }}" class="hover:text-[#0E4D2B] transition">Peta Wilayah</a>
+                    <a href="{{ route('user.bank-sampah') }}" class="hover:text-[#0E4D2B] transition">Bank Sampah</a>
                     <a href="{{ route('faq') }}" class="hover:text-[#0E4D2B] transition">Pusat FAQ</a>
                 </nav>
+
+
             </div>
             
             <div class="flex items-center gap-2 md:gap-4">
