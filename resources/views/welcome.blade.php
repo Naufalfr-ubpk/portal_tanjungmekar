@@ -8,9 +8,17 @@
 
 <head>
     <meta charset="utf-8">
+
+
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Portal Tanjungmekar | KKN UBP Karawang 2026</title>
+    
+    <!-- Favicon KKN -->
+    <link rel="icon" type="image/png" href="{{ asset('images/logo-kkn.png') }}">
+
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700,800&display=swap" rel="stylesheet" />
+
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"></script>
     <style>
