@@ -1,8 +1,9 @@
 @php
-    $heroImage = \Illuminate\Support\Facades\Storage::disk('public')->exists('ui/hero_image.png') 
-        ? asset('storage/ui/hero_image.png') . '?v=' . time() 
-        : asset('images/kelurahan.png');
+    $cachedHero = \Illuminate\Support\Facades\Cache::get('hero_image_url');
+    $heroImage = $cachedHero ? $cachedHero : asset('images/kelurahan.png');
 @endphp
+
+
 <!DOCTYPE html>
 <html lang="id" class="scroll-smooth">
 

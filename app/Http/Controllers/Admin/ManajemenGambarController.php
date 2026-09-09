@@ -4,17 +4,18 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Cache;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 class ManajemenGambarController extends Controller
 {
     public function index()
     {
-        // Cek apakah ada custom gambar di storage
-        $hasCustomImage = Storage::disk('public')->exists('ui/hero_image.png');
+        // Ambil URL gambar dari Cache Database
+        $cloudinaryUrl = Cache::get('hero_image_url');
         
-        // Kasih parameter time() biar browser gak nge-cache gambar lama pas habis diupdate
-        $currentImage = $hasCustomImage ? asset('storage/ui/hero_image.png') . '?v=' . time() : asset('images/kelurahan.png');
+        $hasCustomImage = !empty($cloudinaryUrl);
+        $currentImage = $hasCustomImage ? $cloudinaryUrl : asset('images/kelurahan.png');
 
         return view('admin.manajemen-gambar.index', compact('currentImage', 'hasCustomImage'));
     }
@@ -24,14 +25,18 @@ class ManajemenGambarController extends Controller
         try {
             $request->validate(['cropped_image' => 'required']);
 
-            // Decode base64 dari Cropper.js
-            $image_parts = explode(";base64,", $request->cropped_image);
-            $image_base64 = base64_decode($image_parts[1]);
+            // Cloudinary sangat canggih, dia bisa langsung membaca teks Base64 dari Cropper.js
+            // Kita upload dan timpa (overwrite) file di Cloudinary dengan nama ID yang sama
+            $uploadedFileUrl = Cloudinary::upload($request->cropped_image, [
+                'folder' => 'portal_tanjungmekar/ui',
+                'public_id' => 'hero_image',
+                'overwrite' => true,
+            ])->getSecurePath();
 
-            // Simpan/Timpa ke storage/app/public/ui/hero_image.png
-            Storage::disk('public')->put('ui/hero_image.png', $image_base64);
+            // Simpan link URL Cloudinary secara permanen ke dalam Cache Database TiDB lu
+            Cache::forever('hero_image_url', $uploadedFileUrl);
 
-            return back()->with('success', 'Gambar Hero berhasil diperbarui!');
+            return back()->with('success', 'Gambar Hero berhasil diperbarui dan tersimpan aman di Cloudinary!');
         } catch (\Exception $e) {
             return back()->with('error', 'Gagal menyimpan gambar: ' . $e->getMessage());
         }
@@ -40,9 +45,12 @@ class ManajemenGambarController extends Controller
     public function destroy()
     {
         try {
-            if (Storage::disk('public')->exists('ui/hero_image.png')) {
-                Storage::disk('public')->delete('ui/hero_image.png');
-            }
+            // Hapus gambar fisik dari server Cloudinary
+            Cloudinary::destroy('portal_tanjungmekar/ui/hero_image');
+            
+            // Hapus link URL dari Cache Database
+            Cache::forget('hero_image_url');
+            
             return back()->with('success', 'Gambar berhasil dihapus. Kembali menggunakan gambar bawaan.');
         } catch (\Exception $e) {
             return back()->with('error', 'Gagal menghapus gambar: ' . $e->getMessage());
