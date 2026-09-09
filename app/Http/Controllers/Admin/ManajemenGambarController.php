@@ -5,13 +5,12 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
-use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
+use Cloudinary\Cloudinary; // Pakai SDK asli Cloudinary
 
 class ManajemenGambarController extends Controller
 {
     public function index()
     {
-        // Ambil URL gambar dari Cache Database
         $cloudinaryUrl = Cache::get('hero_image_url');
         
         $hasCustomImage = !empty($cloudinaryUrl);
@@ -25,15 +24,21 @@ class ManajemenGambarController extends Controller
         try {
             $request->validate(['cropped_image' => 'required']);
 
-            // Cloudinary sangat canggih, dia bisa langsung membaca teks Base64 dari Cropper.js
-            // Kita upload dan timpa (overwrite) file di Cloudinary dengan nama ID yang sama
-            $uploadedFileUrl = Cloudinary::upload($request->cropped_image, [
+            // Setup Cloudinary Native dengan fallback URL lu (Anti-Gagal di Vercel)
+            $cloudinaryUrl = env('CLOUDINARY_URL', 'cloudinary://768151755937498:MMjRJ0_OHOYvpzGESVcBHrvxfMY@hcqjbg1u');
+            $cloudinary = new Cloudinary($cloudinaryUrl);
+
+            // Upload langsung pakai SDK asli (Aman 100% nerima Base64 dari Cropper.js)
+            $upload = $cloudinary->uploadApi()->upload($request->cropped_image, [
                 'folder' => 'portal_tanjungmekar/ui',
                 'public_id' => 'hero_image',
                 'overwrite' => true,
-            ])->getSecurePath();
+            ]);
 
-            // Simpan link URL Cloudinary secara permanen ke dalam Cache Database TiDB lu
+            // Ambil URL aman dari response Cloudinary
+            $uploadedFileUrl = $upload['secure_url'];
+
+            // Simpan link URL ke dalam Cache Database TiDB
             Cache::forever('hero_image_url', $uploadedFileUrl);
 
             return back()->with('success', 'Gambar Hero berhasil diperbarui dan tersimpan aman di Cloudinary!');
@@ -45,8 +50,11 @@ class ManajemenGambarController extends Controller
     public function destroy()
     {
         try {
+            $cloudinaryUrl = env('CLOUDINARY_URL', 'cloudinary://768151755937498:MMjRJ0_OHOYvpzGESVcBHrvxfMY@hcqjbg1u');
+            $cloudinary = new Cloudinary($cloudinaryUrl);
+            
             // Hapus gambar fisik dari server Cloudinary
-            Cloudinary::destroy('portal_tanjungmekar/ui/hero_image');
+            $cloudinary->uploadApi()->destroy('portal_tanjungmekar/ui/hero_image');
             
             // Hapus link URL dari Cache Database
             Cache::forget('hero_image_url');
