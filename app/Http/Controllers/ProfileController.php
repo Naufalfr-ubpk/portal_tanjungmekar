@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use Cloudinary\Cloudinary;
 
 class ProfileController extends Controller
 {
@@ -48,8 +49,17 @@ class ProfileController extends Controller
 
         $user = $request->user();
 
-        Auth::logout();
+        // Hapus juga foto profilnya di Cloudinary kalau akunnya dihapus permanen
+        if ($user->avatar && !str_starts_with($user->avatar, '/storage/')) {
+            try {
+                $cloudinaryUrl = env('CLOUDINARY_URL', 'cloudinary://768151755937498:MMjRJ0_OHOYvpzGESVcBHrvxfMY@hcqjbg1u');
+                $cloudinary = new Cloudinary($cloudinaryUrl);
+                $publicId = 'portal_tanjungmekar/avatars/user_' . $user->id . '_avatar';
+                $cloudinary->uploadApi()->destroy($publicId);
+            } catch (\Exception $e) {}
+        }
 
+        Auth::logout();
         $user->delete();
 
         $request->session()->invalidate();
@@ -58,8 +68,8 @@ class ProfileController extends Controller
         return Redirect::to('/');
     }
 
-/**
-     * Memperbarui foto profil pengguna (Upload & Crop via Base64).
+    /**
+     * Memperbarui foto profil pengguna (Upload & Crop via Base64 ke Cloudinary).
      */
     public function updateAvatar(\Illuminate\Http\Request $request)
     {
@@ -68,31 +78,37 @@ class ProfileController extends Controller
         ]);
 
         $user = $request->user();
-        
-        // Memecah format base64 dari JavaScript
-        $image_parts = explode(";base64,", $request->avatar);
-        $image_base64 = base64_decode($image_parts[1]);
 
-        // Bikin nama file unik
-        $filename = 'avatars/' . uniqid() . '.png';
-        
-        // Kalau user udah punya foto lokal sebelumnya, hapus yang lama biar server gak penuh
-        if ($user->avatar && str_starts_with($user->avatar, '/storage/')) {
-            $oldPath = str_replace('/storage/', '', $user->avatar);
-            \Illuminate\Support\Facades\Storage::disk('public')->delete($oldPath);
+        try {
+            // Setup Native SDK
+            $cloudinaryUrl = env('CLOUDINARY_URL', 'cloudinary://768151755937498:MMjRJ0_OHOYvpzGESVcBHrvxfMY@hcqjbg1u');
+            $cloudinary = new Cloudinary($cloudinaryUrl);
+
+            // Bikin ID statis per user agar otomatis menimpa (overwrite) foto lama di Cloudinary
+            $publicId = 'user_' . $user->id . '_avatar';
+
+            // Upload Base64 langsung ke Cloudinary
+            $upload = $cloudinary->uploadApi()->upload($request->avatar, [
+                'folder' => 'portal_tanjungmekar/avatars',
+                'public_id' => $publicId,
+                'overwrite' => true,
+            ]);
+
+            // Update database user dengan URL Cloudinary
+            $user->avatar = $upload['secure_url'];
+            $user->save();
+
+            return response()->json([
+                'success' => true, 
+                'avatar_url' => $user->avatar
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal mengupload gambar: ' . $e->getMessage()
+            ], 500);
         }
-
-        // Simpan foto baru ke folder storage/app/public/avatars
-        \Illuminate\Support\Facades\Storage::disk('public')->put($filename, $image_base64);
-
-        // Update database user
-        $user->avatar = '/storage/' . $filename;
-        $user->save();
-
-        return response()->json([
-            'success' => true, 
-            'avatar_url' => asset('storage/' . $filename)
-        ]);
     }
 
     /**
@@ -102,15 +118,24 @@ class ProfileController extends Controller
     {
         $user = $request->user();
         
-        if ($user->avatar && str_starts_with($user->avatar, '/storage/')) {
-            $oldPath = str_replace('/storage/', '', $user->avatar);
-            \Illuminate\Support\Facades\Storage::disk('public')->delete($oldPath);
+        // Cek jika gambar bukan dari /storage/ lokal bawaan Vercel yang udah mati
+        if ($user->avatar && !str_starts_with($user->avatar, '/storage/')) {
+            try {
+                $cloudinaryUrl = env('CLOUDINARY_URL', 'cloudinary://768151755937498:MMjRJ0_OHOYvpzGESVcBHrvxfMY@hcqjbg1u');
+                $cloudinary = new Cloudinary($cloudinaryUrl);
+                
+                // Eksekusi tembak hapus ke server Cloudinary
+                $publicId = 'portal_tanjungmekar/avatars/user_' . $user->id . '_avatar';
+                $cloudinary->uploadApi()->destroy($publicId);
+            } catch (\Exception $e) {
+                // Biarkan lanjut reset database meskipun hapus fisik gagal
+            }
         }
 
+        // Reset database
         $user->avatar = null;
         $user->save();
 
         return back();
     }
-
 }
