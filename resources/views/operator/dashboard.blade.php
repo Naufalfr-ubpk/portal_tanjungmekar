@@ -19,6 +19,12 @@
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700,800&display=swap" rel="stylesheet" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"></script>
+    <style>
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #F9A825; border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background-color: #F57F17; }
+    </style>
 </head>
 <body class="font-sans antialiased bg-gray-100 text-gray-900 flex" x-data="{ sidebarOpen: false }">
 
@@ -31,18 +37,13 @@
         
         <nav class="flex-1 overflow-y-auto px-4 py-4 space-y-2 custom-scrollbar">
 
-
-       <!-- KHUSUS TAMPIL DI HP: Link Navigasi Publik -->
             <div class="md:hidden mb-4 pb-4 border-b border-gray-300 border-opacity-30">
-
                 <p class="text-xs font-bold text-[#0A3D22] uppercase tracking-wider mb-2 px-2">Navigasi</p>
-
                 <a href="{{ url('/') }}" class="block px-4 py-2 text-sm font-semibold hover:bg-black hover:bg-opacity-10 rounded-lg transition">Beranda</a>
                 <a href="{{ route('pemetaan') }}" class="block px-4 py-2 text-sm font-semibold hover:bg-black hover:bg-opacity-10 rounded-lg transition">Peta Wilayah</a>
                 <a href="{{ route('user.bank-sampah') }}" class="block px-4 py-2 text-sm font-semibold hover:bg-black hover:bg-opacity-10 rounded-lg transition">Bank Sampah</a>
                 <a href="{{ route('faq') }}" class="block px-4 py-2 text-sm font-semibold hover:bg-black hover:bg-opacity-10 rounded-lg transition">Pusat FAQ</a>
             </div>
-
 
             <p class="text-xs font-bold text-[#0A3D22] uppercase tracking-wider mb-2 mt-0 px-2">Menu Utama</p>
             
@@ -53,12 +54,10 @@
             
             <p class="text-xs font-bold text-[#0A3D22] uppercase tracking-wider mb-2 mt-6 px-2">Kustomisasi Web</p>
             
-
             <a href="{{ route('admin.manajemen-gambar.index', $modeParam) }}" class="flex items-center gap-3 hover:bg-[#F9A825] text-[#0E4D2B] hover:text-[#0A3D22] px-4 py-3 rounded-lg font-semibold transition">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                 Manajemen Gambar
             </a>
-            
 
             <a href="{{ route('admin.pemetaan.index', $modeParam) }}" class="flex items-center gap-3 hover:bg-[#F9A825] text-[#0E4D2B] hover:text-[#0A3D22] px-4 py-3 rounded-lg font-semibold transition">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg>
@@ -77,13 +76,10 @@
                 Data Warga
             </a>
             
-
             <a href="{{ route('admin.bank-sampah.index', $modeParam) }}" class="flex items-center gap-3 hover:bg-[#F9A825] text-[#0E4D2B] hover:text-[#0A3D22] px-4 py-3 rounded-lg font-semibold transition">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
                 Bank Sampah
             </a>
-
-
         </nav>
         
         <div class="p-4 border-t border-yellow-500 flex-shrink-0">
@@ -94,56 +90,47 @@
         </div>
     </aside>
 
-    <main class="flex-1 md:ml-64 bg-gray-50 min-h-screen w-full transition-all duration-300">
+    <!-- Hapus class w-full untuk fix horizontal scroll -->
+    <main class="flex-1 md:ml-64 bg-gray-50 min-h-screen transition-all duration-300">
         
-        <header class="bg-white h-20 shadow-sm border-b border-gray-200 flex items-center justify-between px-4 md:px-8 z-10 sticky top-0">
+        <!-- Tambah px-4 md:px-8 agar navbar tidak tenggelam -->
+        <header class="bg-white h-20 shadow-sm border-b border-gray-200 flex items-center justify-between gap-4 lg:gap-8 px-4 md:px-8 z-10 sticky top-0">
             <div class="flex items-center gap-3 md:gap-6">
                 <button @click="sidebarOpen = true" class="md:hidden p-2 text-gray-600 hover:bg-gray-100 rounded-lg focus:outline-none transition">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
                 </button>
 
-                <h2 class="text-lg md:text-xl font-bold text-gray-800 border-r-2 pr-4 md:pr-6 border-gray-300">Dashboard</h2>
-                
+                <h2 class="text-lg md:text-xl font-bold text-gray-800 border-r-2 pr-4 md:pr-6 border-gray-300 whitespace-nowrap shrink-0">Dashboard</h2>
 
                 <nav class="hidden md:flex gap-3 lg:gap-5 text-xs lg:text-sm font-bold text-gray-500 whitespace-nowrap">
-
                     <a href="{{ url('/') }}" class="hover:text-[#0E4D2B] transition">Beranda</a>
                     <a href="{{ route('pemetaan') }}" class="hover:text-[#0E4D2B] transition">Peta Wilayah</a>
                     <a href="{{ route('user.bank-sampah') }}" class="hover:text-[#0E4D2B] transition">Bank Sampah</a>
                     <a href="{{ route('faq') }}" class="hover:text-[#0E4D2B] transition">Pusat FAQ</a>
                 </nav>
-
-
             </div>
             
             <div class="flex items-center gap-3 md:gap-4">
-                <!-- Warna Label Operator jadi Kuning Hijau -->
-                <span class="hidden sm:inline-block text-[10px] md:text-xs font-bold bg-[#FBC02D] text-[#0E4D2B] px-2 md:px-3 py-1 rounded-full uppercase tracking-wider border border-yellow-400">HAK AKSES: OPERATOR</span>
+                <!-- Warna Label Operator -->
+                <span class="hidden sm:inline-block text-[10px] md:text-xs font-bold bg-[#FBC02D] text-[#0E4D2B] px-2 md:px-3 py-1 rounded-full uppercase tracking-wider border border-yellow-400 shrink-0 whitespace-nowrap">HAK AKSES: OPERATOR</span>
                 <div class="hidden sm:block h-8 w-px bg-gray-300"></div>
                 
                 @php
                     $rawAvatar = Auth::user()->avatar;
-
-
                     $avatarUrl = $rawAvatar ? (str_starts_with($rawAvatar, 'http') ? $rawAvatar : asset(str_starts_with($rawAvatar, 'storage/') ? $rawAvatar : 'storage/' . $rawAvatar)) : 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) . '&color=0E4D2B&background=A5D6A7&bold=true';
-
-
-                    $fallbackAvatar = 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) . '&color=0E4D2B&background=FBC02D&bold=true';
                 @endphp
                 <div x-data="{ openOperatorProfile: false }" class="relative">
-                    <button @click="openOperatorProfile = !openOperatorProfile" class="flex items-center gap-2 px-2 md:px-4 py-2 bg-gray-50 border border-gray-200 rounded-full hover:bg-gray-100 transition focus:outline-none">
+                    <button @click="openOperatorProfile = !openOperatorProfile" @click.away="openOperatorProfile = false" class="flex items-center gap-2 px-2 md:px-4 py-2 bg-gray-50 border border-gray-200 rounded-full hover:bg-gray-100 transition focus:outline-none">
                         <div class="w-8 h-8 rounded-full bg-[#FBC02D] flex items-center justify-center overflow-hidden border border-[#0E4D2B] shrink-0">
-
                             <img src="{{ Auth::user()->avatar ? (str_starts_with(Auth::user()->avatar, 'http') ? Auth::user()->avatar : '/storage/' . str_replace('storage/', '', Auth::user()->avatar)) : 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) . '&color=0E4D2B&background=' . (Auth::user()->role === 'operator' ? 'FBC02D' : 'A5D6A7') . '&bold=true' }}" alt="Avatar" class="w-full h-full object-cover">
-
                         </div>
                         <span class="hidden sm:inline-block text-sm font-bold text-gray-800 whitespace-nowrap shrink-0">{{ Auth::user()->name }}</span>
-                        <!-- Efek Putar Alpine JS -->
-                        <svg :class="{'rotate-180': openOperatorProfile}" class="w-4 h-4 text-gray-600 font-bold transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                        <!-- Animasi Chevron -->
+                        <svg :class="{'rotate-180': openOperatorProfile}" class="w-4 h-4 text-gray-600 font-bold transition-transform duration-200 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
                         </svg>
                     </button>
-                    <div x-show="openOperatorProfile" @click.away="openOperatorProfile = false" style="display: none;" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 border border-gray-200 z-50">
+                    <div x-show="openOperatorProfile" x-transition.opacity style="display: none;" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 border border-gray-200 z-50">
                         <a href="{{ route('profile.edit') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 font-semibold">Profil Saya</a>
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
@@ -164,7 +151,6 @@
                 
                 <a href="{{ route('admin.data-warga.index', $modeParam) }}" class="block bg-white rounded-2xl shadow-sm border border-gray-200 p-6 hover:shadow-md hover:-translate-y-1 transition transform">
                 <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-4">Total Warga Terdaftar</h4>
-
                     <div class="flex items-end gap-2">
                         <span class="text-4xl font-black text-[#0E4D2B] leading-none">{{ \App\Models\User::where('role', 'user')->count() }}</span>
                         <span class="text-sm font-semibold text-gray-500 mb-1">Akun Terverifikasi</span>
@@ -179,7 +165,6 @@
                     </div>
                 </a>
 
-
                 <a href="{{ route('admin.bank-sampah.index', $modeParam) }}" class="block bg-white rounded-2xl shadow-sm border border-gray-200 p-6 hover:shadow-md hover:-translate-y-1 transition transform">
                     <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-4">Bank Sampah Digital</h4>
                     <div class="flex items-end gap-2">
@@ -188,17 +173,8 @@
                     </div>
                 </a>
 
-
-                
             </div>
         </div>
     </main>
-
-    <style>
-        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #F9A825; border-radius: 10px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background-color: #F57F17; }
-    </style>
 </body>
 </html>
