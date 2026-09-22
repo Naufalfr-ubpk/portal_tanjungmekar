@@ -85,7 +85,10 @@
     <main class="flex-1 md:ml-64 bg-gray-50 min-h-screen transition-all duration-300 overflow-x-hidden">
         
         <!-- PENGECILAN GAP & PADDING NAVBAR -->
-        <header class="bg-white h-20 shadow-sm border-b border-gray-200 flex items-center justify-between gap-2 lg:gap-4 px-3 lg:px-5 z-10 sticky top-0 w-full">
+
+
+        <header class="bg-white h-20 shadow-sm border-b border-gray-200 flex items-center justify-between gap-4 px-4 md:px-8 z-10 sticky top-0 w-full">
+
 
             <div class="flex items-center gap-2 md:gap-4">
                 <button @click="sidebarOpen = true" class="md:hidden p-2 text-gray-600 hover:bg-gray-100 rounded-lg focus:outline-none transition mr-1">
@@ -103,7 +106,10 @@
                 </nav>
             </div>
             
-            <div class="flex items-center gap-2 lg:gap-3">
+
+            <div class="flex items-center gap-4 md:gap-6">
+
+
                 @if($isOp)
                 <span class="hidden sm:inline-block text-[10px] lg:text-xs font-bold bg-[#FBC02D] text-[#0E4D2B] px-2 py-1 rounded-full uppercase tracking-wider border border-yellow-400 whitespace-nowrap shrink-0">HAK AKSES: OPERATOR</span>
                 @else

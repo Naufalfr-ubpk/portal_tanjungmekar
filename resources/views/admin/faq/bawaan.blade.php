@@ -113,7 +113,9 @@
                 @if($isOp)
                 <span class="hidden sm:inline-block text-[10px] md:text-xs font-bold bg-[#0E4D2B] text-white px-2 md:px-3 py-1 rounded-full uppercase tracking-wider border border-[#0A3D22]">HAK AKSES: OPERATOR</span>
                 @else
-                <span class="hidden sm:inline-block text-[10px] md:text-xs font-bold bg-[#FBC02D] text-[#0E4D2B] px-2 md:px-3 py-1 rounded-full uppercase tracking-wider border border-yellow-400">HAK AKSES: {{ strtoupper(Auth::user()->role) }}</span>
+
+                <span class="hidden sm:inline-block text-[10px] md:text-xs font-bold bg-[#0E4D2B] text-white px-2 md:px-3 py-1 rounded-full uppercase tracking-wider border border-[#0A3D22] shrink-0 whitespace-nowrap">HAK AKSES: {{ strtoupper(Auth::user()->role) }}</span>
+
                 @endif
                 <div class="hidden sm:block h-8 w-px bg-gray-300"></div>
                 
