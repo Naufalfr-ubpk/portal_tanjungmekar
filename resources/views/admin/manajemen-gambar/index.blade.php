@@ -36,7 +36,6 @@
     <link rel="icon" type="image/png" href="{{ asset('images/logo-kkn.png') }}">
 
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700,800&display=swap" rel="stylesheet" />
-    <!-- CDN Cropper.js -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"></script>
@@ -47,7 +46,6 @@
         .custom-scrollbar::-webkit-scrollbar-thumb:hover { background-color: {{ $isAdminTheme ? '#2E7D32' : '#F57F17' }}; }
     </style>
 </head>
-<!-- Hapus class flex di body untuk fix bug horizontal scroll -->
 <body class="font-sans antialiased bg-gray-100 text-gray-900" x-data="imageManager()">
 
     <div x-show="sidebarOpen" @click="sidebarOpen = false" x-transition.opacity class="fixed inset-0 z-20 bg-black bg-opacity-50 md:hidden" style="display: none;"></div>
@@ -59,16 +57,11 @@
         
         <nav id="sidebar-container" class="flex-1 overflow-y-auto px-4 py-4 space-y-2 custom-scrollbar">
             <div class="md:hidden mb-4 pb-4 border-b border-gray-300 border-opacity-30">
-
                 <p class="text-xs font-bold {{ $menuTitle }} uppercase tracking-wider mb-2 px-2">Navigasi</p>
-
-
                 <a href="{{ url('/') }}" class="block px-4 py-2 text-sm font-semibold hover:bg-black hover:bg-opacity-10 rounded-lg transition">Beranda</a>
                 <a href="{{ route('pemetaan') }}" class="block px-4 py-2 text-sm font-semibold hover:bg-black hover:bg-opacity-10 rounded-lg transition">Peta Wilayah</a>
                 <a href="{{ route('user.bank-sampah') }}" class="block px-4 py-2 text-sm font-semibold hover:bg-black hover:bg-opacity-10 rounded-lg transition">Bank Sampah</a>
                 <a href="{{ route('faq') }}" class="block px-4 py-2 text-sm font-semibold hover:bg-black hover:bg-opacity-10 rounded-lg transition">Pusat FAQ</a>
-
-
             </div>
 
             <p class="text-xs font-bold {{ $menuTitle }} uppercase tracking-wider mb-2 mt-0 px-2">Menu Utama</p>
@@ -124,48 +117,40 @@
         </div>
     </aside>
 
-    <!-- Hapus class flex-1 dan w-full di main untuk fix bug horizontal scroll -->
-    <main class="md:ml-64 bg-gray-50 min-h-screen transition-all duration-300">
+    <main class="md:ml-64 bg-gray-50 min-h-screen transition-all duration-300 overflow-x-hidden">
+        
+        <header class="bg-white h-20 shadow-sm border-b border-gray-200 flex items-center justify-between gap-2 lg:gap-4 px-3 lg:px-5 z-10 sticky top-0 w-full">
 
-        <!-- Hapus w-full di header dan pasang px-4 md:px-8 agar navbar tidak tenggelam -->
-        <header class="bg-white h-20 shadow-sm border-b border-gray-200 flex items-center justify-between gap-4 lg:gap-8 px-4 md:px-8 z-10 sticky top-0">
-
-            <div class="flex items-center gap-3 md:gap-6">
-                <button @click="sidebarOpen = true" class="md:hidden p-2 text-gray-600 hover:bg-gray-100 rounded-lg focus:outline-none transition">
+            <div class="flex items-center gap-2 md:gap-4">
+                <button @click="sidebarOpen = true" class="md:hidden p-2 text-gray-600 hover:bg-gray-100 rounded-lg focus:outline-none transition mr-1">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
                 </button>
 
-
-                <h2 class="text-lg md:text-xl font-bold text-gray-800 border-r-2 pr-4 md:pr-6 border-gray-300 whitespace-nowrap shrink-0">Manajemen Gambar</h2>
-                <!-- Tambahan Menu Navigasi -->
-                <div class="hidden lg:flex items-center gap-3 lg:gap-5 text-xs lg:text-sm font-bold text-gray-500 whitespace-nowrap">
+                <h2 class="text-lg md:text-xl font-bold text-gray-800 border-r-2 pr-3 md:pr-5 border-gray-300 whitespace-nowrap shrink-0">Manajemen Gambar</h2>
+                
+                <nav class="hidden lg:flex gap-2 lg:gap-4 text-[11px] lg:text-sm font-bold text-gray-500 whitespace-nowrap">
                     <a href="{{ url('/') }}" class="hover:text-[#0E4D2B] transition">Beranda</a>
                     <a href="{{ route('pemetaan') }}" class="hover:text-[#0E4D2B] transition">Peta Wilayah</a>
                     <a href="{{ route('user.bank-sampah') }}" class="hover:text-[#0E4D2B] transition">Bank Sampah</a>
                     <a href="{{ route('faq') }}" class="hover:text-[#0E4D2B] transition">Pusat FAQ</a>
-                </div>
-
+                </nav>
             </div>
             
-
-            <div class="flex items-center gap-2 lg:gap-4">
-                <span class="hidden sm:inline-block text-[10px] md:text-xs font-bold {{ $isAdminTheme ? 'bg-[#0E4D2B] text-white border-[#0A3D22]' : 'bg-[#FBC02D] text-[#0E4D2B] border-yellow-400' }} px-2 py-1 rounded-full uppercase tracking-wider border whitespace-nowrap shrink-0">HAK AKSES: {{ strtoupper($displayRole) }}</span>
+            <div class="flex items-center gap-2 lg:gap-3">
+                <span class="hidden sm:inline-block text-[10px] lg:text-xs font-bold {{ $isAdminTheme ? 'bg-[#0E4D2B] text-white border-[#0A3D22]' : 'bg-[#FBC02D] text-[#0E4D2B] border-yellow-400' }} px-2 py-1 rounded-full uppercase tracking-wider border whitespace-nowrap shrink-0">HAK AKSES: {{ strtoupper($displayRole) }}</span>
                 <div class="hidden sm:block h-8 w-px bg-gray-300"></div>
 
                 <div x-data="{ openProfile: false }" class="relative">
-                    <button @click="openProfile = !openProfile" @click.away="openProfile = false" class="flex items-center gap-2 px-2 lg:px-4 py-2 bg-gray-50 border border-gray-200 rounded-full hover:bg-gray-100 transition focus:outline-none">
+                    <button @click="openProfile = !openProfile" @click.away="openProfile = false" class="flex items-center gap-1.5 px-2 lg:px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-full hover:bg-gray-100 transition focus:outline-none">
                         <div class="w-8 h-8 rounded-full {{ $isAdminTheme ? 'bg-[#A5D6A7]' : 'bg-[#FBC02D]' }} flex items-center justify-center overflow-hidden border border-[#0E4D2B] shrink-0">
-
                             <img src="{{ Auth::user()->avatar ? (str_starts_with(Auth::user()->avatar, 'http') ? Auth::user()->avatar : '/storage/' . str_replace('storage/', '', Auth::user()->avatar)) : 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) . '&color=0E4D2B&background=' . (Auth::user()->role === 'operator' ? 'FBC02D' : 'A5D6A7') . '&bold=true' }}" alt="Avatar" class="w-full h-full object-cover">
-
                         </div>
-                        <span class="hidden sm:inline-block text-xs lg:text-sm font-bold text-gray-800 whitespace-nowrap shrink-0">{{ Auth::user()->name }}</span>
+                        
+                        <span class="hidden sm:inline-block text-[11px] lg:text-sm font-bold text-gray-800 whitespace-nowrap shrink-0">{{ Auth::user()->name }}</span>
 
-                        <!-- Animasi Chevron Aktif -->
                         <svg :class="{'rotate-180': openProfile}" class="w-4 h-4 text-gray-500 font-bold transition-transform duration-200 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
                         </svg>
-
                     </button>
                     <div x-show="openProfile" x-transition.opacity style="display: none;" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 border border-gray-200 z-50">
                         <a href="{{ route('profile.edit') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 font-semibold">Profil Saya</a>
@@ -213,7 +198,6 @@
 
                 <div class="p-6">
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                        <!-- Preview Gambar Saat Ini -->
                         <div>
                             <h4 class="text-sm font-bold text-gray-700 uppercase tracking-widest mb-3">Gambar Saat Ini Tampil</h4>
                             <div class="aspect-w-16 aspect-h-9 rounded-xl overflow-hidden border-4 border-gray-200 shadow-inner bg-gray-100 flex items-center justify-center">
@@ -221,7 +205,6 @@
                             </div>
                         </div>
 
-                        <!-- Form Upload & Crop Baru -->
                         <div>
                             <h4 class="text-sm font-bold text-[#0E4D2B] uppercase tracking-widest mb-3">Ganti Gambar Baru</h4>
                             
@@ -229,7 +212,6 @@
 
                             <p class="text-xs text-gray-500 mb-4">*Disarankan memilih gambar dengan orientasi Landscape.</p>
 
-                            <!-- Area Cropping (Hidden by default) -->
                             <div id="cropper-container" style="display: none;">
                                 <div class="w-full max-h-[300px] overflow-hidden rounded-xl border-2 border-gray-300 bg-black mb-4">
                                     <img id="image-preview" src="" class="max-w-full">
@@ -290,7 +272,6 @@
 
                     if (cropper) { cropper.destroy(); }
                     
-                    // Ratio 16:9 ngunci proporsi Landscape persis seperti request lu
                     cropper = new Cropper(image, {
                         aspectRatio: 16 / 9,
                         viewMode: 1,
@@ -308,7 +289,6 @@
 
         function saveImage() {
             if (cropper) {
-                // Konversi hasil crop ke Base64 (resolusi ditahan di 1280x720 biar enteng dimuat)
                 const canvas = cropper.getCroppedCanvas({
                     width: 1280,
                     height: 720

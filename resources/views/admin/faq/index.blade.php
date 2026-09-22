@@ -1,7 +1,7 @@
 @php
     $isOp = Auth::user()->role === 'operator' || request('mode') === 'operator';
-    $modeParam = (Auth::user()->role === 'admin' &&$isOp) ? ['mode' => 'operator'] : [];
-    $navLinkText =$isOp ? 'text-[#0E4D2B]' : 'text-gray-200';
+    $modeParam = (Auth::user()->role === 'admin' && $isOp) ? ['mode' => 'operator'] : [];
+    $navLinkText = $isOp ? 'text-[#0E4D2B]' : 'text-gray-200';
 @endphp
 <!DOCTYPE html>
 <html lang="id">
@@ -34,7 +34,6 @@
         .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
-<!-- Hapus class flex di body untuk fix bug horizontal scroll -->
 <body class="font-sans antialiased bg-gray-100 text-gray-900" x-data="faqManager()">
 
     <!-- OVERLAY MOBILE -->
@@ -47,18 +46,12 @@
         
         <nav class="flex-1 overflow-y-auto px-4 py-4 space-y-2 custom-scrollbar">
 
-        <!-- KHUSUS TAMPIL DI HP: Link Navigasi Publik -->
             <div class="md:hidden mb-4 pb-4 border-b border-gray-300 border-opacity-30">
-
                 <p class="text-xs font-bold {{ $isOp ? 'text-[#0A3D22]' : 'text-[#A5D6A7]' }} uppercase tracking-wider mb-2 px-2">Navigasi</p>
-
-
                 <a href="{{ url('/') }}" class="block px-4 py-2 text-sm font-semibold hover:bg-black hover:bg-opacity-10 rounded-lg transition">Beranda</a>
                 <a href="{{ route('pemetaan') }}" class="block px-4 py-2 text-sm font-semibold hover:bg-black hover:bg-opacity-10 rounded-lg transition">Peta Wilayah</a>
                 <a href="{{ route('user.bank-sampah') }}" class="block px-4 py-2 text-sm font-semibold hover:bg-black hover:bg-opacity-10 rounded-lg transition">Bank Sampah</a>
                 <a href="{{ route('faq') }}" class="block px-4 py-2 text-sm font-semibold hover:bg-black hover:bg-opacity-10 rounded-lg transition">Pusat FAQ</a>
-
-
             </div>
 
             <p class="text-xs font-bold uppercase tracking-wider mb-2 px-2 {{ $isOp ? 'text-[#0A3D22]' : 'text-[#A5D6A7]' }}">Menu Utama</p>
@@ -69,7 +62,7 @@
             @endif
             
             <p class="text-xs font-bold uppercase tracking-wider mb-2 mt-6 px-2 {{ $isOp ? 'text-[#0A3D22]' : 'text-[#A5D6A7]' }}">Kustomisasi Web</p>
-            <a href="{{ route('admin.manajemen-gambar.index', isset($modeParam) ?$modeParam : []) }}" class="flex items-center gap-3 sidebar-link {{ $navLinkText }} px-4 py-3 rounded-lg font-semibold"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg> Manajemen Gambar</a>
+            <a href="{{ route('admin.manajemen-gambar.index', isset($modeParam) ? $modeParam : []) }}" class="flex items-center gap-3 sidebar-link {{ $navLinkText }} px-4 py-3 rounded-lg font-semibold"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg> Manajemen Gambar</a>
             <a href="{{ route('admin.pemetaan.index', $modeParam) }}" class="flex items-center gap-3 sidebar-link {{ $navLinkText }} px-4 py-3 rounded-lg font-semibold"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg> Manajemen Peta</a>
             
             <p class="text-xs font-bold uppercase tracking-wider mb-2 mt-6 px-2 {{ $isOp ? 'text-[#0A3D22]' : 'text-[#A5D6A7]' }}">Data & Laporan</p>
@@ -77,10 +70,10 @@
             
             <a href="{{ route('admin.data-warga.index', $modeParam) }}" class="flex items-center gap-3 sidebar-link {{ $navLinkText }} px-4 py-3 rounded-lg font-semibold"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg> Data Warga</a>
             
-            <a href="{{ route('admin.bank-sampah.index', $modeParam) }}" class="flex items-center gap-3 sidebar-link {{ isset($navLinkText) ?$navLinkText : (isset($navLink) ?$navLink : '') }} px-4 py-3 rounded-lg font-semibold transition"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg> Bank Sampah</a>
+            <a href="{{ route('admin.bank-sampah.index', $modeParam) }}" class="flex items-center gap-3 sidebar-link {{ $navLinkText }} px-4 py-3 rounded-lg font-semibold transition"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg> Bank Sampah</a>
 
             @if(Auth::user()->role === 'admin' && !$isOp)
-            <a href="{{ route('admin.laporan-web.index', isset($modeParam) ?$modeParam : []) }}" class="flex items-center gap-3 sidebar-link text-gray-200 px-4 py-3 rounded-lg font-semibold mb-4"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg> Laporan Web</a>
+            <a href="{{ route('admin.laporan-web.index', isset($modeParam) ? $modeParam : []) }}" class="flex items-center gap-3 sidebar-link text-gray-200 px-4 py-3 rounded-lg font-semibold mb-4"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg> Laporan Web</a>
             @endif
         </nav>
         <div class="p-4 border-t flex-shrink-0 {{ $isOp ? 'border-yellow-500' : 'border-[#2E7D32]' }}">
@@ -88,58 +81,53 @@
         </div>
     </aside>
 
-    <!-- Hapus class flex-1 dan w-full di main untuk fix bug horizontal scroll -->
-    <main class="md:ml-64 bg-gray-50 min-h-screen transition-all duration-300">
-        <!-- HEADER KONTEN (hapus w-full dan atur padding) -->
-        <header class="bg-white h-20 shadow-sm border-b border-gray-200 flex items-center justify-between gap-4 lg:gap-8 px-4 md:px-8 z-10 sticky top-0">
+    <!-- HAPUS w-full dan TAMBAH overflow-x-hidden buat kunci horizontal scroll -->
+    <main class="flex-1 md:ml-64 bg-gray-50 min-h-screen transition-all duration-300 overflow-x-hidden">
+        
+        <!-- PENGECILAN GAP & PADDING NAVBAR -->
+        <header class="bg-white h-20 shadow-sm border-b border-gray-200 flex items-center justify-between gap-2 lg:gap-4 px-3 lg:px-5 z-10 sticky top-0 w-full">
 
-            <div class="flex items-center gap-3 md:gap-6">
-                <!-- HAMBURGER BUTTON -->
-                <button @click="sidebarOpen = true" class="md:hidden p-2 text-gray-600 hover:bg-gray-100 rounded-lg focus:outline-none transition mr-2">
+            <div class="flex items-center gap-2 md:gap-4">
+                <button @click="sidebarOpen = true" class="md:hidden p-2 text-gray-600 hover:bg-gray-100 rounded-lg focus:outline-none transition mr-1">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
                 </button>
 
-
-                <h2 class="text-lg md:text-xl font-bold text-gray-800 border-r-2 pr-4 md:pr-6 border-gray-300 whitespace-nowrap shrink-0">Manajemen FAQ</h2>
-                <nav class="hidden lg:flex gap-3 lg:gap-5 text-xs lg:text-sm font-bold text-gray-500 whitespace-nowrap">
+                <h2 class="text-lg md:text-xl font-bold text-gray-800 border-r-2 pr-3 md:pr-5 border-gray-300 whitespace-nowrap shrink-0">Manajemen FAQ</h2>
+                
+                <!-- PENGECILAN UKURAN TEKS DAN GAP LINK NAVIGASI TENGAH -->
+                <nav class="hidden lg:flex gap-2 lg:gap-4 text-[11px] lg:text-sm font-bold text-gray-500 whitespace-nowrap">
                     <a href="{{ url('/') }}" class="hover:text-[#0E4D2B] transition">Beranda</a>
                     <a href="{{ route('pemetaan') }}" class="hover:text-[#0E4D2B] transition">Peta Wilayah</a>
                     <a href="{{ route('user.bank-sampah') }}" class="hover:text-[#0E4D2B] transition">Bank Sampah</a>
                     <a href="{{ route('faq') }}" class="hover:text-[#0E4D2B] transition">Pusat FAQ</a>
                 </nav>
-
-
             </div>
             
-
-
-            <div class="flex items-center gap-2 lg:gap-4">
+            <div class="flex items-center gap-2 lg:gap-3">
                 @if($isOp)
-                <span class="hidden sm:inline-block text-[10px] md:text-xs font-bold bg-[#FBC02D] text-[#0E4D2B] px-2 py-1 rounded-full uppercase tracking-wider border border-yellow-400 whitespace-nowrap shrink-0">HAK AKSES: OPERATOR</span>
+                <span class="hidden sm:inline-block text-[10px] lg:text-xs font-bold bg-[#FBC02D] text-[#0E4D2B] px-2 py-1 rounded-full uppercase tracking-wider border border-yellow-400 whitespace-nowrap shrink-0">HAK AKSES: OPERATOR</span>
                 @else
-                <span class="hidden sm:inline-block text-[10px] md:text-xs font-bold bg-[#0E4D2B] text-white px-2 py-1 rounded-full uppercase tracking-wider border border-[#0A3D22] whitespace-nowrap shrink-0">HAK AKSES: {{ strtoupper(Auth::user()->role) }}</span>
+                <span class="hidden sm:inline-block text-[10px] lg:text-xs font-bold bg-[#0E4D2B] text-white px-2 py-1 rounded-full uppercase tracking-wider border border-[#0A3D22] whitespace-nowrap shrink-0">HAK AKSES: {{ strtoupper(Auth::user()->role) }}</span>
                 @endif
-
 
                 <div class="hidden sm:block h-8 w-px bg-gray-300"></div>
 
                 @php
                     $rawAvatar = Auth::user()->avatar;
-                    $bgAvatar =$isOp ? 'FBC02D' : 'A5D6A7';
-                    $avatarUrl =$rawAvatar ? (str_starts_with($rawAvatar, 'http') ?$rawAvatar : asset($rawAvatar)) : 'https://ui-avatars.com/api/?name='.urlencode(Auth::user()->name).'&color=0E4D2B&background='.$bgAvatar.'&bold=true';
+                    $bgAvatar = $isOp ? 'FBC02D' : 'A5D6A7';
+                    $avatarUrl = $rawAvatar ? (str_starts_with($rawAvatar, 'http') ? $rawAvatar : asset($rawAvatar)) : 'https://ui-avatars.com/api/?name='.urlencode(Auth::user()->name).'&color=0E4D2B&background='.$bgAvatar.'&bold=true';
                     $fallbackAvatar = 'https://ui-avatars.com/api/?name='.urlencode(Auth::user()->name).'&color=0E4D2B&background='.$bgAvatar.'&bold=true';
                 @endphp
                 <div x-data="{ openAdminProfile: false }" class="relative">
-                    <button @click="openAdminProfile = !openAdminProfile" @click.away="openAdminProfile = false" class="flex items-center gap-2 px-2 lg:px-4 py-2 bg-gray-50 border border-gray-200 rounded-full hover:bg-gray-100 transition focus:outline-none">
+                    <button @click="openAdminProfile = !openAdminProfile" @click.away="openAdminProfile = false" class="flex items-center gap-1.5 px-2 lg:px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-full hover:bg-gray-100 transition focus:outline-none">
                         <div class="w-8 h-8 rounded-full bg-[#{{ $bgAvatar }}] flex items-center justify-center overflow-hidden border border-[#0E4D2B] shrink-0">
-
                             <img src="{{ Auth::user()->avatar ? (str_starts_with(Auth::user()->avatar, 'http') ? Auth::user()->avatar : '/storage/' . str_replace('storage/', '', Auth::user()->avatar)) : 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) . '&color=0E4D2B&background=' . (Auth::user()->role === 'operator' ? 'FBC02D' : 'A5D6A7') . '&bold=true' }}" alt="Avatar" class="w-full h-full object-cover">
-
                         </div>
-                        <span class="hidden sm:inline-block text-xs lg:text-sm font-bold text-gray-800 whitespace-nowrap shrink-0">{{ Auth::user()->name }}</span>
+                        
+                        <!-- PENGECILAN TEKS NAMA USER -->
+                        <span class="hidden sm:inline-block text-[11px] lg:text-sm font-bold text-gray-800 whitespace-nowrap shrink-0">{{ Auth::user()->name }}</span>
 
-                        <!-- Animasi Chevron Aktif -->
-                        <svg :class="{'rotate-180': openAdminProfile}" class="w-4 h-4 text-gray-500 font-bold transition-transform duration-200 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        <svg class="w-4 h-4 text-gray-500 transition-transform duration-200" :class="openAdminProfile ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                     </button>
 
                     <div x-show="openAdminProfile" x-transition.opacity style="display: none;" class="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg py-2 border border-gray-100 z-50">
@@ -171,7 +159,6 @@
                 </div>
             @endif
 
-            <!-- MENU TABS -->
             <div class="flex overflow-x-auto hide-scroll gap-2 md:gap-3 mb-4 pb-2">
                 <button @click="activeTab = 'semua'" :class="activeTab === 'semua' ? 'bg-[#0E4D2B] text-white' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'" class="whitespace-nowrap px-4 md:px-5 py-2 rounded-full font-bold shadow-sm border transition text-xs md:text-sm">Semua</button>
                 <button @click="activeTab = 'pending'" :class="activeTab === 'pending' ? 'bg-yellow-500 text-white border-yellow-500' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'" class="whitespace-nowrap px-4 md:px-5 py-2 rounded-full font-bold shadow-sm border transition text-xs md:text-sm">Menunggu Jawaban</button>
@@ -179,7 +166,6 @@
                 <button @click="activeTab = 'ditolak'" :class="activeTab === 'ditolak' ? 'bg-red-600 text-white border-red-600' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'" class="whitespace-nowrap px-4 md:px-5 py-2 rounded-full font-bold shadow-sm border transition text-xs md:text-sm">Ditolak</button>
             </div>
 
-            <!-- TABEL -->
             <div class="bg-white rounded-xl shadow border border-gray-200 overflow-hidden w-full">
                 <div class="overflow-x-auto w-full custom-scrollbar">
                     <table class="min-w-full divide-y divide-gray-200">
@@ -193,28 +179,32 @@
                         </thead>
                         
                         <tbody x-show="activeTab === 'semua'" class="divide-y divide-gray-200">
-                            @forelse($faqs as$faq)
+                            @forelse($faqs as $faq)
                                 @include('admin.faq.partials.row_warga', ['faq' => $faq])
                             @empty
                                 <tr><td colspan="4" class="px-6 py-10 text-center text-gray-500 font-medium">Mohon maaf, belum ada pengajuan pertanyaan dari warga.</td></tr>
                             @endforelse
                         </tbody>
+                        
                         <tbody x-show="activeTab === 'pending'" style="display:none;" class="divide-y divide-gray-200">
-                            @forelse($faqs->where('status', 'pending') as$faq)
+                            @php $pendingFaqs = $faqs->where('status', 'pending'); @endphp
+                            @forelse($pendingFaqs as $faq)
                                 @include('admin.faq.partials.row_warga', ['faq' => $faq])
                             @empty
                                 <tr><td colspan="4" class="px-6 py-10 text-center text-gray-500 font-medium">Mohon maaf, tidak ada pengajuan yang menunggu jawaban.</td></tr>
                             @endforelse
                         </tbody>
                         <tbody x-show="activeTab === 'dipublikasi'" style="display:none;" class="divide-y divide-gray-200">
-                            @forelse($faqs->where('status', 'dipublikasi') as$faq)
+                            @php $publishedFaqs = $faqs->where('status', 'dipublikasi'); @endphp
+                            @forelse($publishedFaqs as $faq)
                                 @include('admin.faq.partials.row_warga', ['faq' => $faq])
                             @empty
                                 <tr><td colspan="4" class="px-6 py-10 text-center text-gray-500 font-medium">Mohon maaf, belum ada pengajuan pertanyaan yang dipublikasi.</td></tr>
                             @endforelse
                         </tbody>
                         <tbody x-show="activeTab === 'ditolak'" style="display:none;" class="divide-y divide-gray-200">
-                            @forelse($faqs->where('status', 'ditolak') as$faq)
+                            @php $rejectedFaqs = $faqs->where('status', 'ditolak'); @endphp
+                            @forelse($rejectedFaqs as $faq)
                                 @include('admin.faq.partials.row_warga', ['faq' => $faq])
                             @empty
                                 <tr><td colspan="4" class="px-6 py-10 text-center text-gray-500 font-medium">Mohon maaf, belum ada pengajuan pertanyaan yang ditolak.</td></tr>
@@ -224,7 +214,6 @@
                 </div>
             </div>
 
-            <!-- MODAL FORM ULAS / JAWAB FAQ -->
             <div x-show="isModalOpen" style="display: none;" class="fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-70 p-4">
                 <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden max-h-[90vh] overflow-y-auto custom-scrollbar">
                     <div class="bg-[#0E4D2B] p-5 text-white flex justify-between items-center">
@@ -245,9 +234,7 @@
 
                         <div class="mb-5">
                             <label class="block text-sm font-bold text-gray-700 mb-2">Jawaban <span class="text-red-500">*</span></label>
-
                             <textarea name="jawaban" x-model="formData.jawaban" rows="4" :required="formData.status !== 'ditolak'" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-[#0E4D2B]" placeholder="Ketikkan jawaban Anda di sini..."></textarea>
-
                         </div>
 
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5 p-4 bg-gray-50 rounded-xl border border-gray-200">
@@ -272,13 +259,11 @@
 
                         <div class="mb-6">
                             <label class="block text-sm font-bold text-gray-700 mb-2">Status Visibilitas</label>
-
                             <select name="status" x-model="formData.status" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-[#0E4D2B]">
                                 <option value="pending">Tetap Pending (Belum dipublikasi)</option>
                                 <option value="dipublikasi">Dipublikasi (Tampil di FAQ)</option>
                                 <option value="ditolak">Ditolak (Pindah ke Tab Ditolak)</option>
                             </select>
-
                         </div>
 
                         <div class="flex justify-end gap-3 pt-4 border-t">
@@ -289,35 +274,29 @@
                 </div>
             </div>
 
-            <!-- MODAL KONFIRMASI HAPUS -->
+            <div x-show="deleteModalOpen" style="display: none;" class="fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-70 p-4">
+                <div @click.away="closeDeleteModal()" class="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full text-center relative">
+                    
+                    <button @click="closeDeleteModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
 
-                <div x-show="deleteModalOpen" style="display: none;" class="fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-70 p-4">
-                    <div @click.away="closeDeleteModal()" class="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full text-center relative">
-                        
-                        <!-- Tombol X Tambahan -->
-                        <button @click="closeDeleteModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                        </button>
-
-                        <div class="w-16 h-16 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-4 mt-2">
-                            <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-                        </div>
-                        <h3 class="text-2xl font-bold text-gray-900 mb-2">Hapus Pertanyaan?</h3>
-                        
-                        <!-- Teks yang disesuaikan -->
-
-                        <p class="text-sm text-gray-500 mb-6" x-text="deleteStatus === 'ditolak' ? 'Pertanyaan ini akan dihapus secara PERMANEN dari sistem. Apakah anda yakin untuk menghapusnya? ' : 'Pertanyaan ini akan dipindahkan ke tab Ditolak terlebih dahulu.'"></p>
-                        
-                        <div class="flex justify-center gap-3">
-                            <button @click="closeDeleteModal()" class="px-6 py-2.5 bg-gray-200 text-gray-800 font-bold rounded-lg hover:bg-gray-300 transition">Batal</button>
-                            <form :action="deleteUrl" method="POST" class="inline-block">
-                                @csrf @method('DELETE')
-                                <button type="submit" class="px-6 py-2.5 bg-red-600 text-white font-bold rounded-lg hover:bg-red-700 shadow-md">Ya, Hapus!</button>
-                            </form>
-                        </div>
+                    <div class="w-16 h-16 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-4 mt-2">
+                        <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-2">Hapus Pertanyaan?</h3>
+                    
+                    <p class="text-sm text-gray-500 mb-6" x-text="deleteStatus === 'ditolak' ? 'Pertanyaan ini akan dihapus secara PERMANEN dari sistem. Apakah anda yakin untuk menghapusnya? ' : 'Pertanyaan ini akan dipindahkan ke tab Ditolak terlebih dahulu.'"></p>
+                    
+                    <div class="flex justify-center gap-3">
+                        <button @click="closeDeleteModal()" class="px-6 py-2.5 bg-gray-200 text-gray-800 font-bold rounded-lg hover:bg-gray-300 transition">Batal</button>
+                        <form :action="deleteUrl" method="POST" class="inline-block">
+                            @csrf @method('DELETE')
+                            <button type="submit" class="px-6 py-2.5 bg-red-600 text-white font-bold rounded-lg hover:bg-red-700 shadow-md">Ya, Hapus!</button>
+                        </form>
                     </div>
                 </div>
-
+            </div>
         </div>
     </main>
 

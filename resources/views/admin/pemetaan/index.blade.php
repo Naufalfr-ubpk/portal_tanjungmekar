@@ -27,7 +27,6 @@
         .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
-<!-- Hapus class flex, w-full, dan overflow di body untuk fix bug horizontal scroll -->
 <body class="font-sans antialiased bg-gray-100 text-gray-900" x-data="mapManager()" x-init="initMap()">
 
     <!-- OVERLAY MOBILE -->
@@ -42,23 +41,17 @@
 
         <!-- KHUSUS TAMPIL DI HP: Link Navigasi Publik -->
             <div class="md:hidden mb-4 pb-4 border-b border-gray-300 border-opacity-30">
-
                 <p class="text-xs font-bold {{ $isOp ? 'text-[#0A3D22]' : 'text-[#A5D6A7]' }} uppercase tracking-wider mb-2 px-2">Navigasi</p>
-
-
                 <a href="{{ url('/') }}" class="block px-4 py-2 text-sm font-semibold hover:bg-black hover:bg-opacity-10 rounded-lg transition">Beranda</a>
                 <a href="{{ route('pemetaan') }}" class="block px-4 py-2 text-sm font-semibold hover:bg-black hover:bg-opacity-10 rounded-lg transition">Peta Wilayah</a>
                 <a href="{{ route('user.bank-sampah') }}" class="block px-4 py-2 text-sm font-semibold hover:bg-black hover:bg-opacity-10 rounded-lg transition">Bank Sampah</a>
                 <a href="{{ route('faq') }}" class="block px-4 py-2 text-sm font-semibold hover:bg-black hover:bg-opacity-10 rounded-lg transition">Pusat FAQ</a>
-
-
             </div>
-
 
             <p class="text-xs font-bold uppercase tracking-wider mb-2 mt-0 px-2 {{ $isOp ? 'text-[#0A3D22]' : 'text-[#A5D6A7]' }}">Menu Utama</p>
             
             <a href="{{ $isOp ? route('operator.dashboard') : route('admin.dashboard') }}" class="flex items-center gap-3 px-4 py-3 rounded-lg font-semibold transition {{ $navLink }}">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
                 Dashboard
             </a>
 
@@ -113,20 +106,17 @@
         </div>
     </aside>
 
-    <!-- Hapus class flex-1, w-full, dan overflow di main untuk fix bug horizontal scroll -->
-    <main class="md:ml-64 bg-gray-50 min-h-screen transition-all duration-300">
+    <main class="md:ml-64 bg-gray-50 min-h-screen transition-all duration-300 overflow-x-hidden">
 
-        <!-- Hapus w-full di header dan pasang px-4 md:px-8 agar navbar tidak tenggelam -->
-        <header class="bg-white h-20 shadow-sm border-b border-gray-200 flex items-center justify-between gap-4 lg:gap-8 px-4 md:px-8 z-10 sticky top-0">
+        <header class="bg-white h-20 shadow-sm border-b border-gray-200 flex items-center justify-between gap-2 lg:gap-4 px-3 lg:px-5 z-10 sticky top-0 w-full">
 
-            <div class="flex items-center gap-3 md:gap-6">
-                <button @click="sidebarOpen = true" class="md:hidden p-2 text-gray-600 hover:bg-gray-100 rounded-lg focus:outline-none transition mr-2">
+            <div class="flex items-center gap-2 md:gap-4">
+                <button @click="sidebarOpen = true" class="md:hidden p-2 text-gray-600 hover:bg-gray-100 rounded-lg focus:outline-none transition mr-1">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
                 </button>
 
-
-                <h2 class="text-lg md:text-xl font-bold text-gray-800 border-r-2 pr-4 md:pr-6 border-gray-300 whitespace-nowrap shrink-0">Manajemen Peta</h2>
-                <nav class="hidden lg:flex gap-3 lg:gap-5 text-xs lg:text-sm font-bold text-gray-500 whitespace-nowrap">
+                <h2 class="text-lg md:text-xl font-bold text-gray-800 border-r-2 pr-3 md:pr-5 border-gray-300 whitespace-nowrap shrink-0">Manajemen Peta</h2>
+                <nav class="hidden lg:flex gap-2 lg:gap-4 text-[11px] lg:text-sm font-bold text-gray-500 whitespace-nowrap">
                     <a href="{{ url('/') }}" class="hover:text-[#0E4D2B] transition">Beranda</a>
                     <a href="{{ route('pemetaan') }}" class="hover:text-[#0E4D2B] transition">Peta Wilayah</a>
                     <a href="{{ route('user.bank-sampah') }}" class="hover:text-[#0E4D2B] transition">Bank Sampah</a>
@@ -135,12 +125,11 @@
 
             </div>
             
-
-            <div class="flex items-center gap-2 lg:gap-4">
+            <div class="flex items-center gap-2 lg:gap-3">
                 @if($isOp)
-                <span class="hidden sm:inline-block text-[10px] md:text-xs font-bold bg-[#FBC02D] text-[#0E4D2B] px-2 py-1 rounded-full uppercase tracking-wider border border-yellow-400 whitespace-nowrap shrink-0">HAK AKSES: OPERATOR</span>
+                <span class="hidden sm:inline-block text-[10px] lg:text-xs font-bold bg-[#FBC02D] text-[#0E4D2B] px-2 py-1 rounded-full uppercase tracking-wider border border-yellow-400 whitespace-nowrap shrink-0">HAK AKSES: OPERATOR</span>
                 @else
-                <span class="hidden sm:inline-block text-[10px] md:text-xs font-bold bg-[#0E4D2B] text-white px-2 py-1 rounded-full uppercase tracking-wider border border-[#0A3D22] whitespace-nowrap shrink-0">HAK AKSES: {{ strtoupper(Auth::user()->role) }}</span>
+                <span class="hidden sm:inline-block text-[10px] lg:text-xs font-bold bg-[#0E4D2B] text-white px-2 py-1 rounded-full uppercase tracking-wider border border-[#0A3D22] whitespace-nowrap shrink-0">HAK AKSES: {{ strtoupper(Auth::user()->role) }}</span>
                 @endif
 
 
@@ -153,18 +142,15 @@
                     $fallbackAvatar = 'https://ui-avatars.com/api/?name='.urlencode(Auth::user()->name).'&color=0E4D2B&background='.$bgAvatar.'&bold=true';
                 @endphp
                 <div x-data="{ openAdminProfile: false }" class="relative">
-                    <button @click="openAdminProfile = !openAdminProfile" @click.away="openAdminProfile = false" class="flex items-center gap-2 px-2 lg:px-4 py-2 bg-gray-50 border border-gray-200 rounded-full hover:bg-gray-100 transition focus:outline-none">
+                    <button @click="openAdminProfile = !openAdminProfile" @click.away="openAdminProfile = false" class="flex items-center gap-1.5 px-2 lg:px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-full hover:bg-gray-100 transition focus:outline-none">
                         <div class="w-8 h-8 rounded-full bg-[#{{ $bgAvatar }}] flex items-center justify-center overflow-hidden border border-[#0E4D2B] shrink-0">
 
                             <img src="{{ Auth::user()->avatar ? (str_starts_with(Auth::user()->avatar, 'http') ? Auth::user()->avatar : '/storage/' . str_replace('storage/', '', Auth::user()->avatar)) : 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) . '&color=0E4D2B&background=' . (Auth::user()->role === 'operator' ? 'FBC02D' : 'A5D6A7') . '&bold=true' }}" alt="Avatar" class="w-full h-full object-cover">
 
                         </div>
-                        <span class="hidden sm:inline-block text-xs lg:text-sm font-bold text-gray-800 whitespace-nowrap shrink-0">{{ Auth::user()->name }}</span>
+                        <span class="hidden sm:inline-block text-[11px] lg:text-sm font-bold text-gray-800 whitespace-nowrap shrink-0">{{ Auth::user()->name }}</span>
 
-                        <!-- Animasi Chevron Aktif -->
-                        <svg :class="{'rotate-180': openAdminProfile}" class="w-4 h-4 text-gray-500 font-bold transition-transform duration-200 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                        </svg>
+                        <svg class="w-4 h-4 text-gray-500 transition-transform duration-200" :class="openAdminProfile ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                     </button>
 
                     <div x-show="openAdminProfile" x-transition.opacity style="display: none;" class="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg py-2 border border-gray-100 z-50">
