@@ -1,7 +1,7 @@
 @php
     $isOp = Auth::user()->role === 'operator' || request('mode') === 'operator';
-    $modeParam = (Auth::user()->role === 'admin' && $isOp) ? ['mode' => 'operator'] : [];
-    $navLinkText = $isOp ? 'text-[#0E4D2B]' : 'text-gray-200';
+    $modeParam = (Auth::user()->role === 'admin' &&$isOp) ? ['mode' => 'operator'] : [];
+    $navLinkText =$isOp ? 'text-[#0E4D2B]' : 'text-gray-200';
 @endphp
 <!DOCTYPE html>
 <html lang="id">
@@ -9,6 +9,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Manajemen FAQ | Admin Portal</title>
+    
+    <!-- Favicon KKN -->
+    <link rel="icon" type="image/png" href="{{ asset('images/logo-kkn.png') }}">
+
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700,800&display=swap" rel="stylesheet" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"></script>
@@ -30,7 +34,8 @@
         .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
-<body class="font-sans antialiased bg-gray-100 text-gray-900 flex" x-data="faqManager()">
+<!-- Hapus class flex di body untuk fix bug horizontal scroll -->
+<body class="font-sans antialiased bg-gray-100 text-gray-900" x-data="faqManager()">
 
     <!-- OVERLAY MOBILE -->
     <div x-show="sidebarOpen" @click="sidebarOpen = false" x-transition.opacity class="fixed inset-0 z-20 bg-black bg-opacity-50 md:hidden" style="display: none;"></div>
@@ -64,7 +69,7 @@
             @endif
             
             <p class="text-xs font-bold uppercase tracking-wider mb-2 mt-6 px-2 {{ $isOp ? 'text-[#0A3D22]' : 'text-[#A5D6A7]' }}">Kustomisasi Web</p>
-            <a href="{{ route('admin.manajemen-gambar.index', isset($modeParam) ? $modeParam : []) }}" class="flex items-center gap-3 sidebar-link {{ $navLinkText }} px-4 py-3 rounded-lg font-semibold"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg> Manajemen Gambar</a>
+            <a href="{{ route('admin.manajemen-gambar.index', isset($modeParam) ?$modeParam : []) }}" class="flex items-center gap-3 sidebar-link {{ $navLinkText }} px-4 py-3 rounded-lg font-semibold"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg> Manajemen Gambar</a>
             <a href="{{ route('admin.pemetaan.index', $modeParam) }}" class="flex items-center gap-3 sidebar-link {{ $navLinkText }} px-4 py-3 rounded-lg font-semibold"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg> Manajemen Peta</a>
             
             <p class="text-xs font-bold uppercase tracking-wider mb-2 mt-6 px-2 {{ $isOp ? 'text-[#0A3D22]' : 'text-[#A5D6A7]' }}">Data & Laporan</p>
@@ -72,10 +77,10 @@
             
             <a href="{{ route('admin.data-warga.index', $modeParam) }}" class="flex items-center gap-3 sidebar-link {{ $navLinkText }} px-4 py-3 rounded-lg font-semibold"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg> Data Warga</a>
             
-            <a href="{{ route('admin.bank-sampah.index', $modeParam) }}" class="flex items-center gap-3 sidebar-link {{ isset($navLinkText) ? $navLinkText : (isset($navLink) ? $navLink : '') }} px-4 py-3 rounded-lg font-semibold transition"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg> Bank Sampah</a>
+            <a href="{{ route('admin.bank-sampah.index', $modeParam) }}" class="flex items-center gap-3 sidebar-link {{ isset($navLinkText) ?$navLinkText : (isset($navLink) ?$navLink : '') }} px-4 py-3 rounded-lg font-semibold transition"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg> Bank Sampah</a>
 
             @if(Auth::user()->role === 'admin' && !$isOp)
-            <a href="{{ route('admin.laporan-web.index', isset($modeParam) ? $modeParam : []) }}" class="flex items-center gap-3 sidebar-link text-gray-200 px-4 py-3 rounded-lg font-semibold mb-4"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg> Laporan Web</a>
+            <a href="{{ route('admin.laporan-web.index', isset($modeParam) ?$modeParam : []) }}" class="flex items-center gap-3 sidebar-link text-gray-200 px-4 py-3 rounded-lg font-semibold mb-4"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg> Laporan Web</a>
             @endif
         </nav>
         <div class="p-4 border-t flex-shrink-0 {{ $isOp ? 'border-yellow-500' : 'border-[#2E7D32]' }}">
@@ -83,10 +88,10 @@
         </div>
     </aside>
 
-    <main class="flex-1 w-full min-w-0 md:ml-64 bg-gray-50 min-h-screen transition-all duration-300 overflow-x-hidden">
-        <!-- HEADER KONTEN -->
-
-        <header class="bg-white h-20 shadow-sm border-b border-gray-200 flex items-center justify-between gap-4 lg:gap-8 px-3 lg:px-8 z-10 sticky top-0 w-full">
+    <!-- Hapus class flex-1 dan w-full di main untuk fix bug horizontal scroll -->
+    <main class="md:ml-64 bg-gray-50 min-h-screen transition-all duration-300">
+        <!-- HEADER KONTEN (hapus w-full dan atur padding) -->
+        <header class="bg-white h-20 shadow-sm border-b border-gray-200 flex items-center justify-between gap-4 lg:gap-8 px-4 md:px-8 z-10 sticky top-0">
 
             <div class="flex items-center gap-3 md:gap-6">
                 <!-- HAMBURGER BUTTON -->
@@ -120,8 +125,8 @@
 
                 @php
                     $rawAvatar = Auth::user()->avatar;
-                    $bgAvatar = $isOp ? 'FBC02D' : 'A5D6A7';
-                    $avatarUrl = $rawAvatar ? (str_starts_with($rawAvatar, 'http') ? $rawAvatar : asset($rawAvatar)) : 'https://ui-avatars.com/api/?name='.urlencode(Auth::user()->name).'&color=0E4D2B&background='.$bgAvatar.'&bold=true';
+                    $bgAvatar =$isOp ? 'FBC02D' : 'A5D6A7';
+                    $avatarUrl =$rawAvatar ? (str_starts_with($rawAvatar, 'http') ?$rawAvatar : asset($rawAvatar)) : 'https://ui-avatars.com/api/?name='.urlencode(Auth::user()->name).'&color=0E4D2B&background='.$bgAvatar.'&bold=true';
                     $fallbackAvatar = 'https://ui-avatars.com/api/?name='.urlencode(Auth::user()->name).'&color=0E4D2B&background='.$bgAvatar.'&bold=true';
                 @endphp
                 <div x-data="{ openAdminProfile: false }" class="relative">
@@ -133,9 +138,8 @@
                         </div>
                         <span class="hidden sm:inline-block text-xs lg:text-sm font-bold text-gray-800 whitespace-nowrap shrink-0">{{ Auth::user()->name }}</span>
 
-
-
-                        <svg class="w-4 h-4 text-gray-500 transition-transform duration-200" :class="openAdminProfile ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        <!-- Animasi Chevron Aktif -->
+                        <svg :class="{'rotate-180': openAdminProfile}" class="w-4 h-4 text-gray-500 font-bold transition-transform duration-200 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                     </button>
 
                     <div x-show="openAdminProfile" x-transition.opacity style="display: none;" class="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg py-2 border border-gray-100 z-50">
@@ -189,28 +193,28 @@
                         </thead>
                         
                         <tbody x-show="activeTab === 'semua'" class="divide-y divide-gray-200">
-                            @forelse($faqs as $faq)
+                            @forelse($faqs as$faq)
                                 @include('admin.faq.partials.row_warga', ['faq' => $faq])
                             @empty
                                 <tr><td colspan="4" class="px-6 py-10 text-center text-gray-500 font-medium">Mohon maaf, belum ada pengajuan pertanyaan dari warga.</td></tr>
                             @endforelse
                         </tbody>
                         <tbody x-show="activeTab === 'pending'" style="display:none;" class="divide-y divide-gray-200">
-                            @forelse($faqs->where('status', 'pending') as $faq)
+                            @forelse($faqs->where('status', 'pending') as$faq)
                                 @include('admin.faq.partials.row_warga', ['faq' => $faq])
                             @empty
                                 <tr><td colspan="4" class="px-6 py-10 text-center text-gray-500 font-medium">Mohon maaf, tidak ada pengajuan yang menunggu jawaban.</td></tr>
                             @endforelse
                         </tbody>
                         <tbody x-show="activeTab === 'dipublikasi'" style="display:none;" class="divide-y divide-gray-200">
-                            @forelse($faqs->where('status', 'dipublikasi') as $faq)
+                            @forelse($faqs->where('status', 'dipublikasi') as$faq)
                                 @include('admin.faq.partials.row_warga', ['faq' => $faq])
                             @empty
                                 <tr><td colspan="4" class="px-6 py-10 text-center text-gray-500 font-medium">Mohon maaf, belum ada pengajuan pertanyaan yang dipublikasi.</td></tr>
                             @endforelse
                         </tbody>
                         <tbody x-show="activeTab === 'ditolak'" style="display:none;" class="divide-y divide-gray-200">
-                            @forelse($faqs->where('status', 'ditolak') as $faq)
+                            @forelse($faqs->where('status', 'ditolak') as$faq)
                                 @include('admin.faq.partials.row_warga', ['faq' => $faq])
                             @empty
                                 <tr><td colspan="4" class="px-6 py-10 text-center text-gray-500 font-medium">Mohon maaf, belum ada pengajuan pertanyaan yang ditolak.</td></tr>

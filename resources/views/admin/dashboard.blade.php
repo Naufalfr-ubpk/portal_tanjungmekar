@@ -4,6 +4,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Dashboard Admin | Portal Tanjungmekar</title>
+    
+    <!-- Favicon KKN -->
+    <link rel="icon" type="image/png" href="{{ asset('images/logo-kkn.png') }}">
+
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700,800&display=swap" rel="stylesheet" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"></script>
@@ -126,7 +130,8 @@
             </div>
             
             <div class="flex items-center gap-3 md:gap-4">
-                <span class="hidden sm:inline-block text-[10px] md:text-xs font-bold bg-[#FBC02D] text-[#0E4D2B] px-2 md:px-3 py-1 rounded-full uppercase tracking-wider border border-yellow-400">HAK AKSES: {{ strtoupper(Auth::user()->role) }}</span>
+                <!-- Warna Label Admin jadi Hijau Putih -->
+                <span class="hidden sm:inline-block text-[10px] md:text-xs font-bold bg-[#0E4D2B] text-white px-2 md:px-3 py-1 rounded-full uppercase tracking-wider border border-[#0A3D22]">HAK AKSES: {{ strtoupper(Auth::user()->role) }}</span>
                 <div class="hidden sm:block h-8 w-px bg-gray-300"></div>
                 
                 @php
@@ -140,14 +145,15 @@
                 @endphp
                 <div x-data="{ openAdminProfile: false }" class="relative">
                     <button @click="openAdminProfile = !openAdminProfile" class="flex items-center gap-2 px-2 md:px-4 py-2 bg-gray-50 border border-gray-200 rounded-full hover:bg-gray-100 transition focus:outline-none">
-                        <div class="w-8 h-8 rounded-full bg-[#A5D6A7] flex items-center justify-center overflow-hidden border border-[#0E4D2B]">
+                        <div class="w-8 h-8 rounded-full bg-[#A5D6A7] flex items-center justify-center overflow-hidden border border-[#0E4D2B] shrink-0">
 
                             <img src="{{ Auth::user()->avatar ? (str_starts_with(Auth::user()->avatar, 'http') ? Auth::user()->avatar : '/storage/' . str_replace('storage/', '', Auth::user()->avatar)) : 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) . '&color=0E4D2B&background=' . (Auth::user()->role === 'operator' ? 'FBC02D' : 'A5D6A7') . '&bold=true' }}" alt="Avatar" class="w-full h-full object-cover">
 
                         </div>
                         <!-- Sembunyikan nama di layar HP super kecil -->
-                        <span class="hidden sm:inline-block text-sm font-bold text-gray-800">{{ Auth::user()->name }}</span>
-                        <svg class="w-4 h-4 text-gray-600 font-bold" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                        <span class="hidden sm:inline-block text-sm font-bold text-gray-800 whitespace-nowrap shrink-0">{{ Auth::user()->name }}</span>
+                        <!-- Efek Putar Alpine JS -->
+                        <svg :class="{'rotate-180': openAdminProfile}" class="w-4 h-4 text-gray-600 font-bold transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
                         </svg>
                     </button>

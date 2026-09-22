@@ -18,7 +18,8 @@
 
         <div>
             <x-input-label for="name" :value="__('Nama Lengkap Warga')" />
-            <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)" required autofocus autocomplete="name" />
+            <!-- Hapus atribut autofocus di sini biar gak kedip-kedip otomatis -->
+            <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)" required autocomplete="name" />
             <x-input-error class="mt-2" :messages="$errors->get('name')" />
         </div>
 
